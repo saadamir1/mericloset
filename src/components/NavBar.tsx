@@ -1,12 +1,13 @@
-import React from "react";
 import logo from "../assets/logo.webp"; // Fix the import path
-import { HStack, Image, Text } from "@chakra-ui/react";
+import { HStack, Image } from "@chakra-ui/react";
+import ColorModeSwitch from "./ColorModeSwitch";
 
 const NavBar = () => {
   return (
-    <HStack>
+    //hstack => horizontal stack meaning components will be aligned side by side, in a row.
+    <HStack justifyContent="space-between" padding="10px">
       <Image src={logo} alt="Logo" boxSize="50px" />
-      <Text>GameHub</Text>
+      <ColorModeSwitch />
     </HStack>
   );
 };
