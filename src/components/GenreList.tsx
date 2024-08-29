@@ -1,8 +1,21 @@
-import { Image, List, ListItem, Text, HStack, Spinner } from "@chakra-ui/react";
+import {
+  Image,
+  List,
+  ListItem,
+  Text,
+  HStack,
+  Spinner,
+  Button,
+} from "@chakra-ui/react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
 
-const GenreList = () => {
+interface Props {
+  onSelectGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
+}
+
+const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
 
   if (isLoading) return <Spinner />;
@@ -18,7 +31,17 @@ const GenreList = () => {
               borderRadius={8}
               src={getCroppedImageUrl(genre.image_background)}
             />
-            <Text fontSize="lg">{genre.name}</Text>
+            <Button
+              onClick={() => onSelectGenre(genre)}
+              fontSize="lg"
+              variant="link"
+              fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+              textColor={
+                genre.id === selectedGenre?.id ? "teal.300" : "inherit"
+              }
+            >
+              {genre.name}
+            </Button>
           </HStack>
         </ListItem>
       ))}
@@ -27,30 +50,3 @@ const GenreList = () => {
 };
 
 export default GenreList;
-
-// import { HStack, List, Text, ListItem, Image } from "@chakra-ui/react";
-// import useGenres, { Genre } from "../hooks/useGenres";
-// import getCroppedImageUrl from "../services/image-url";
-
-// const GenreList = () => {
-//   const { data } = useGenres();
-//   return (
-//     <List>
-//       {data.map((genre) => (
-//         <ListItem key={genre.id}>
-//           <HStack>
-//             {" "}
-//             <Image
-//               boxSize="32px"
-//               borderRadius={8}
-//               src={getCroppedImageUrl(genre.background_image)}
-//             />
-//             <Text>{genre.name}</Text>
-//           </HStack>
-//         </ListItem>
-//       ))}
-//     </List>
-//   );
-// };
-
-// export default GenreList;
