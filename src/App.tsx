@@ -1,4 +1,12 @@
-import { Box, Flex, Grid, GridItem, HStack, Show } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  Show,
+} from "@chakra-ui/react";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import GameGrid from "./components/GameGrid";
@@ -30,6 +38,13 @@ function App() {
       }}
     >
       <GridItem area="nav">
+        <Heading
+          fontWeight="bold"
+          color="teal.500"
+          textShadow="2px 2px #000000"
+        >
+          Game-Hub
+        </Heading>
         <NavBar
           onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
         />
