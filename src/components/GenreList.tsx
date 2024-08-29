@@ -19,7 +19,7 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
 
   if (isLoading) return <Spinner />;
-  if (error) return null; //just display nothing in case of error
+  if (error) return null; //just don't render this component in case of error
 
   return (
     <List>
