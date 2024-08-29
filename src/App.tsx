@@ -11,6 +11,10 @@ function App() {
         base: '"nav" "main"', // for mobile view
         lg: '"nav nav" "aside main"', //for larger screen view e.g PC or 1080px
       }}
+      templateColumns={{
+        base: "1fr", // for mobile view
+        lg: "230px 1fr", //for larger screen view e.g PC or 1080px
+      }}
     >
       <GridItem area="nav">
         <NavBar />
