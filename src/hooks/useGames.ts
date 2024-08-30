@@ -13,6 +13,8 @@ export interface Game {
   background_image: string;
   metacritic: number;
   parent_platforms: { platform: Platform }[]; //parent_platforms is array of object where each object has a property called platform
+  rating_top: number; //whole rating no.
+  rating: number; //float rating no.
 }
 
 const useGames = (gameQuery: GameQuery) =>
