@@ -29,6 +29,7 @@ function App() {
         base: "320px 1fr", // for mobile view
         lg: "230px 1fr", //for larger screen view e.g PC or 1080px
       }}
+      justifyContent="center" // Center content horizontally
     >
       <GridItem area="nav">
         <Heading
