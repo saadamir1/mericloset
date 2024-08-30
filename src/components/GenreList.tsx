@@ -5,6 +5,7 @@ import {
   HStack,
   Spinner,
   Button,
+  Heading,
 } from "@chakra-ui/react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
@@ -21,30 +22,38 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   if (error) return null; //just don't render this component in case of error
 
   return (
-    <List>
-      {data.map((genre) => (
-        <ListItem key={genre.id} paddingY="5px">
-          <HStack>
-            <Image
-              boxSize="32px"
-              borderRadius={8}
-              src={getCroppedImageUrl(genre.image_background)}
-            />
-            <Button
-              onClick={() => onSelectGenre(genre)}
-              fontSize="lg"
-              variant="link"
-              fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
-              textColor={
-                genre.id === selectedGenre?.id ? "teal.300" : "inherit"
-              }
-            >
-              {genre.name}
-            </Button>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Heading textAlign="left" fontSize="2xl" marginBottom={3}>
+        Genres
+      </Heading>
+      <List>
+        {data.map((genre) => (
+          <ListItem key={genre.id} paddingY="5px">
+            <HStack>
+              <Image
+                boxSize="32px"
+                borderRadius={8}
+                src={getCroppedImageUrl(genre.image_background)}
+              />
+              <Button
+                onClick={() => onSelectGenre(genre)}
+                fontSize="lg"
+                variant="link"
+                whiteSpace="nowrap"
+                textAlign="left"
+                objectFit="cover"
+                fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+                textColor={
+                  genre.id === selectedGenre?.id ? "teal.300" : "inherit"
+                }
+              >
+                {genre.name}
+              </Button>
+            </HStack>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 
