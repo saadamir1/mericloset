@@ -12,7 +12,11 @@ const GameCard = ({ game }: Props) => {
   return (
     <Card height="300px">
       {" "}
-      <Image src={getCroppedImageUrl(game.background_image)} />
+      <Image
+        // objectFit="cover"
+        // height="180px"
+        src={getCroppedImageUrl(game.background_image)}
+      />
       <CardBody>
         <HStack justifyContent="space-between" marginBottom={3}>
           {game.parent_platforms && ( //if exist then proceed
@@ -22,7 +26,7 @@ const GameCard = ({ game }: Props) => {
           )}
           <CriticScore score={game.metacritic} />
         </HStack>
-        <Heading fontSize="2xl" textAlign="left">
+        <Heading fontSize={{ base: "xl", md: "2xl" }} textAlign="left">
           {game.name}
         </Heading>
       </CardBody>

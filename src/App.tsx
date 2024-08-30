@@ -26,7 +26,7 @@ function App() {
         lg: '"nav nav" "aside main"', //for larger screen view e.g PC or 1080px
       }}
       templateColumns={{
-        base: "1fr", // for mobile view
+        base: "320px 1fr", // for mobile view
         lg: "230px 1fr", //for larger screen view e.g PC or 1080px
       }}
     >
