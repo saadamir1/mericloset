@@ -2,6 +2,7 @@ import logo from "../assets/logo.webp"; // Fix the import path
 import { Box, Heading, HStack, Image } from "@chakra-ui/react";
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -12,7 +13,7 @@ const NavBar = () => {
           color="teal.500"
           textShadow="2px 2px #000000"
         >
-          GAME-HUB
+          <Link to={"/"}>GAME-HUB </Link>
         </Heading>
       </Box>
 
