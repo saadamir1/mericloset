@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 const layout = () => {
   return (
     <>
-      <NavBar onSearch={() => console.log(" Navbar of layout")} />
+      <NavBar />
       <Outlet />
     </>
   );

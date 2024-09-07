@@ -3,11 +3,7 @@ import { HStack, Image } from "@chakra-ui/react";
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 
-interface Props {
-  onSearch: (searchText: string) => void;
-}
-
-const NavBar = ({ onSearch }: Props) => {
+const NavBar = () => {
   return (
     //hstack => horizontal stack meaning components will be aligned side by side, in a row.
     <HStack marginBottom={5} padding="10px">
@@ -15,7 +11,7 @@ const NavBar = ({ onSearch }: Props) => {
       {/* <Text fontSize="2xl" fontWeight="bold">
         Game-Hub
       </Text> */}
-      <SearchInput onSearch={onSearch} />
+      <SearchInput />
       <ColorModeSwitch />
     </HStack>
   );
