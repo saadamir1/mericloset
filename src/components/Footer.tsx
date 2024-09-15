@@ -4,7 +4,8 @@ const Footer = () => {
   return (
     <Box as="footer" bg="gray.700" color="white" py={2} textAlign="center">
       <Text>
-        &copy; {new Date().getFullYear()} Game Hub. All rights reserved.
+        &copy; {new Date().getFullYear()} Saad Amir | Game Hub. All rights
+        reserved.
       </Text>
       <Box mt={2}>
         <Link href="#" mx={2}>
