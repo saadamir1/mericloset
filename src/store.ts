@@ -13,6 +13,7 @@ interface GameQueryStore {
   setPlatformID: (platformID: number) => void;
   setSortOrder: (sortOrder: string) => void;
   setSearchText: (searchText: string) => void;
+  resetFilters: () => void;
 }
 
 const useGameQueryStore = create<GameQueryStore>((set) => ({
@@ -36,6 +37,10 @@ const useGameQueryStore = create<GameQueryStore>((set) => ({
   setSearchText: (searchText) =>
     set((store) => ({
       gameQuery: { ...store.gameQuery, searchText },
+    })),
+  resetFilters: () =>
+    set(() => ({
+      gameQuery: {}, // Reset to empty object
     })),
 }));
 
