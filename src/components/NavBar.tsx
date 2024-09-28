@@ -18,6 +18,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
+import gamingBackground from "../assets/navbar-bg.jpg"; // Your gaming background image
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import useGameQueryStore from "../store";
@@ -31,25 +32,39 @@ const NavBar = () => {
 
   const buttons = [
     { label: "Home", action: resetFilters, to: "/" },
-    { label: "Contact", to: "/contact-us" },
     { label: "Trending", action: () => setSortOrder("-rating"), to: "/" },
     { label: "New Arrival", action: () => setSortOrder("-released"), to: "/" },
+    { label: "Contact", to: "/contact-us" },
   ];
 
   return (
     <>
       {isMobileView ? (
         <>
-          <Box textAlign="center" py={3}>
-            <Heading
-              fontWeight="bold"
-              color="teal.400"
-              textShadow="2px 2px #718096"
+          <Box textAlign="center" py={0} m={0}>
+            <Box
+              backgroundImage={`linear-gradient(
+                to bottom, 
+                rgba(0, 0, 0, 0.2),  
+                rgba(0, 0, 0, 0.6),  
+                rgba(0, 0, 0, 0.9)   
+              ), url(${gamingBackground})`}
+              width="100%"
+              borderRadius="0"
+              p={3}
             >
-              <RouterLink onClick={resetFilters} to={"/"}>
-                GAME-HUB
-              </RouterLink>
-            </Heading>
+              <Heading
+                fontWeight="bold"
+                color="teal.400"
+                textShadow="2px 2px #718096"
+                fontSize="2xl"
+                mb={1}
+              >
+                <RouterLink onClick={resetFilters} to={"/"}>
+                  GameHub
+                </RouterLink>
+              </Heading>
+            </Box>
           </Box>
 
           <HStack p="10px" justifyContent="space-between">
@@ -102,23 +117,34 @@ const NavBar = () => {
         </>
       ) : (
         <>
-          <HStack spacing={4} justifyContent="center">
-            {buttons.map(({ label, action, to }) => (
-              <Button
-                key={label}
-                variant="ghost"
-                colorScheme="teal"
-                onClick={() => {
-                  action?.();
-                  onClose();
-                }}
-                as={RouterLink}
-                to={to}
-              >
-                {label}
-              </Button>
-            ))}
-          </HStack>
+          <Box
+            backgroundImage={`linear-gradient(
+              to bottom, 
+              rgba(0, 0, 0, 0.2),  
+              rgba(0, 0, 0, 0.6),  
+              rgba(0, 0, 0, 0.9)   
+            ), url(${gamingBackground})`}
+            backgroundSize="cover"
+            backgroundPosition="center"
+          >
+            <HStack spacing={4} justifyContent="center">
+              {buttons.map(({ label, action, to }) => (
+                <Button
+                  key={label}
+                  variant="ghost"
+                  colorScheme="teal"
+                  onClick={() => {
+                    action?.();
+                    onClose();
+                  }}
+                  as={RouterLink}
+                  to={to}
+                >
+                  {label}
+                </Button>
+              ))}
+            </HStack>
+          </Box>
 
           <HStack
             spacing={10}
@@ -131,7 +157,7 @@ const NavBar = () => {
                 src={logo}
                 ml={2}
                 alt="Logo"
-                boxSize="50px"
+                boxSize="60px"
                 objectFit="contain"
               />
             </RouterLink>
@@ -142,7 +168,7 @@ const NavBar = () => {
               fontSize={{ base: "xl", md: "2xl" }}
             >
               <RouterLink onClick={resetFilters} to={"/"}>
-                GAME-HUB
+                GameHub
               </RouterLink>
             </Heading>
             <SearchInput />

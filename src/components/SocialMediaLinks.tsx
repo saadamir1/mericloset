@@ -23,7 +23,7 @@ const SocialMediaLinks = () => (
       color="#0A66C2"
     />
     <SocialMediaLink
-      href="https://facebook.com/saadamir1"
+      href="https://facebook.com/saadamirr"
       icon={FaFacebook}
       color="#1877F2"
     />

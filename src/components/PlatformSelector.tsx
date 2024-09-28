@@ -10,13 +10,16 @@ const PlatformSelector = () => {
   const setselectedPlatformID = useGameQueryStore((s) => s.setPlatformID);
   const selectedPlatform = usePlatform(selectedPlatformID);
 
-  if (error) return null; //if error fetching platforms, don't render/display platformSector compnent
+  if (error) return null;
 
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-        {" "}
-        {selectedPlatform?.name || "Platforms"}{" "}
+      <MenuButton
+        as={Button}
+        rightIcon={<BsChevronDown />}
+        size={{ base: "sm", md: "md" }}
+      >
+        {selectedPlatform?.name || "Platforms"}
       </MenuButton>
       <MenuList>
         {data?.results.map((platform) => (
