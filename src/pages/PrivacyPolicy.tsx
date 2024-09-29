@@ -8,28 +8,28 @@ const PrivacyPolicy = () => {
         Privacy Policy
       </Heading>
       <Text mb={6} textAlign="center">
-        At Game Hub, we are committed to protecting your privacy. This Privacy
+        At MeriCloset, we are committed to protecting your privacy. This Privacy
         Policy explains how we collect, use, and safeguard your personal
-        information when you visit our website and use our services.
+        information when you use our app and services.
       </Text>
 
       <Divider mb={6} borderColor="gray.300" />
 
       <Section title="Information We Collect">
-        We collect personal information such as your name, email address, etc.
-        when you sign up or make a purchase. We also gather non-personal data
-        like browser type, IP address, and game preferences.
+        We collect personal information such as your name, email address, and
+        body measurements when you sign up or make a purchase. We also gather
+        non-personal data like device type, IP address, and usage preferences.
       </Section>
 
-      <Divider mb={6} borderColor="gray.300" />
+      <Divider mb={6} borderColor="green.300" />
 
       <Section title="How We Use Your Information">
-        Your personal information is used to provide and improve our services,
-        including customer support, and game recommendations. We do not sell or
-        share your data with third parties without your consent.
+        Your personal information is used to provide and enhance our services,
+        including personalized recommendations and customer support. We do not
+        sell or share your data with third parties without your consent.
       </Section>
 
-      <Divider mb={6} borderColor="gray.300" />
+      <Divider mb={6} borderColor="green.300" />
 
       <Section title="Data Security">
         We implement reasonable measures to protect your data from unauthorized
@@ -38,16 +38,16 @@ const PrivacyPolicy = () => {
         security.
       </Section>
 
-      <Divider mb={6} borderColor="gray.300" />
+      <Divider mb={6} borderColor="green.300" />
 
       <Section title="Changes to This Policy">
-        We may update this Privacy Policy periodically. Changes will be posted
-        on this page with an updated revision date.
+        We may update this Privacy Policy periodically. Any changes will be
+        posted on this page with an updated revision date.
       </Section>
 
       <Text textAlign="center">
         Questions? Contact us at{" "}
-        <Link href="mailto:Saadamir070@gmail.com" color="teal.700">
+        <Link href="mailto:Saadamir070@gmail.com" color="green.800">
           Saadamir070@gmail.com
         </Link>
         .

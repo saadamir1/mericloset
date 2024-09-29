@@ -6,7 +6,7 @@ interface EmailLinkProps {
 }
 
 const EmailLink = ({ email }: EmailLinkProps) => (
-  <Link href={`mailto:${email}`} fontWeight="bold" color="teal.700">
+  <Link href={`mailto:${email}`} fontWeight="bold" color="green.700">
     {email}
   </Link>
 );
@@ -14,7 +14,7 @@ const EmailLink = ({ email }: EmailLinkProps) => (
 const ContactUs = () => {
   return (
     <Box as="section" p={5} bg="gray.100" color="black">
-      <Heading mb={4} textAlign="center" color="teal.700">
+      <Heading mb={4} textAlign="center" color="green.700">
         Contact Us
       </Heading>
       <Text mb={4}>
@@ -27,8 +27,9 @@ const ContactUs = () => {
           Customer Support
         </Heading>
         <Text>
-          For questions regarding your account, issues with games, or technical
-          support, email us at <EmailLink email="Saadamir070@gmail.com" />.
+          For questions regarding your account, issues with products, or
+          technical support, email us at{" "}
+          <EmailLink email="Saadamir070@gmail.com" />.
         </Text>
       </Box>
 

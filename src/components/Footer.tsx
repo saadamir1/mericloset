@@ -12,8 +12,7 @@ const Footer = () => {
       textAlign="center"
     >
       <Text mt={2} fontSize={["sm", "md"]}>
-        &copy; {new Date().getFullYear()} Saad Amir | Game Hub. All rights
-        reserved.
+        &copy; {new Date().getFullYear()} MeriCloset. All rights reserved.
       </Text>
       <Box mt={2}>
         <Link href="/privacy-policy" mx={2} fontSize={["xs", "sm", "md"]}>

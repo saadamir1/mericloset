@@ -10,21 +10,25 @@ const HomePage = () => {
     <Grid
       templateAreas={{
         base: ' "main"', // for mobile view
-        lg: ' "aside main"', //for larger screen view e.g PC or 1080px
+        lg: ' "aside main"', // for larger screen view e.g PC or 1080px
       }}
       templateColumns={{
         base: "320px 1fr", // for mobile view
-        lg: "230px 1fr", //for larger screen view e.g PC or 1080px
+        lg: "230px 1fr", // for larger screen view e.g PC or 1080px
       }}
       justifyContent="center" // Center content horizontally
     >
       <Show above="lg">
-        <GridItem area="aside">
+        <GridItem area="aside" paddingTop={10}>
+          {" "}
+          {/* Add padding here */}
           <GenreList />
         </GridItem>
       </Show>
       <GridItem area="main">
-        <Box paddingLeft={2} textAlign="left">
+        <Box paddingLeft={2} paddingTop={3} textAlign="left">
+          {" "}
+          {/* Add padding here */}
           <GameHeading />
         </Box>
         <Flex paddingLeft={2} marginBottom={3}>

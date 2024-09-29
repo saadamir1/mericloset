@@ -18,17 +18,17 @@ const SocialMediaLink = ({ href, icon, color }: SocialMediaLinkProps) => (
 const SocialMediaLinks = () => (
   <List display="flex" gap={4}>
     <SocialMediaLink
-      href="https://linkedin.com/in/saadamirr"
+      href="https://linkedin.com"
       icon={FaLinkedin}
       color="#0A66C2"
     />
     <SocialMediaLink
-      href="https://facebook.com/saadamirr"
+      href="https://facebook.com"
       icon={FaFacebook}
       color="#1877F2"
     />
     <SocialMediaLink
-      href="https://instagram.com/goddot1"
+      href="https://instagram.com"
       icon={FaInstagram}
       color="#C13584"
     />

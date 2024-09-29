@@ -1,10 +1,9 @@
 import {
   Box,
-  Heading,
   HStack,
+  VStack,
   Image,
   Button,
-  useBreakpointValue,
   IconButton,
   Drawer,
   DrawerOverlay,
@@ -13,22 +12,27 @@ import {
   DrawerHeader,
   DrawerBody,
   useDisclosure,
-  VStack,
+  useBreakpointValue,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
-import gamingBackground from "../assets/navbar-bg.jpg"; // Your gaming background image
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import useGameQueryStore from "../store";
-import GenreList from "./GenreList";
+import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 
 const NavBar = () => {
   const resetFilters = useGameQueryStore((state) => state.resetFilters);
   const setSortOrder = useGameQueryStore((state) => state.setSortOrder);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobileView = useBreakpointValue({ base: true, md: false });
+
+  // Define navbar background color based on light or dark mode
+  const navbarBgColor = useColorModeValue("green.300", "green.900");
+
+  const logoHeight = useBreakpointValue({ base: "30px", md: "60px" }); // Adjust height for mobile
 
   const buttons = [
     { label: "Home", action: resetFilters, to: "/" },
@@ -41,37 +45,21 @@ const NavBar = () => {
     <>
       {isMobileView ? (
         <>
-          <Box textAlign="center" py={0} m={0}>
-            <Box
-              backgroundImage={`linear-gradient(
-                to bottom, 
-                rgba(0, 0, 0, 0.2),  
-                rgba(0, 0, 0, 0.6),  
-                rgba(0, 0, 0, 0.9)   
-              ), url(${gamingBackground})`}
-              width="100%"
-              borderRadius="0"
-              p={3}
-            >
-              <Heading
-                fontWeight="bold"
-                color="teal.400"
-                textShadow="2px 2px #718096"
-                fontSize="2xl"
-                mb={1}
-              >
-                <RouterLink onClick={resetFilters} to={"/"}>
-                  GameHub
-                </RouterLink>
-              </Heading>
-            </Box>
-          </Box>
-
-          <HStack p="10px" justifyContent="space-between">
+          <HStack p="10px" justifyContent="space-between" bg={navbarBgColor}>
             <RouterLink to="/">
-              <Image src={logo} alt="Logo" boxSize="70px" objectFit="contain" />
+              <Image
+                src={logo}
+                alt="Logo"
+                height={logoHeight} // Use breakpoint value for height
+                objectFit="cover"
+                display="block"
+              />
             </RouterLink>
-            <SearchInput />
+            <Box flex="1" maxW="300px" mx="10px">
+              {" "}
+              {/* Adjusted max width for search bar */}
+              <SearchInput />
+            </Box>
             <IconButton
               icon={<HamburgerIcon />}
               variant="outline"
@@ -104,11 +92,6 @@ const NavBar = () => {
                       {label}
                     </Button>
                   ))}
-                  <Box py={4} width="100%">
-                    <RouterLink to="/" onClick={onClose}>
-                      <GenreList />
-                    </RouterLink>
-                  </Box>
                   <ColorModeSwitch />
                 </VStack>
               </DrawerBody>
@@ -117,63 +100,62 @@ const NavBar = () => {
         </>
       ) : (
         <>
-          <Box
-            backgroundImage={`linear-gradient(
-              to bottom, 
-              rgba(0, 0, 0, 0.2),  
-              rgba(0, 0, 0, 0.6),  
-              rgba(0, 0, 0, 0.9)   
-            ), url(${gamingBackground})`}
-            backgroundSize="cover"
-            backgroundPosition="center"
-          >
-            <HStack spacing={4} justifyContent="center">
-              {buttons.map(({ label, action, to }) => (
-                <Button
-                  key={label}
-                  variant="ghost"
-                  colorScheme="teal"
-                  onClick={() => {
-                    action?.();
-                    onClose();
-                  }}
-                  as={RouterLink}
-                  to={to}
-                >
-                  {label}
-                </Button>
-              ))}
-            </HStack>
-          </Box>
+          <Box bg={navbarBgColor} width="100%" p={3}>
+            <VStack spacing={2} width="100%">
+              <HStack justifyContent="space-between" width="100%">
+                <RouterLink to="/">
+                  <Image
+                    src={logo}
+                    alt="Logo"
+                    height="60px" // Keep height for larger screens
+                    objectFit="cover"
+                  />
+                </RouterLink>
 
-          <HStack
-            spacing={10}
-            p="10px"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <RouterLink to="/">
-              <Image
-                src={logo}
-                ml={2}
-                alt="Logo"
-                boxSize="60px"
-                objectFit="contain"
-              />
-            </RouterLink>
-            <Heading
-              fontWeight="bold"
-              color="teal.400"
-              textShadow="2px 2px #718096"
-              fontSize={{ base: "xl", md: "2xl" }}
-            >
-              <RouterLink onClick={resetFilters} to={"/"}>
-                GameHub
-              </RouterLink>
-            </Heading>
-            <SearchInput />
-            <ColorModeSwitch />
-          </HStack>
+                <Box flex="1" maxW="500px" mx="20px">
+                  <SearchInput />
+                </Box>
+
+                <HStack spacing={4}>
+                  <IconButton
+                    icon={<FaUserAlt />}
+                    aria-label="User Profile"
+                    variant="outline"
+                    as={RouterLink}
+                    to="/profile"
+                  />
+                  <IconButton
+                    icon={<FaShoppingCart />}
+                    aria-label="Cart"
+                    variant="outline"
+                    as={RouterLink}
+                    to="/cart"
+                  />
+                </HStack>
+              </HStack>
+
+              <HStack spacing={4} justifyContent="space-between" width="100%">
+                <HStack>
+                  {buttons.map(({ label, action, to }) => (
+                    <Button
+                      key={label}
+                      variant="ghost"
+                      colorScheme="teal"
+                      onClick={() => {
+                        action?.();
+                        onClose();
+                      }}
+                      as={RouterLink}
+                      to={to}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </HStack>
+                <ColorModeSwitch />
+              </HStack>
+            </VStack>
+          </Box>
         </>
       )}
     </>

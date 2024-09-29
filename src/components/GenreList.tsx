@@ -22,7 +22,7 @@ const GenreList = () => {
   return (
     <>
       <Heading textAlign="left" fontSize="2xl" marginBottom={3}>
-        Genres
+        Categories
       </Heading>
       <List>
         {data?.results.map((genre) => (
