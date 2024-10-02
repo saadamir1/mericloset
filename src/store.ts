@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
-export interface GameQuery {
+export interface ProductQuery {
   genreID?: number;
   platformID?: number; // same as platformID: number | undefined;
   sortOrder?: string;
   searchText?: string;
 }
 
-interface GameQueryStore {
-  gameQuery: GameQuery;
+interface ProductQueryStore {
+  productQuery: ProductQuery;
   setGenreID: (genreID: number) => void;
   setPlatformID: (platformID: number) => void;
   setSortOrder: (sortOrder: string) => void;
@@ -16,32 +16,32 @@ interface GameQueryStore {
   resetFilters: () => void;
 }
 
-const useGameQueryStore = create<GameQueryStore>((set) => ({
-  gameQuery: {},
+const useProductQueryStore = create<ProductQueryStore>((set) => ({
+  productQuery: {},
 
   setGenreID: (genreID) =>
     set((store) => ({
-      gameQuery: { ...store.gameQuery, genreID },
+      productQuery: { ...store.productQuery, genreID },
     })),
 
   setPlatformID: (platformID) =>
     set((store) => ({
-      gameQuery: { ...store.gameQuery, platformID },
+      productQuery: { ...store.productQuery, platformID },
     })),
 
   setSortOrder: (sortOrder) =>
     set((store) => ({
-      gameQuery: { ...store.gameQuery, sortOrder },
+      productQuery: { ...store.productQuery, sortOrder },
     })),
 
   setSearchText: (searchText) =>
     set((store) => ({
-      gameQuery: { ...store.gameQuery, searchText },
+      productQuery: { ...store.productQuery, searchText },
     })),
   resetFilters: () =>
     set(() => ({
-      gameQuery: {}, // Reset to empty object
+      productQuery: {}, // Reset to empty object
     })),
 }));
 
-export default useGameQueryStore;
+export default useProductQueryStore;

@@ -1,6 +1,6 @@
 import { Grid, Show, GridItem, Box, Flex } from "@chakra-ui/react";
-import GameGrid from "../components/GameGrid";
-import GameHeading from "../components/GameHeading";
+import GameGrid from "../components/ProductGrid";
+import GameHeading from "../components/ProductHeading";
 import GenreList from "../components/GenreList";
 import PlatformSelector from "../components/PlatformSelector";
 import SortSelector from "../components/SortSelector";

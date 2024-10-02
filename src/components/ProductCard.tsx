@@ -1,4 +1,4 @@
-import Game from "../entities/Game";
+import Product from "../entities/Product";
 import { Card, CardBody, Heading, HStack, Image } from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
@@ -6,33 +6,33 @@ import getCroppedImageUrl from "../services/image-url";
 import { Link } from "react-router-dom";
 
 interface Props {
-  game: Game;
+  product: Product;
 }
 
-const GameCard = ({ game }: Props) => {
+const ProductCard = ({ product }: Props) => {
   return (
     <Card height="350px">
       {" "}
       <Image
         // objectFit="cover"
         // height="180px"
-        src={getCroppedImageUrl(game.background_image)}
+        src={getCroppedImageUrl(product.background_image)}
       />
       <CardBody>
         <HStack justifyContent="space-between" marginBottom={3}>
-          {game.parent_platforms && ( //if exist then proceed
+          {product.parent_platforms && ( //if exist then proceed
             <PlatformIconList
-              platforms={game.parent_platforms.map((p) => p.platform)}
+              platforms={product.parent_platforms.map((p) => p.platform)}
             />
           )}
-          <CriticScore score={game.metacritic} />
+          <CriticScore score={product.metacritic} />
         </HStack>
         <Heading fontSize={{ base: "xl", md: "2xl" }} textAlign="left">
-          <Link to={"/games/" + game.slug}>{game.name}</Link>
+          <Link to={"/products/" + product.slug}>{product.name}</Link>
         </Heading>
       </CardBody>
     </Card>
   );
 };
 
-export default GameCard;
+export default ProductCard;

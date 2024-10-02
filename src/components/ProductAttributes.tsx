@@ -1,31 +1,31 @@
 import { SimpleGrid, Text } from "@chakra-ui/react";
-import Game from "../entities/Game";
+import Product from "../entities/Product";
 import CriticScore from "./CriticScore";
 import DefinitionItem from "./DefinitionItem";
 
 interface Props {
-  game: Game;
+  product: Product;
 }
 
-const GameComponents = ({ game }: Props) => {
+const ProductComponents = ({ product }: Props) => {
   return (
     <SimpleGrid columns={2} as="dl">
       <DefinitionItem term="Platforms">
         {/* //same as parent_platforms.platform.name */}
-        {game.parent_platforms?.map(({ platform }) => (
+        {product.parent_platforms?.map(({ platform }) => (
           <Text key={platform.id}>{platform.name}</Text>
         ))}
       </DefinitionItem>
       <DefinitionItem term="Metascore">
-        <CriticScore score={game.metacritic} />
+        <CriticScore score={product.metacritic} />
       </DefinitionItem>
       <DefinitionItem term="Genres">
-        {game.genres?.map((genre) => (
+        {product.genres?.map((genre) => (
           <Text key={genre.id}>{genre.name}</Text>
         ))}
       </DefinitionItem>
       <DefinitionItem term="Publishers">
-        {game.publishers?.map((p) => (
+        {product.publishers?.map((p) => (
           <Text key={p.id}>{p.name}</Text>
         ))}
       </DefinitionItem>
@@ -33,4 +33,4 @@ const GameComponents = ({ game }: Props) => {
   );
 };
 
-export default GameComponents;
+export default ProductComponents;

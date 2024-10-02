@@ -9,12 +9,12 @@ import {
 } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
-import useGameQueryStore from "../store";
+import useProductQueryStore from "../store";
 
 const GenreList = () => {
   const { data, isLoading, error } = useGenres();
-  const selectedGenreID = useGameQueryStore((s) => s.gameQuery.genreID);
-  const setSelectedGenreID = useGameQueryStore((s) => s.setGenreID);
+  const selectedGenreID = useProductQueryStore((s) => s.productQuery.genreID);
+  const setSelectedGenreID = useProductQueryStore((s) => s.setGenreID);
 
   if (isLoading) return <Spinner />;
   if (error) return null; //just don't render this component in case of error

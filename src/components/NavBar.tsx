@@ -20,12 +20,12 @@ import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
-import useGameQueryStore from "../store";
+import useProductQueryStore from "../store";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
 
 const NavBar = () => {
-  const resetFilters = useGameQueryStore((state) => state.resetFilters);
-  const setSortOrder = useGameQueryStore((state) => state.setSortOrder);
+  const resetFilters = useProductQueryStore((state) => state.resetFilters);
+  const setSortOrder = useProductQueryStore((state) => state.setSortOrder);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobileView = useBreakpointValue({ base: true, md: false });
 

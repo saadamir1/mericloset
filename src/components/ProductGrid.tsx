@@ -1,24 +1,24 @@
 import { SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import useGames from "../hooks/useGames";
-import Game from "../entities/Game";
-import GameCard from "./GameCard";
-import GameCardContainer from "./GameCardContainer";
-import GameCardSkeleon from "./GameCardSkeleton";
+import useProducts from "../hooks/useProducts";
+import Product from "../entities/Product";
+import ProductCard from "./ProductCard";
+import ProductCardContainer from "./ProductCardContainer";
+import ProductCardSkeleon from "./ProductCardSkeleton";
 
-const GameGrid = () => {
-  const { data, error, isLoading, fetchNextPage, hasNextPage } = useGames();
+const ProductGrid = () => {
+  const { data, error, isLoading, fetchNextPage, hasNextPage } = useProducts();
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8];
 
   if (error) return <Text>{error.message}</Text>;
 
-  const FetchedGamesCount =
+  const FetchedProductsCount =
     data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
 
   return (
     <InfiniteScroll
-      dataLength={FetchedGamesCount}
+      dataLength={FetchedProductsCount}
       // as hasNextPage has type boolean or undefined but hasMore component expects a boolean so '!!hasNextPage' will convert indefinite to boolean false
       hasMore={!!hasNextPage}
       next={() => fetchNextPage()}
@@ -31,16 +31,16 @@ const GameGrid = () => {
       >
         {isLoading &&
           skeletons.map((skeleton) => (
-            <GameCardContainer key={skeleton}>
-              <GameCardSkeleon />
-            </GameCardContainer>
+            <ProductCardContainer key={skeleton}>
+              <ProductCardSkeleon />
+            </ProductCardContainer>
           ))}
         {data?.pages.map((page, index) => (
           <React.Fragment key={index}>
-            {page.results.map((game: Game) => (
-              <GameCardContainer key={game.id}>
-                <GameCard game={game} />
-              </GameCardContainer>
+            {page.results.map((product: Product) => (
+              <ProductCardContainer key={product.id}>
+                <ProductCard product={product} />
+              </ProductCardContainer>
             ))}
           </React.Fragment>
         ))}
@@ -49,4 +49,4 @@ const GameGrid = () => {
   );
 };
 
-export default GameGrid;
+export default ProductGrid;
