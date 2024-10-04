@@ -14,6 +14,11 @@ import {
   useDisclosure,
   useBreakpointValue,
   useColorModeValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
@@ -28,6 +33,7 @@ const NavBar = () => {
   const setSortOrder = useProductQueryStore((state) => state.setSortOrder);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobileView = useBreakpointValue({ base: true, md: false });
+  const toast = useToast(); // Initialize toast
 
   // Define navbar background color based on light or dark mode
   const navbarBgColor = useColorModeValue("green.300", "green.900");
@@ -40,6 +46,19 @@ const NavBar = () => {
     { label: "New Arrival", action: () => setSortOrder("-released"), to: "/" },
     { label: "Contact", to: "/contact-us" },
   ];
+
+  const handleLogout = () => {
+    // will add logout logic here (e.g., clearing auth tokens, etc.)
+
+    // Show toast notification
+    toast({
+      title: "Logout Successful",
+      description: "You have been logged out successfully.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
 
   return (
     <>
@@ -56,8 +75,6 @@ const NavBar = () => {
               />
             </RouterLink>
             <Box flex="1" maxW="300px" mx="10px">
-              {" "}
-              {/* Adjusted max width for search bar */}
               <SearchInput />
             </Box>
             <IconButton
@@ -117,13 +134,14 @@ const NavBar = () => {
                 </Box>
 
                 <HStack spacing={4}>
-                  <IconButton
-                    icon={<FaUserAlt />}
-                    aria-label="User Profile"
-                    variant="outline"
-                    as={RouterLink}
-                    to="/profile"
-                  />
+                  <Menu>
+                    <MenuButton as={IconButton} icon={<FaUserAlt />} aria-label="User Profile" variant="outline" />
+                    <MenuList>
+                      <MenuItem as={RouterLink} to="/login">Login</MenuItem>
+                      <MenuItem as={RouterLink} to="/signup">Signup</MenuItem>
+                      <MenuItem onClick={() => { handleLogout(); onClose(); }}>Logout</MenuItem>
+                    </MenuList>
+                  </Menu>
                   <IconButton
                     icon={<FaShoppingCart />}
                     aria-label="Cart"

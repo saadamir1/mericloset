@@ -6,6 +6,8 @@ import ErrorPage from "./pages/ErrorPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ContactUs from "./pages/ContactUs";
+import Login from "./pages/login";
+import Signup from "./pages/signup"
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ const router = createBrowserRouter([
       { path: "privacy-policy", element: <PrivacyPolicy /> },
       { path: "terms-of-service", element: <TermsOfService /> },
       { path: "contact-us", element: <ContactUs /> },
+      { path: "login", element: <Login /> },
+      { path: "signup", element: <Signup /> },
     ],
   },
 ]);
