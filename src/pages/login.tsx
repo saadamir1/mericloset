@@ -15,20 +15,23 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../userStore";
 
 const LoginPage = () => {
+  const { setIsLoggedIn, setUser, setToken } = useUserStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const toast = useToast(); // Initialize toast hook
+  const toast = useToast(); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true); // Start loading
     setErrorMessage(""); // Reset error message
+    setIsLoggedIn(true);
 
     try {
       const { data } = await axios.post("http://localhost:5170/api/v1/users/login", {
@@ -36,8 +39,8 @@ const LoginPage = () => {
         password,
       });
 
-      // Store token in localStorage for tokenization
-      localStorage.setItem("token", data.token);
+      setToken(data.token);
+      setUser(data.user);
 
       // Show success toast immediately
       toast({
@@ -64,7 +67,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" height="100vh">
+    <Box display="flex" alignItems="center" justifyContent="center" height="90vh">
       <Box p={8} borderRadius="md" boxShadow="lg" backgroundColor="white" width={{ base: "90%", sm: "400px" }} border="1px solid #e2e8f0">
         <Heading as="h2" size="lg" textAlign="center" mb={6} color="teal.600">
           Login

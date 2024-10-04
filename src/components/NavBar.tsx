@@ -1,25 +1,4 @@
-import {
-  Box,
-  HStack,
-  VStack,
-  Image,
-  Button,
-  IconButton,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  useDisclosure,
-  useBreakpointValue,
-  useColorModeValue,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, HStack, VStack, Image, Button, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, useDisclosure, useBreakpointValue, useColorModeValue, Menu, MenuButton, MenuList, MenuItem, useToast } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
@@ -27,13 +6,16 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import useProductQueryStore from "../store";
 import { FaUserAlt, FaShoppingCart } from "react-icons/fa";
+import useUserStore from "../userStore"; 
 
 const NavBar = () => {
   const resetFilters = useProductQueryStore((state) => state.resetFilters);
   const setSortOrder = useProductQueryStore((state) => state.setSortOrder);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobileView = useBreakpointValue({ base: true, md: false });
-  const toast = useToast(); // Initialize toast
+  const toast = useToast();
+
+  const { isLoggedIn, logout } = useUserStore();
 
   // Define navbar background color based on light or dark mode
   const navbarBgColor = useColorModeValue("green.300", "green.900");
@@ -48,9 +30,7 @@ const NavBar = () => {
   ];
 
   const handleLogout = () => {
-    // will add logout logic here (e.g., clearing auth tokens, etc.)
-
-    // Show toast notification
+    logout(); 
     toast({
       title: "Logout Successful",
       description: "You have been logged out successfully.",
@@ -66,23 +46,12 @@ const NavBar = () => {
         <>
           <HStack p="10px" justifyContent="space-between" bg={navbarBgColor}>
             <RouterLink to="/">
-              <Image
-                src={logo}
-                alt="Logo"
-                height={logoHeight} // Use breakpoint value for height
-                objectFit="cover"
-                display="block"
-              />
+              <Image src={logo} alt="Logo" height={logoHeight} objectFit="cover" display="block" />
             </RouterLink>
             <Box flex="1" maxW="300px" mx="10px">
               <SearchInput />
             </Box>
-            <IconButton
-              icon={<HamburgerIcon />}
-              variant="outline"
-              onClick={onOpen}
-              aria-label="Open menu"
-            />
+            <IconButton icon={<HamburgerIcon />} variant="outline" onClick={onOpen} aria-label="Open menu" />
           </HStack>
 
           <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -121,12 +90,7 @@ const NavBar = () => {
             <VStack spacing={2} width="100%">
               <HStack justifyContent="space-between" width="100%">
                 <RouterLink to="/">
-                  <Image
-                    src={logo}
-                    alt="Logo"
-                    height="60px" // Keep height for larger screens
-                    objectFit="cover"
-                  />
+                  <Image src={logo} alt="Logo" height="60px" objectFit="cover" />
                 </RouterLink>
 
                 <Box flex="1" maxW="500px" mx="20px">
@@ -137,18 +101,18 @@ const NavBar = () => {
                   <Menu>
                     <MenuButton as={IconButton} icon={<FaUserAlt />} aria-label="User Profile" variant="outline" />
                     <MenuList>
-                      <MenuItem as={RouterLink} to="/login">Login</MenuItem>
-                      <MenuItem as={RouterLink} to="/signup">Signup</MenuItem>
-                      <MenuItem onClick={() => { handleLogout(); onClose(); }}>Logout</MenuItem>
+                      {!isLoggedIn && (
+                        <>
+                          <MenuItem as={RouterLink} to="/login">Login</MenuItem>
+                          <MenuItem as={RouterLink} to="/signup">Register</MenuItem>
+                        </>
+                      )}
+                      {isLoggedIn && (
+                        <MenuItem onClick={() => { handleLogout(); onClose(); }}>Logout</MenuItem>
+                      )}
                     </MenuList>
                   </Menu>
-                  <IconButton
-                    icon={<FaShoppingCart />}
-                    aria-label="Cart"
-                    variant="outline"
-                    as={RouterLink}
-                    to="/cart"
-                  />
+                  <IconButton icon={<FaShoppingCart />} aria-label="Cart" variant="outline" as={RouterLink} to="/cart" />
                 </HStack>
               </HStack>
 
