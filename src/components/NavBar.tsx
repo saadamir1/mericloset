@@ -14,13 +14,11 @@ const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
+  
+  const { isLoggedIn, logout, user } = useUserStore();
 
-  const { isLoggedIn, logout } = useUserStore();
-
-  // Define navbar background color based on light or dark mode
   const navbarBgColor = useColorModeValue("green.300", "green.900");
-
-  const logoHeight = useBreakpointValue({ base: "30px", md: "60px" }); // Adjust height for mobile
+  const logoHeight = useBreakpointValue({ base: "30px", md: "60px" });
 
   const buttons = [
     { label: "Home", action: resetFilters, to: "/" },
@@ -100,15 +98,17 @@ const NavBar = () => {
                 <HStack spacing={4}>
                   <Menu>
                     <MenuButton as={IconButton} icon={<FaUserAlt />} aria-label="User Profile" variant="outline" />
-                    <MenuList>
-                      {!isLoggedIn && (
+                    <MenuList borderRadius="md" boxShadow="lg">
+                      {!isLoggedIn ? (
                         <>
-                          <MenuItem as={RouterLink} to="/login">Login</MenuItem>
-                          <MenuItem as={RouterLink} to="/signup">Register</MenuItem>
+                          <MenuItem as={RouterLink} to="/login" _hover={{ bg: "green.100" }}>Login</MenuItem>
+                          <MenuItem as={RouterLink} to="/signup" _hover={{ bg: "green.100" }}>Register</MenuItem>
                         </>
-                      )}
-                      {isLoggedIn && (
-                        <MenuItem onClick={() => { handleLogout(); onClose(); }}>Logout</MenuItem>
+                      ) : (
+                        <>
+                          <MenuItem as={RouterLink} to="/profile" fontWeight="bold">{`Hello, ${user.firstName}`}</MenuItem>
+                          <MenuItem onClick={() => { handleLogout(); onClose(); }}>Logout</MenuItem>
+                        </>
                       )}
                     </MenuList>
                   </Menu>

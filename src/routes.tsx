@@ -8,6 +8,7 @@ import TermsOfService from "./pages/TermsOfService";
 import ContactUs from "./pages/ContactUs";
 import Login from "./pages/login";
 import Signup from "./pages/signup"
+import Profile from "./pages/profile"
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: "contact-us", element: <ContactUs /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "profile", element: <Profile /> },
     ],
   },
 ]);

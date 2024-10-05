@@ -4,6 +4,7 @@ interface UserStore {
   user: {
     firstName?: string;
     lastName?: string;
+    username?: string;
     email?: string;
   };
   token?: string;
