@@ -68,11 +68,11 @@ const LoginPage = () => {
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" height="90vh">
-      <Box p={8} borderRadius="md" boxShadow="lg" backgroundColor="white" width={{ base: "90%", sm: "400px" }} border="1px solid #e2e8f0">
+      <Box p={8} borderRadius="md" boxShadow="lg" backgroundColor="#ffffff" width={{ base: "90%", sm: "400px" }} border="1px solid #e2e8f0">
         <Heading as="h2" size="lg" textAlign="center" mb={6} color="teal.600">
           Login
         </Heading>
-        <Text fontSize="sm" color="gray.600" textAlign="center" mb={4}>
+        <Text fontSize="sm" color="#4a5568" textAlign="center" mb={4}>
           Welcome to MeriCloset. Please enter your credentials.
         </Text>
 
@@ -89,9 +89,9 @@ const LoginPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 variant="filled"
-                backgroundColor="gray.100"
+                backgroundColor="#f7fafc"
                 focusBorderColor="teal.400"
-                _placeholder={{ color: "gray.500" }}
+                _placeholder={{ color: "#a0aec0" }} // fixed color in both light and dark mode
               />
             </FormControl>
 
@@ -107,9 +107,9 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   variant="filled"
-                  backgroundColor="gray.100"
+                  backgroundColor="#f7fafc"
                   focusBorderColor="teal.400"
-                  _placeholder={{ color: "gray.500" }}
+                  _placeholder={{ color: "#a0aec0" }} // fixed color for placeholder
                 />
                 <IconButton
                   position="absolute"
