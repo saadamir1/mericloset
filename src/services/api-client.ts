@@ -6,19 +6,18 @@ export interface FetchResponse<T> {
   results: T[];
 }
 
+// Set the axios baseURL to your local backend API
 const axiosInstance = axios.create({
-  baseURL: "https://api.rawg.io/api",
-  params: {
-    key: "30560d91abe14549b4cdbc4cb3cd1225",
-  },
+  baseURL: "http://localhost:5170/api/v1", 
 });
 
-class apiClient<T> {
+class APIClient<T> {
   endpoint: string;
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
+
   getAll = (config: AxiosRequestConfig) => {
     return axiosInstance
       .get<FetchResponse<T>>(this.endpoint, config)
@@ -32,4 +31,4 @@ class apiClient<T> {
   };
 }
 
-export default apiClient;
+export default APIClient;

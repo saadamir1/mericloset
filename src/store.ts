@@ -1,16 +1,17 @@
 import { create } from "zustand";
 
+// Updated ProductQuery interface to match e-commerce filters
 export interface ProductQuery {
-  genreID?: number;
-  platformID?: number; // same as platformID: number | undefined;
-  sortOrder?: string;
-  searchText?: string;
+  categoryID?: string; // For filtering by category
+  brandID?: string;    // For filtering by brand
+  sortOrder?: string;  // For sorting (e.g., price, popularity)
+  searchText?: string; // For search functionality
 }
 
 interface ProductQueryStore {
   productQuery: ProductQuery;
-  setGenreID: (genreID: number) => void;
-  setPlatformID: (platformID: number) => void;
+  setCategoryID: (categoryID: string) => void;
+  setBrandID: (brandID: string) => void;
   setSortOrder: (sortOrder: string) => void;
   setSearchText: (searchText: string) => void;
   resetFilters: () => void;
@@ -19,14 +20,14 @@ interface ProductQueryStore {
 const useProductQueryStore = create<ProductQueryStore>((set) => ({
   productQuery: {},
 
-  setGenreID: (genreID) =>
+  setCategoryID: (categoryID) =>
     set((store) => ({
-      productQuery: { ...store.productQuery, genreID },
+      productQuery: { ...store.productQuery, categoryID },
     })),
 
-  setPlatformID: (platformID) =>
+  setBrandID: (brandID) =>
     set((store) => ({
-      productQuery: { ...store.productQuery, platformID },
+      productQuery: { ...store.productQuery, brandID },
     })),
 
   setSortOrder: (sortOrder) =>
@@ -38,9 +39,10 @@ const useProductQueryStore = create<ProductQueryStore>((set) => ({
     set((store) => ({
       productQuery: { ...store.productQuery, searchText },
     })),
+
   resetFilters: () =>
     set(() => ({
-      productQuery: {}, // Reset to empty object
+      productQuery: {}, // Reset to empty object to clear all filters
     })),
 }));
 

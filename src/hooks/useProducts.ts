@@ -3,27 +3,30 @@ import APIClient, { FetchResponse } from "../services/api-client";
 import useProductQueryStore from "../store";
 import Product from "../entities/Product";
 
-const apiClient = new APIClient<Product>("/games");
+const apiClient = new APIClient<Product>("/products");
 
 const useProducts = () => {
   const productQuery = useProductQueryStore((s) => s.productQuery);
   return useInfiniteQuery<FetchResponse<Product>, Error>({
     queryKey: ["products", productQuery],
-    queryFn: ({ pageParam = 1 }) =>
-      apiClient.getAll({
+    queryFn: ({ pageParam = 1 }) => {
+      return apiClient.getAll({
         params: {
-          genres: productQuery.genreID,
-          parent_platforms: productQuery.platformID,
+          categoryID: productQuery.categoryID,  // Update the parameter to match your store
+          brandID: productQuery.brandID,        // Update to match your store
           ordering: productQuery.sortOrder,
           search: productQuery.searchText,
           page: pageParam,
         },
-      }),
+      }).then((data) => {
+        console.log("Fetched Products:", data);  // Log the response
+        return data;
+      });
+    },
     getNextPageParam: (lastPage, allPages) => {
-      // If there's no next page, return undefined to stop fetching
       return lastPage.next ? allPages.length + 1 : undefined;
     },
-    staleTime: 24 * 60 * 60 * 1000, //24hours
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
     initialPageParam: 1,
   });
 };

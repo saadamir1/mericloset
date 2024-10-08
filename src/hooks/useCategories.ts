@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import genres from "../data/genres";
+//import categories from "../data/categories";
 import APIClient from "../services/api-client";
-import Genre from "../entities/Genre";
+import Category from "../entities/Category";
 
-const apiClient = new APIClient<Genre>("/genres");
+const apiClient = new APIClient<Category>("/categories");
 
 const useGenres = () =>
   useQuery({
-    queryKey: ["genres"],
+    queryKey: ["categories"],
     queryFn: apiClient.getAll,
     staleTime: 24 * 60 * 60 * 1000, //24hours
-    initialData: genres,
+    //initialData: categories,
   });
 
 export default useGenres;

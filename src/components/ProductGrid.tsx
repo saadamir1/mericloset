@@ -5,7 +5,7 @@ import useProducts from "../hooks/useProducts";
 import Product from "../entities/Product";
 import ProductCard from "./ProductCard";
 import ProductCardContainer from "./ProductCardContainer";
-import ProductCardSkeleon from "./ProductCardSkeleton";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 
 const ProductGrid = () => {
   const { data, error, isLoading, fetchNextPage, hasNextPage } = useProducts();
@@ -13,39 +13,46 @@ const ProductGrid = () => {
 
   if (error) return <Text>{error.message}</Text>;
 
-  const FetchedProductsCount =
-    data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
+  const fetchedProductsCount =
+    data?.pages?.reduce((total, page) => total + page.results.length, 0) || 0;
 
   return (
-    <InfiniteScroll
-      dataLength={FetchedProductsCount}
-      // as hasNextPage has type boolean or undefined but hasMore component expects a boolean so '!!hasNextPage' will convert indefinite to boolean false
-      hasMore={!!hasNextPage}
-      next={() => fetchNextPage()}
-      loader={<Spinner />}
-    >
-      <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
-        spacing={5}
-        padding="10px"
-      >
-        {isLoading &&
-          skeletons.map((skeleton) => (
+    <>
+      {isLoading && (
+        <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} spacing={5} padding="10px">
+          {skeletons.map((skeleton) => (
             <ProductCardContainer key={skeleton}>
-              <ProductCardSkeleon />
+              <ProductCardSkeleton />
             </ProductCardContainer>
           ))}
-        {data?.pages.map((page, index) => (
-          <React.Fragment key={index}>
-            {page.results.map((product: Product) => (
-              <ProductCardContainer key={product.id}>
-                <ProductCard product={product} />
-              </ProductCardContainer>
+        </SimpleGrid>
+      )}
+
+      {data && data.pages && (
+        <InfiniteScroll
+          dataLength={fetchedProductsCount}
+          hasMore={!!hasNextPage}
+          next={() => fetchNextPage()}
+          loader={<Spinner />}
+        >
+          <SimpleGrid
+            columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+            spacing={5}
+            padding="10px"
+          >
+            {data.pages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page.results.map((product: Product) => (
+                  <ProductCardContainer key={product._id}>
+                    <ProductCard product={product} />
+                  </ProductCardContainer>
+                ))}
+              </React.Fragment>
             ))}
-          </React.Fragment>
-        ))}
-      </SimpleGrid>
-    </InfiniteScroll>
+          </SimpleGrid>
+        </InfiniteScroll>
+      )}
+    </>
   );
 };
 
