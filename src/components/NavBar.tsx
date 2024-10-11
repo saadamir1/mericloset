@@ -16,6 +16,7 @@ const NavBar = () => {
   const toast = useToast();
   
   const { isLoggedIn, logout, user } = useUserStore();
+  const isAdmin = user && user.role == 'admin' ;
 
   const navbarBgColor = useColorModeValue("green.300", "green.900");
   const logoHeight = useBreakpointValue({ base: "30px", md: "60px" });
@@ -76,6 +77,19 @@ const NavBar = () => {
                       {label}
                     </Button>
                   ))}
+                  {/* Show Upload Products only if the user is admin */}
+                  {isAdmin && (
+                    <Button
+                      variant="ghost"
+                      colorScheme="teal"
+                      as={RouterLink}
+                      to="/upload-products"
+                      width="100%"
+                      textAlign="left"
+                    >
+                      Upload Products
+                    </Button>
+                  )}
                   <ColorModeSwitch />
                 </VStack>
               </DrawerBody>
@@ -133,6 +147,17 @@ const NavBar = () => {
                       {label}
                     </Button>
                   ))}
+                  {/* Show Upload Products only if the user is admin */}
+                  {isAdmin && (
+                    <Button
+                      variant="ghost"
+                      colorScheme="teal"
+                      as={RouterLink}
+                      to="/upload-products"
+                    >
+                      Upload Products
+                    </Button>
+                  )}
                 </HStack>
                 <ColorModeSwitch />
               </HStack>

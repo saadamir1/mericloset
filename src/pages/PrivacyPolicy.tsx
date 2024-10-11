@@ -1,6 +1,5 @@
 import { Box, Heading, Text, Link, Divider } from "@chakra-ui/react";
 import Section from "../components/Section";
-import UploadExcel from "../components/UploadExcel"; // Adjust the path as necessary
 
 const PrivacyPolicy = () => {
   return (
@@ -53,14 +52,6 @@ const PrivacyPolicy = () => {
         </Link>
         .
       </Text>
-
-      {/* Upload Excel File Section */}
-      <Box mt={8}>
-        <Heading as="h2" size="lg" textAlign="center" mb={4}>
-          Upload Product Data
-        </Heading>
-        <UploadExcel />
-      </Box>
     </Box>
   );
 };

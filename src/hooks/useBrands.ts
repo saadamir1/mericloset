@@ -14,4 +14,3 @@ const useBrands = () =>
   });
 export default useBrands;
 
-///////////////////

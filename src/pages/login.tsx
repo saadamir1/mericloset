@@ -16,9 +16,14 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../userStore";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface CustomJwtPayload extends JwtPayload {
+  role: string; // Add the role property
+}
 
 const LoginPage = () => {
-  const { setIsLoggedIn, setUser, setToken } = useUserStore();
+  const { setIsLoggedIn, setUser, setToken, setUserRole } = useUserStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +46,11 @@ const LoginPage = () => {
 
       setToken(data.token);
       setUser(data.user);
+
+      // Decode the token to extract the user role
+      const decodedToken = jwtDecode<CustomJwtPayload>(data.token); 
+      const userRole = decodedToken.role; 
+      setUserRole(userRole); 
 
       // Show success toast immediately
       toast({

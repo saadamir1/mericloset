@@ -28,7 +28,7 @@ const UploadExcel: React.FC = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post('http://localhost:5170/api/v1/upload', formData, {
+            const response = await axios.post('http://localhost:5170/api/v1/admin/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`, 
@@ -37,7 +37,7 @@ const UploadExcel: React.FC = () => {
             setMessage(`File uploaded successfully: ${response.data}`);
         } catch (error) {
             console.error(error);
-            setMessage('Error uploading file.');
+            setMessage('Error uploading file...');
         }
     };
 

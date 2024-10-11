@@ -6,6 +6,7 @@ interface UserStore {
     lastName?: string;
     username?: string;
     email?: string;
+    role?: string;
   };
   token?: string;
   isLoggedIn: boolean;
@@ -13,6 +14,7 @@ interface UserStore {
   setUser: (user: Partial<UserStore['user']>) => void;
   setToken: (token: string) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  setUserRole: (role: string) => void;
   logout: () => void;
 }
 
@@ -24,7 +26,7 @@ const useUserStore = create<UserStore>((set) => ({
   setUser: (user) => set((state) => ({ user: { ...state.user, ...user } })),
   setToken: (token) => set({ token }),
   setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-
+  setUserRole: (role) => set((state) => ({ user: { ...state.user, role } })),
   logout: () => set(() => ({ user: {}, token: undefined, isLoggedIn: false })),
 }));
 

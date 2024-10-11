@@ -9,6 +9,8 @@ import ContactUs from "./pages/ContactUs";
 import Login from "./pages/login";
 import Signup from "./pages/signup"
 import Profile from "./pages/profile"
+import UploadProducts from "./pages/UploadProducts"
+
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,7 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
       { path: "profile", element: <Profile /> },
+      { path: "upload-products", element: <UploadProducts /> },
     ],
   },
 ]);

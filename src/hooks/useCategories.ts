@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import APIClient from "../services/api-client";
 import Category from "../entities/Category";
 
-const apiClient = new APIClient<Category>("/categories");
+const apiClient = new APIClient<Category>("/categoriess");
 
 const useGenres = () =>
   useQuery({

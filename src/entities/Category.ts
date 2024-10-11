@@ -1,5 +1,6 @@
-export default interface Genre {
+export default interface Category {
   id: string;
   name: string;
-  image_background: string;
+  parentCategory: Category;
+  subcategories: Category;
 }

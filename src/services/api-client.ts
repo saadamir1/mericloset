@@ -6,7 +6,6 @@ export interface FetchResponse<T> {
   results: T[];
 }
 
-// Set the axios baseURL to your local backend API
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5170/api/v1", 
 });
