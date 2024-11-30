@@ -1,19 +1,12 @@
 export default interface Product {
   _id: string;
-  name: string;
+  title: string;
   description?: string;
   brand: string;
-  price?: number;
-  categories: string[];
-  sizesAvailable: string[];
-  colorsAvailable: string[];
+  price: number;
+  colors: string[];
+  sizes: string[];
   images: string[];
-  popularityIndex?: number;
-  tags?: string[];
-  isEthical?: boolean;
-  ratings?: number;
-  dateCreated: string;
+  type: string;
   scrapedAt: string;
-  countInStock?: number;
-
 }

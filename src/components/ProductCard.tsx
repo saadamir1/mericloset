@@ -1,8 +1,5 @@
 import Product from "../entities/Product";
-import { Card, CardBody, Heading, HStack, Image } from "@chakra-ui/react";
-import PlatformIconList from "./PlatformIconList";
-import CriticScore from "./CriticScore";
-import getCroppedImageUrl from "../services/image-url";
+import { Card, CardBody, Text, Heading, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -10,26 +7,29 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
+  const imageUrl = "https://drive.google.com/thumbnail?id=1fhCbhY62c91j46N4yDyVEDPR-YSX3MVV&sz=w800";
+
   return (
-    <Card height="350px">
-      {" "}
-      <Image
-        // objectFit="cover"
-        // height="180px"
-        src={getCroppedImageUrl(product.background_image)}
-      />
-      <CardBody>
-        <HStack justifyContent="space-between" marginBottom={3}>
-          {product.parent_platforms && ( //if exist then proceed
-            <PlatformIconList
-              platforms={product.parent_platforms.map((p) => p.platform)}
-            />
-          )}
-          <CriticScore score={product.metacritic} />
-        </HStack>
-        <Heading fontSize={{ base: "xl", md: "2xl" }} textAlign="left">
-          <Link to={"/products/" + product.slug}>{product.name}</Link>
+    <Card height="400px" width="250px" overflow="hidden" boxShadow="md">
+      {product.images.length > 0 && (
+        <Image
+          src={product.images[0]}
+          alt={product.title}
+          height="280px"   // Set the height to limit the image size within the card
+          width="100%"
+          //objectFit="cover" // Crop the image to fit the specified dimensions
+        />
+      )}
+      <CardBody padding="10px">
+        <Heading fontSize={{ base: "lg", md: "xl" }} textAlign="left" noOfLines={1}>
+          <Link to={`/products/${product._id}`}>{product.title}</Link>
         </Heading>
+        <Text color="gray.600" fontSize="sm" noOfLines={1}>
+          {product.brand}
+        </Text>
+        <Text color="gray.800" fontWeight="bold">
+          ${product.price}
+        </Text>
       </CardBody>
     </Card>
   );
