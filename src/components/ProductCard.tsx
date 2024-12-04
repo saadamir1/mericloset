@@ -1,5 +1,5 @@
 import Product from "../entities/Product";
-import { Card, CardBody, Text, Heading, Image } from "@chakra-ui/react";
+import { Card, CardBody, Text, Heading, Image, useColorModeValue } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -7,27 +7,35 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
-  const imageUrl = "https://drive.google.com/thumbnail?id=1fhCbhY62c91j46N4yDyVEDPR-YSX3MVV&sz=w800";
+  const bgColor = useColorModeValue("white", "gray.700");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
 
   return (
-    <Card height="400px" width="250px" overflow="hidden" boxShadow="md">
+    <Card 
+      height="350px" 
+      boxShadow="md" 
+      bg={bgColor} 
+      borderWidth="1px" 
+      borderColor={borderColor} 
+      borderRadius="md"
+    >
       {product.images.length > 0 && (
         <Image
           src={product.images[0]}
           alt={product.title}
-          height="280px"   // Set the height to limit the image size within the card
-          width="100%"
-          //objectFit="cover" // Crop the image to fit the specified dimensions
+          height="240px"
+          //objectFit="cover"
+          borderTopRadius="md"
         />
       )}
-      <CardBody padding="10px">
+      <CardBody>
         <Heading fontSize={{ base: "lg", md: "xl" }} textAlign="left" noOfLines={1}>
-          <Link to={`/products/${product._id}`}>{product.title}</Link>
+          <Link to={`/products/${product.id}`}>{product.title}</Link>
         </Heading>
         <Text color="gray.600" fontSize="sm" noOfLines={1}>
           {product.brand}
         </Text>
-        <Text color="gray.800" fontWeight="bold">
+        <Text fontWeight="bold">
           ${product.price}
         </Text>
       </CardBody>

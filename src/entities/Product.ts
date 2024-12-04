@@ -1,5 +1,5 @@
 export default interface Product {
-  _id: string;
+  id: string; // Virtual 'id' from backend
   title: string;
   description?: string;
   brand: string;
@@ -7,6 +7,9 @@ export default interface Product {
   colors: string[];
   sizes: string[];
   images: string[];
-  type: string;
-  scrapedAt: string;
+  scrapedAt: string; 
+  stockStatus?: string; // 'In Stock' or 'Out of Stock'
+  category?: string; 
+  tags?: string[]; // Used in content-based filtering
+  popularityIndex?: number; // Useful for collaborative filtering
 }

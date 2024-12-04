@@ -38,12 +38,12 @@ const ProductGrid = () => {
           <SimpleGrid
             columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
             spacing={5}
-            padding="10px"
+            padding="20px"
           >
             {data.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.results.map((product: Product) => (
-                  <ProductCardContainer key={product._id}>
+                  <ProductCardContainer key={product.id}>
                     <ProductCard product={product} />
                   </ProductCardContainer>
                 ))}
