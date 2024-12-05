@@ -9,25 +9,25 @@ interface Props {
 
 const ProductComponents = ({ product }: Props) => {
   return (
-    <SimpleGrid columns={2} as="dl">
-      <DefinitionItem term="Platforms">
-        {/* //same as parent_platforms.platform.name */}
-        {product.parent_platforms?.map(({ platform }) => (
-          <Text key={platform.id}>{platform.name}</Text>
-        ))}
+    <SimpleGrid columns={2} as="dl" spacing={4}>
+      {/* Price */}
+      <DefinitionItem term="Price">
+        <CriticScore price={product.price} />
       </DefinitionItem>
-      <DefinitionItem term="Metascore">
-        <CriticScore score={product.metacritic} />
+
+      {/* Sizes */}
+      <DefinitionItem term="Sizes">
+        <Text>{product.sizes?.join(", ") || "N/A"}</Text>
       </DefinitionItem>
-      <DefinitionItem term="Genres">
-        {product.genres?.map((genre) => (
-          <Text key={genre.id}>{genre.name}</Text>
-        ))}
+
+      {/* Brand */}
+      <DefinitionItem term="Brand">
+        <Text>{product.brand || "N/A"}</Text>
       </DefinitionItem>
-      <DefinitionItem term="Publishers">
-        {product.publishers?.map((p) => (
-          <Text key={p.id}>{p.name}</Text>
-        ))}
+
+      {/* Colors */}
+      <DefinitionItem term="Colors">
+        <Text>{product.colors?.join(", ") || "N/A"}</Text>
       </DefinitionItem>
     </SimpleGrid>
   );

@@ -36,8 +36,9 @@ const ProductCard = ({ product }: Props) => {
           {product.brand}
         </Text>
         <Text fontWeight="bold">
-          ${product.price}
+          Rs. {Math.floor(product.price)}
         </Text>
+
       </CardBody>
     </Card>
   );

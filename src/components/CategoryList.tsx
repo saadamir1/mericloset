@@ -2,37 +2,37 @@ import {
   Button,
   Heading,
   HStack,
-  Image,
+  //Image,
   List,
   ListItem,
   Spinner,
 } from "@chakra-ui/react";
 import useCategories from "../hooks/useCategories";
-import getCroppedImageUrl from "../services/image-url";
+//import getCroppedImageUrl from "../services/image-url";
 import useProductQueryStore from "../store";
 
 const CategoryList = () => {
-  const { data, isLoading, error } = useCategories();
+  const { data, isLoading } = useCategories();
   const selectedCategoryID = useProductQueryStore((s) => s.productQuery.categoryID);
   const setSelectedCategoryID = useProductQueryStore((s) => s.setCategoryID);
 
   if (isLoading) return <Spinner />;
   //if (error) return null;
-
+  console.log("Categories data:", data);
   return (
     <>
       <Heading textAlign="left" fontSize="2xl" marginBottom={3}>
         Categories
       </Heading>
       <List>
-        {data?.results.map((category) => (
+        {data?.results?.map((category) => (
           <ListItem key={category.id} paddingY="5px">
             <HStack>
-              <Image
+              {/* <Image
                 boxSize="32px"
                 borderRadius={8}
                 src={getCroppedImageUrl(category.image_background)}
-              />
+              /> */}
               <Button
                 onClick={() => setSelectedCategoryID(category.id)}
                 fontSize="lg"

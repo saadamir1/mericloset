@@ -22,7 +22,7 @@ const BrandSelector = () => {
         {selectedBrand?.name || "Brands"}
       </MenuButton>
       <MenuList>
-        {data?.results.map((brand) => (
+        {data?.results?.map((brand) => (
           <MenuItem
             onClick={() => setselectedBrandID(brand.id)}
             key={brand.id}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import APIClient from "../services/api-client";
 import Brand from "../entities/Brand";
 
-const apiClient = new APIClient<Brand>("/brands/lists/parents");
+const apiClient = new APIClient<Brand>("/brands");
 
 const useBrands = () =>
   useQuery({
