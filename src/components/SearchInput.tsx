@@ -1,4 +1,4 @@
-import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { Input, InputGroup, InputLeftElement, useColorModeValue } from "@chakra-ui/react";
 import { useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 import useProductQueryStore from "../store";
@@ -9,23 +9,32 @@ const SearchInput = () => {
   const setSearchText = useProductQueryStore((s) => s.setSearchText);
   const navigate = useNavigate();
 
+  // Dynamic colors for input border
+  const inputFocusBorderColor = useColorModeValue("green.500", "green.300");
+  const inputHoverBorderColor = useColorModeValue("green.600", "green.400");
+
   return (
     <form
-      onSubmit={() => {
-        event?.preventDefault();
-        if (ref.current) {
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (ref.current?.value) {
           setSearchText(ref.current.value);
           navigate("/");
         }
       }}
     >
       <InputGroup>
-        <InputLeftElement children={<BsSearch />} />
+        <InputLeftElement>
+          <BsSearch color="gray.500" />
+        </InputLeftElement>
         <Input
           ref={ref}
-          borderRadius={20}
+          borderRadius="full"
           placeholder="Search products..."
           variant="filled"
+          focusBorderColor={inputFocusBorderColor}
+          _hover={{ borderColor: inputHoverBorderColor }}
+          _focus={{ borderColor: inputFocusBorderColor }}
         />
       </InputGroup>
     </form>
