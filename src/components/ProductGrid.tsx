@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
+import { Button, SimpleGrid, Text } from "@chakra-ui/react";
 import useProducts from "../hooks/useProducts";
 import Product from "../entities/Product";
 import ProductCard from "./ProductCard";

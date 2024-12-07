@@ -7,6 +7,14 @@ const config: ThemeConfig = {
 const theme = extendTheme({
   config,
   colors: {
+    light: {
+      bg: "#ffffff",
+      text: "#000000",
+    },
+    dark: {
+      bg: "#121212",
+      text: "#ffffff",
+    },
     gray: {
       50: "#f9f9f9",
       100: "#ededed",
@@ -19,6 +27,14 @@ const theme = extendTheme({
       800: "#121212",
       900: "#111111",
     },
+  },
+  styles: {
+    global: (props: { colorMode: string }) => ({
+      body: {
+        bg: props.colorMode === "dark" ? "dark.bg" : "light.bg",
+        color: props.colorMode === "dark" ? "dark.text" : "light.text",
+      },
+    }),
   },
 });
 

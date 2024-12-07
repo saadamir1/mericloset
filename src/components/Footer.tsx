@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Text, Link, VStack, HStack, Icon, Input, Button, useToast, Flex } from '@chakra-ui/react';
-import { FaInstagram, FaFacebookF, FaSnapchatGhost, FaPinterestP, FaEnvelope } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaSnapchatGhost, FaPinterestP } from 'react-icons/fa';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const toast = useToast();
   const year = new Date().getFullYear();
 
   const handleSubscribe = () => {
     if (email) {
-      setIsSubscribed(true);
       toast({
         title: "Subscribed successfully!",
         description: "Our monthly clothes catalog will be sent to your email.",

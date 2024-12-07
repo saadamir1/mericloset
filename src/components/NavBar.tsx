@@ -41,7 +41,6 @@ interface Language {
   flagCode: string;
 }
 
-
 const NavBar: React.FC<NavBarProps> = ({ style }) => {
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
@@ -84,7 +83,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       p={3}
       position="sticky"
       top="0"
-      zIndex="999" 
+      zIndex="999"
       boxShadow="md"
       style={style} // Apply the style prop here
     >
@@ -174,6 +173,10 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                 <MenuItem
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
+                  style={{
+                    textDecoration: currentLanguage === lang.code ? "underline" : "none",
+                    fontWeight: currentLanguage === lang.code ? "bold" : "normal",
+                  }}
                 >
                   <ReactCountryFlag
                     countryCode={lang.flagCode}
