@@ -24,10 +24,8 @@ const CustomSlider = () => {
       },
     ],
   };
-
-  // Convert the `import.meta.glob` result to an array of image URLs
-  const imageArray = Object.values(images) as string[];
-
+  const imageArray = Object.values(images).map((module: any) => module.default);
+  
   return (
     <Box mb={6}>
       <Slider {...settings}>

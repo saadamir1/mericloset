@@ -4,6 +4,7 @@ import {
   HStack,
   Image,
   Button,
+  Text, 
   IconButton,
   useBreakpointValue,
   useColorModeValue,
@@ -45,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
   const navbarBgColor = useColorModeValue("white", "gray.800");
-  const logoHeight = useBreakpointValue({ base: "40px", md: "60px" });
+  const logoHeight = useBreakpointValue({ base: "40px", md: "50px" });
 
   const buttons = [
     { label: "Home", icon: <FaHome />, to: "/" },
@@ -75,6 +76,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       });
     }
   };
+  const sloganColor = useColorModeValue("gray.600", "gray.300");
 
   return (
     <Box
@@ -88,18 +90,23 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       style={style} // Apply the style prop here
     >
       <HStack width="100%" alignItems="center" spacing={4}>
-        {/* Logo */}
-        <RouterLink to="/">
-          <Image
-            src={logo}
-            alt="Logo"
-            height={logoHeight}
-            objectFit="cover"
-            _hover={{ transform: "scale(1.05)" }}
-            transition="transform 0.2s"
-          />
+      {/* Logo and Slogan */}
+      <RouterLink to="/">
+          <Box textAlign="center">
+            <Image
+              src={logo}
+              alt="Logo"
+              height={logoHeight}
+              objectFit="cover"
+              _hover={{ transform: "scale(1.05)" }}
+              transition="transform 0.2s"
+            />
+            {/* Bold slogan with dynamic color */}
+            <Text fontSize="xs" fontStyle={"italic"} color={sloganColor} fontWeight="bold" mt={1}>
+              Style at Your Fingertips
+            </Text>
+          </Box>
         </RouterLink>
-
         {/* Navigation Buttons */}
         {!isMobileView && (
           <HStack spacing={6}>

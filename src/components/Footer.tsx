@@ -7,20 +7,34 @@ const Footer = () => {
   const toast = useToast();
   const year = new Date().getFullYear();
 
+  // Email validation regex pattern
+  const validateEmail = (email: string) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  };
+
   const handleSubscribe = () => {
-    if (email) {
+    if (!email) {
+      toast({
+        title: "Please enter an email address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else if (!validateEmail(email)) {
+      toast({
+        title: "Invalid email address.",
+        description: "Please enter a valid email address.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
       toast({
         title: "Subscribed successfully!",
         description: "Our monthly clothes catalog will be sent to your email.",
         status: "success",
         duration: 5000,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: "Please enter a valid email address.",
-        status: "error",
-        duration: 3000,
         isClosable: true,
       });
     }
