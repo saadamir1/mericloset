@@ -1,4 +1,4 @@
-import { GridItem, Heading,Image, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { Box, GridItem, Heading, Image, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
 import ProductAttributes from "../components/ProductAttributes";
@@ -17,18 +17,28 @@ const ProductDetailPage = () => {
         <text>{product.description}</text>
         <ProductAttributes product={product} />
       </GridItem>
-      <GridItem display="flex" justifyContent="center" alignItems="center">
-      <Image
-        src={product.images[0]}
-        alt={product.title}
-        borderRadius="md"
-        objectFit="contain"
-        maxWidth="100%"
-        height="400px"
-      />
-
+      <GridItem>
+        {/* Scrollable Image Container */}
+        <Box
+          display="flex"
+          overflowX="scroll"
+          paddingY={4}
+          gap={4}
+          className="image-scroller"
+        >
+          {product.images.map((image, index) => (
+            <Image
+              key={index}
+              src={image}
+              alt={`${product.title} - ${index + 1}`}
+              borderRadius="md"
+              objectFit="contain"
+              maxWidth="200px"
+              height="200px"
+            />
+          ))}
+        </Box>
       </GridItem>
-
     </SimpleGrid>
   );
 };

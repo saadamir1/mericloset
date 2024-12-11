@@ -1,16 +1,36 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
-import useBrand from "../hooks/useBrand";
 import useBrands from "../hooks/useBrands";
 import useProductQueryStore from "../store";
+import Brand from "../entities/Brand";
 
 const BrandSelector = () => {
-  const { data, error } = useBrands();
+  const { data, error, isLoading } = useBrands();
   const selectedBrandID = useProductQueryStore((s) => s.productQuery.brandID);
   const setselectedBrandID = useProductQueryStore((s) => s.setBrandID);
-  const selectedBrand = useBrand(selectedBrandID);
 
-  //if (error) return null;
+  if (error) {
+    console.error("Error fetching brands:", error);
+  }
+
+  if (isLoading) {
+    return <div>Loading brands...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading brands</div>;
+  }
+
+  // Extract brands from `data`, assuming it's a `FetchResponse<Brand>`
+  const brands: Brand[] = Array.isArray(data) ? data : data?.results || [];  // Adjust as per the correct property
+
+  if (!brands || brands.length === 0) {
+    return <div>No brands available</div>;
+  }
+
+  const brandLabel = selectedBrandID
+    ? `Brand: ${selectedBrandID}`
+    : "Select a brand";
 
   return (
     <Menu>
@@ -19,10 +39,10 @@ const BrandSelector = () => {
         rightIcon={<BsChevronDown />}
         size={{ base: "sm", md: "md" }}
       >
-        {selectedBrand?.name || "Brands"}
+        {brandLabel}
       </MenuButton>
       <MenuList>
-        {data?.results?.map((brand) => (
+        {brands.map((brand) => (
           <MenuItem
             onClick={() => setselectedBrandID(brand.id)}
             key={brand.id}

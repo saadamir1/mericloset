@@ -12,7 +12,7 @@ const ProductCard = ({ product }: Props) => {
 
   return (
     <Card 
-      height="350px" 
+      height="390px" 
       boxShadow="md" 
       bg={bgColor} 
       borderWidth="1px" 
@@ -23,7 +23,7 @@ const ProductCard = ({ product }: Props) => {
         <Image
           src={product.images[0]}
           alt={product.title}
-          height="240px"
+          height="280px"
           //objectFit="cover"
           borderTopRadius="md"
         />
@@ -35,7 +35,7 @@ const ProductCard = ({ product }: Props) => {
         <Text color="gray.600" fontSize="sm" noOfLines={1}>
           {product.brand}
         </Text>
-        <Text fontWeight="bold">
+        <Text fontWeight="bold"  fontSize="xl">
           Rs. {Math.floor(product.price)}
         </Text>
 

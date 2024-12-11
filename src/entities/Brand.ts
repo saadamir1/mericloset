@@ -1,4 +1,4 @@
-export default interface Platform {
+export default interface Brand {
   id: string;
   name: string;
   slug: string;        

@@ -1,6 +1,6 @@
 import { Heading } from "@chakra-ui/react";
 import useCategory from "../hooks/useCategory";
-import usePlatform from "../hooks/useBrand";
+import useBrand from "../hooks/useBrand";
 import useProductQueryStore from "../store";
 
 const ProductHeading = () => {
@@ -8,7 +8,7 @@ const ProductHeading = () => {
   const category = useCategory(categoryID);
 
   const brandID = useProductQueryStore((s) => s.productQuery.brandID);
-  const brand = usePlatform(brandID);
+  const brand = useBrand(brandID);
 
   const heading = `${brand?.name || ""} ${category?.name || ""} Products`;
 
