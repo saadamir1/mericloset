@@ -6,8 +6,8 @@ import Brand from "../entities/Brand";
 
 const BrandSelector = () => {
   const { data, error, isLoading } = useBrands();
-  const selectedBrandID = useProductQueryStore((s) => s.productQuery.brandID);
-  const setselectedBrandID = useProductQueryStore((s) => s.setBrandID);
+  const selectedBrand = useProductQueryStore((s) => s.productQuery.brandID); // Retrieve the brand name from store
+  const setSelectedBrand = useProductQueryStore((s) => s.setBrandID); // Function to set the brand name in store
 
   if (error) {
     console.error("Error fetching brands:", error);
@@ -22,15 +22,14 @@ const BrandSelector = () => {
   }
 
   // Extract brands from `data`, assuming it's a `FetchResponse<Brand>`
-  const brands: Brand[] = Array.isArray(data) ? data : data?.results || [];  // Adjust as per the correct property
+  const brands: Brand[] = Array.isArray(data) ? data : data?.results || [];
 
   if (!brands || brands.length === 0) {
     return <div>No brands available</div>;
   }
 
-  const brandLabel = selectedBrandID
-    ? `Brand: ${selectedBrandID}`
-    : "Select a brand";
+  // Determine the label to show in the dropdown button
+  const brandLabel = selectedBrand ? `Brand: ${selectedBrand}` : "Select a brand";
 
   return (
     <Menu>
@@ -44,7 +43,7 @@ const BrandSelector = () => {
       <MenuList>
         {brands.map((brand) => (
           <MenuItem
-            onClick={() => setselectedBrandID(brand.id)}
+            onClick={() => setSelectedBrand(brand.name)}  // Set the brand name when a brand is selected
             key={brand.id}
           >
             {brand.name}

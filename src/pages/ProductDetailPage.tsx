@@ -25,19 +25,17 @@ const ProductDetailPage = () => {
     if (!mainImage) return;
     const imageElement = e.currentTarget;
     const { left, top, width, height } = imageElement.getBoundingClientRect();
-  
+
     const x = e.clientX - left;
     const y = e.clientY - top;
-  
+
     setZoomStyle({
       backgroundImage: `url(${mainImage})`,
       backgroundSize: `${width * 2}px ${height * 2}px`,
       backgroundPosition: `${(x / width) * 100}% ${(y / height) * 100}%`,
       backgroundRepeat: "no-repeat",
-      border: "2px solid #ccc",
     });
   };
-  
 
   const handleMouseLeave = () => {
     setZoomStyle({});

@@ -30,6 +30,7 @@ import {
   FaGlobe,
 } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
+import useProductQueryStore from "../store"; // Import useProductQueryStore
 
 // Add the style prop type
 interface NavBarProps {
@@ -76,7 +77,16 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       });
     }
   };
+
   const sloganColor = useColorModeValue("gray.600", "gray.300");
+
+  // Use the resetFilters function from useProductQueryStore
+  const resetFilters = useProductQueryStore((state) => state.resetFilters);
+
+  // Function to clear filters when logo is clicked
+  const handleLogoClick = () => {
+    resetFilters(); // Call resetFilters to clear the filters
+  };
 
   return (
     <Box
@@ -90,8 +100,8 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       style={style} // Apply the style prop here
     >
       <HStack width="100%" alignItems="center" spacing={4}>
-      {/* Logo and Slogan */}
-      <RouterLink to="/">
+        {/* Logo and Slogan */}
+        <RouterLink to="/" onClick={handleLogoClick}>
           <Box textAlign="center">
             <Image
               src={logo}
@@ -107,6 +117,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
             </Text>
           </Box>
         </RouterLink>
+
         {/* Navigation Buttons */}
         {!isMobileView && (
           <HStack spacing={6}>

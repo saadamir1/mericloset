@@ -1,14 +1,17 @@
 import { Menu, MenuList, MenuItem, MenuButton, Button } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
-import useProductQueryStore from "../store";
+import useProductQueryStore from "../store"; // Your custom store
 
 const SortSelector = () => {
   const sortOrders = [
-    { value: "", label: "Relevance" },
+    { value: "", label: "Relevance" }, // Default sorting
     { value: "-added", label: "Date Added" },
-    { value: "name", label: "Name" },
+    { value: "name", label: "Name (A-Z)" },
+    { value: "-name", label: "Name (Z-A)" },
+    { value: "price", label: "Price (Low to High)" },
+    { value: "-price", label: "Price (High to Low)" },
     { value: "-metacritic", label: "Popularity" },
-    { value: "-rating", label: "Average rating" },
+    { value: "-rating", label: "Average Rating" },
   ];
 
   const sortOrder = useProductQueryStore((s) => s.productQuery.sortOrder);
@@ -16,6 +19,8 @@ const SortSelector = () => {
   const currentSortOrder = sortOrders.find(
     (order) => order.value === sortOrder
   );
+  console.log("Current sort order:", sortOrder);
+
 
   return (
     <Menu>
@@ -23,7 +28,6 @@ const SortSelector = () => {
         as={Button}
         rightIcon={<BsChevronDown />}
         size={{ base: "sm", md: "md" }}
-        //px={2} // Optional: Adjust padding for mobile
       >
         {currentSortOrder?.label || "Order by: Relevance"}
       </MenuButton>

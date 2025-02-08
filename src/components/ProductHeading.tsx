@@ -1,16 +1,23 @@
 import { Heading } from "@chakra-ui/react";
 import useCategory from "../hooks/useCategory";
-import useBrand from "../hooks/useBrand";
 import useProductQueryStore from "../store";
 
 const ProductHeading = () => {
   const categoryID = useProductQueryStore((s) => s.productQuery.categoryID);
   const category = useCategory(categoryID);
 
-  const brandID = useProductQueryStore((s) => s.productQuery.brandID);
-  const brand = useBrand(brandID);
+  const brand = useProductQueryStore((s) => s.productQuery.brandID);  // Since brand is a string
 
-  const heading = `${brand?.name || ""} ${category?.name || ""} Products`;
+  // Build the heading dynamically based on brand and category
+  let heading = "Products"; // Default heading
+
+  if (brand && category) {
+    heading = `${brand} ${category.name} Products`;
+  } else if (brand) {
+    heading = `${brand} Products`;
+  } else if (category) {
+    heading = `${category.name} Products`;
+  }
 
   return (
     <Heading as="h1" marginY={5} fontSize="5xl">
