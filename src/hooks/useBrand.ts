@@ -6,4 +6,6 @@ const useBrand = (id?: string) => {
   return brands?.results?.find((brand) => brand.id === id);
 };
 
-export default useBrand;
+export default useBrand; 
+
+/*hello from the other planet*/
