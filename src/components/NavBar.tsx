@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Box,
   HStack,
@@ -12,7 +11,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  useToast,
   Spacer,
   Tooltip,
 } from "@chakra-ui/react";
@@ -21,31 +19,18 @@ import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import {
-  FaUserAlt,
   FaShoppingCart,
   FaHome,
   FaFire,
   FaStar,
   FaPhoneAlt,
   FaGlobe,
-  FaHeart, // Wishlist icon
+  FaHeart,
 } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
-import useProductQueryStore from "../store";
 
-interface NavBarProps {
-  style?: React.CSSProperties;
-}
-
-interface Language {
-  code: string;
-  label: string;
-  flagCode: string;
-}
-
-const NavBar: React.FC<NavBarProps> = ({ style }) => {
+const NavBar = () => {
   const isMobileView = useBreakpointValue({ base: true, md: false });
-  const toast = useToast();
   const navbarBgColor = useColorModeValue("white", "gray.800");
   const logoHeight = useBreakpointValue({ base: "40px", md: "50px" });
 
@@ -56,59 +41,28 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
     { label: "Contact", icon: <FaPhoneAlt />, to: "/contact-us" },
   ];
 
-  const languages: Language[] = [
+  const languages = [
     { code: "en", label: "English", flagCode: "US" },
     { code: "ur", label: "اردو", flagCode: "PK" },
     { code: "fr", label: "Français", flagCode: "FR" },
     { code: "es", label: "Español", flagCode: "ES" },
   ];
 
-  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
-
   const handleLanguageChange = (langCode: string) => {
-    const selectedLanguage = languages.find((lang) => lang.code === langCode);
-    if (selectedLanguage) {
-      setCurrentLanguage(langCode);
-      toast({
-        title: `Language changed to ${selectedLanguage.label}`,
-        status: "info",
-        duration: 2000,
-        isClosable: true,
-      });
+    if (langCode !== "en") {
+      const translateUrl = `https://translate.google.com/translate?hl=${langCode}&sl=auto&tl=${langCode}&u=${window.location.href}`;
+      window.location.href = translateUrl; // ✅ Redirects to Google Translate
     }
   };
 
-  const sloganColor = useColorModeValue("gray.600", "gray.300");
-  const resetFilters = useProductQueryStore((state) => state.resetFilters);
-
-  const handleLogoClick = () => {
-    resetFilters();
-  };
-
   return (
-    <Box
-      bg={navbarBgColor}
-      width="100%"
-      p={3}
-      position="sticky"
-      top="0"
-      zIndex="999"
-      boxShadow="md"
-      style={style}
-    >
+    <Box bg={navbarBgColor} width="100%" p={3} position="sticky" top="0" zIndex="999" boxShadow="md">
       <HStack width="100%" alignItems="center" spacing={4}>
-        {/* Logo and Slogan */}
-        <RouterLink to="/" onClick={handleLogoClick}>
+        {/* Logo */}
+        <RouterLink to="/">
           <Box textAlign="center">
-            <Image
-              src={logo}
-              alt="Logo"
-              height={logoHeight}
-              objectFit="cover"
-              _hover={{ transform: "scale(1.05)" }}
-              transition="transform 0.2s"
-            />
-            <Text fontSize="xs" fontStyle={"italic"} color={sloganColor} fontWeight="bold" mt={1}>
+            <Image src={logo} alt="Logo" height={logoHeight} objectFit="cover" />
+            <Text fontSize="xs" fontStyle={"italic"} fontWeight="bold" mt={1}>
               Style at Your Fingertips
             </Text>
           </Box>
@@ -118,22 +72,13 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
         {!isMobileView && (
           <HStack spacing={6}>
             {buttons.map(({ label, icon, to }) => (
-              <Button
-                key={label}
-                as={RouterLink}
-                to={to}
-                leftIcon={icon}
-                variant="ghost"
-                fontSize="sm"
-                fontWeight="bold"
-              >
+              <Button key={label} as={RouterLink} to={to} leftIcon={icon} variant="ghost">
                 {label}
               </Button>
             ))}
           </HStack>
         )}
 
-        {/* Spacer */}
         <Spacer />
 
         {/* Search Bar */}
@@ -141,76 +86,28 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
           <SearchInput />
         </Box>
 
-        {/* Spacer */}
         <Spacer />
 
-        {/* Icons and Language Menu */}
+        {/* Icons & Language Menu */}
         <HStack spacing={4}>
           <Tooltip label="Toggle Dark Mode">
             <ColorModeSwitch />
           </Tooltip>
-          {/* Wishlist Button */}
           <Tooltip label="Wishlist">
-            <IconButton
-              icon={<FaHeart />}
-              aria-label="Wishlist"
-              variant="ghost"
-              as={RouterLink}
-              to="/wishlist" // Ensure this matches the route path
-            />
+            <IconButton icon={<FaHeart />} aria-label="Wishlist" variant="ghost" as={RouterLink} to="/wishlist" />
           </Tooltip>
           <Tooltip label="Cart">
-            <IconButton
-              icon={<FaShoppingCart />}
-              aria-label="Cart"
-              variant="ghost"
-              as={RouterLink}
-              to="/cart"
-            />
+            <IconButton icon={<FaShoppingCart />} aria-label="Cart" variant="ghost" as={RouterLink} to="/cart" />
           </Tooltip>
           <Menu>
-            <MenuButton
-              as={IconButton}
-              icon={<FaUserAlt />}
-              aria-label="User Profile"
-              variant="ghost"
-            />
-            <MenuList>
-              <MenuItem as={RouterLink} to="/login">
-                Login
-              </MenuItem>
-              <MenuItem as={RouterLink} to="/signup">
-                Register
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              icon={<FaGlobe />}
-              aria-label="Language"
-              variant="ghost"
-              fontSize="xl"
-            />
+            <MenuButton as={IconButton} icon={<FaGlobe />} aria-label="Language" variant="ghost" fontSize="xl" />
             <MenuList>
               {languages.map((lang) => (
                 <MenuItem
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
-                  style={{
-                    textDecoration: currentLanguage === lang.code ? "underline" : "none",
-                    fontWeight: currentLanguage === lang.code ? "bold" : "normal",
-                  }}
                 >
-                  <ReactCountryFlag
-                    countryCode={lang.flagCode}
-                    svg
-                    style={{
-                      width: "1.5em",
-                      height: "1.5em",
-                      marginRight: "0.5em",
-                    }}
-                  />
+                  <ReactCountryFlag countryCode={lang.flagCode} svg style={{ width: "1.5em", height: "1.5em", marginRight: "0.5em" }} />
                   {lang.label}
                 </MenuItem>
               ))}

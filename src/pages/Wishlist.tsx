@@ -1,7 +1,9 @@
 import React from "react";
-import { Box, Text, VStack, Button,Icon, Image, Flex, useColorMode, Container } from "@chakra-ui/react";
+import { Box, Text, VStack, Button, Icon, Image, Flex, useColorMode, Container } from "@chakra-ui/react";
 import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import greenAnimated from "../assets/greenanimated.mp4";
+/*see this*/
 
 const WishlistPage: React.FC = () => {
   const isWishlistEmpty = true;
@@ -9,8 +11,9 @@ const WishlistPage: React.FC = () => {
   const textColor = colorMode === "dark" ? "gray.300" : "gray.900";
   const bgColor = colorMode === "dark" ? "gray.800" : "gray.100";
   const boxShadowColor = colorMode === "dark" ? "md" : "lg";
-  const highlightColor = colorMode === "dark" ? "blue.300" : "blue.700";
+  const highlightColor = colorMode === "dark" ? "teal.300" : "teal.500";
   const secondaryTextColor = colorMode === "dark" ? "gray.400" : "gray.600";
+  const navigate = useNavigate();
 
   return (
     <Container maxW="container.md" py={8} textAlign="center">
@@ -26,14 +29,14 @@ const WishlistPage: React.FC = () => {
         </Box>
         {isWishlistEmpty ? (
           <VStack spacing={4} p={4} bg={bgColor} borderRadius="lg" boxShadow={boxShadowColor} w="full" alignItems="center">
-            <Icon as={FaHeart} color="gray.400" boxSize={12} />
+            <Icon as={FaHeart} color="teal.400" boxSize={12} />
             <Text fontSize="lg" color={textColor} fontWeight="bold">
               Your wishlist is empty.
             </Text>
             <Text fontSize="md" color={secondaryTextColor} maxW="sm" textAlign="center">
               Save your favorite items by tapping the heart icon and build your dream collection!
             </Text>
-            <Button colorScheme="blue" size="lg" borderRadius="full" px={8}>
+            <Button colorScheme="teal" size="lg" borderRadius="full" px={8} onClick={() => navigate("/")}> 
               Start Adding Items
             </Button>
           </VStack>
