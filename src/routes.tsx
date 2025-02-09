@@ -8,10 +8,12 @@ import TermsOfService from "./pages/TermsOfService";
 import ContactUs from "./pages/ContactUs";
 import Login from "./pages/login";
 import Signup from "./pages/signup"
+import BrandRegister from "./pages/BrandRegister"
 import Profile from "./pages/profile"
 import UploadProducts from "./pages/UploadProducts"
 import FAQ from "./pages/FAQ";
 import AboutUs from "./pages/AboutUs";
+import BrandCentral from "./pages/brandCentral";
 
 
 const router = createBrowserRouter([
@@ -27,11 +29,13 @@ const router = createBrowserRouter([
       { path: "contact-us", element: <ContactUs /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "register-brand", element: <BrandRegister /> },
       { path: "profile", element: <Profile /> },
       { path: "upload-products", element: <UploadProducts /> },
       { path: "faq", element: <FAQ/>},
       { path: "about-us", element: <AboutUs /> }, 
     ],
   },
+  { path: "brand-central", element: <BrandCentral /> },
 ]);
 export default router;

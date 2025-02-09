@@ -9,23 +9,21 @@ import {
   VStack,
   useToast,
   Text,
-  HStack,
 } from "@chakra-ui/react";
 import axios from "axios"; 
-import useUserStore from "../userStore";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../userStore";
 
-const SignupPage = () => {
-  const { setIsLoggedIn,setUser, setToken } = useUserStore();
+const RegisterBrandPage = () => {
+    const { setIsLoggedIn,setUser, setToken } = useUserStore();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    brandName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const toast = useToast();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,7 +34,7 @@ const SignupPage = () => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast({
-        title: "Error.",
+        title: "Error",
         description: "Passwords do not match.",
         status: "error",
         duration: 5000,
@@ -45,35 +43,32 @@ const SignupPage = () => {
       return;
     }
 
-    const { confirmPassword, ...userData } = formData;
+    const { confirmPassword, ...brandData } = formData;
 
     try {
-      console.log("Submitting data:", userData);
-      const { data } = await axios.post("http://localhost:5170/api/v1/users/register", userData);
-      setToken(data.token);
-      setUser(data.user);
-
+      console.log("Submitting brand data:", brandData);
+      const { data }  = await axios.post("http://localhost:5170/api/v1/users/register-brand", brandData);
+      
       toast({
-        title: "Signup Successful.",
-        description: "You have successfully signed up.",
+        title: "Registration Successful",
+        description: "Brand registered successfully.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
-
       setToken(data.token);
       setUser(data.user);
       setIsLoggedIn(true);
-
+      
       setTimeout(() => {
-        navigate("/");
+        navigate("/brand-central");
       }, 1500);
     } catch (error) {
       const errorMsg = axios.isAxiosError(error) && error.response
-        ? error.response.data.message || "Signup failed. Please try again."
+        ? error.response.data.message || "Registration failed. Try again."
         : "An unexpected error occurred.";
       toast({
-        title: "Error.",
+        title: "Error",
         description: errorMsg,
         status: "error",
         duration: 5000,
@@ -93,45 +88,28 @@ const SignupPage = () => {
         border="1px solid #e2e8f0"
       >
         <Heading as="h2" size="lg" textAlign="center" mb={6} color="teal.600">
-          Signup
+          Register Brand
         </Heading>
         <Text fontSize="sm" color="gray.600" textAlign="center" mb={4}>
-          Please fill in the details to create your account.
+          Fill in the details to register your brand.
         </Text>
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
-            <HStack spacing={4} width="full">
-              <FormControl isRequired>
-                <FormLabel htmlFor="firstName" color="teal.600">First Name:</FormLabel>
-                <Input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="Enter your first name"
-                  variant="filled"
-                  backgroundColor="gray.100"
-                  focusBorderColor="teal.400"
-                  _placeholder={{ color: "gray.500" }}
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <FormLabel htmlFor="lastName" color="teal.600">Last Name:</FormLabel>
-                <Input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  placeholder="Enter your last name"
-                  variant="filled"
-                  backgroundColor="gray.100"
-                  focusBorderColor="teal.400"
-                  _placeholder={{ color: "gray.500" }}
-                />
-              </FormControl>
-            </HStack>
+            <FormControl isRequired>
+              <FormLabel htmlFor="brandName" color="teal.600">Brand Name:</FormLabel>
+              <Input
+                type="text"
+                id="brandName"
+                name="brandName"
+                value={formData.brandName}
+                onChange={handleChange}
+                placeholder="Enter brand name"
+                variant="filled"
+                backgroundColor="gray.100"
+                focusBorderColor="teal.400"
+                _placeholder={{ color: "gray.500" }}
+              />
+            </FormControl>
 
             <FormControl isRequired>
               <FormLabel htmlFor="email" color="teal.600">Email:</FormLabel>
@@ -141,13 +119,14 @@ const SignupPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Enter email"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
                 _placeholder={{ color: "gray.500" }}
               />
             </FormControl>
+
             <FormControl isRequired>
               <FormLabel htmlFor="password" color="teal.600">Password:</FormLabel>
               <Input
@@ -156,7 +135,7 @@ const SignupPage = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
@@ -172,28 +151,15 @@ const SignupPage = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Confirm your password"
+                placeholder="Confirm password"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
                 _placeholder={{ color: "gray.500" }}
               />
             </FormControl>
-
-            <Button type="submit" colorScheme="teal" width="full" mt={4}>
-              Signup
-            </Button>
-            <Text>Or</Text>
-
-          {/* Added button to sign up as a seller */}
-          <Button
-            variant="outline"
-            colorScheme="teal"
-            width="full"
-            onClick={() => navigate("/register-brand")}
-          >
-            Sign up as Seller
-          </Button>
+            
+            <Button type="submit" colorScheme="teal" width="full" mt={4}>Register</Button>
           </VStack>
         </form>
       </Box>
@@ -201,4 +167,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default RegisterBrandPage;

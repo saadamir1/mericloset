@@ -11,6 +11,8 @@ import {
   IconButton,
   Spinner,
   useToast,
+  Switch,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -19,7 +21,7 @@ import useUserStore from "../userStore";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
 interface CustomJwtPayload extends JwtPayload {
-  role: string; // Add the role property
+  role: string;
 }
 
 const LoginPage = () => {
@@ -29,42 +31,47 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSeller, setIsSeller] = useState(false);
   const toast = useToast(); 
   const navigate = useNavigate();
 
+  const bgColor = useColorModeValue("white", "gray.800");
+  const textColor = useColorModeValue("gray.700", "gray.200");
+  const headingColor = useColorModeValue("teal.600", "teal.300");
+  const inputBg = useColorModeValue("gray.100", "gray.700");
+  const borderColor = useColorModeValue("gray.300", "gray.600");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true); // Start loading
-    setErrorMessage(""); // Reset error message
-    setIsLoggedIn(true);
-
+    setIsLoading(true);
+    setErrorMessage("");
+    
     try {
       const { data } = await axios.post("http://localhost:5170/api/v1/users/login", {
         email,
         password,
+        isSeller,
       });
 
       setToken(data.token);
       setUser(data.user);
+      setIsLoggedIn(true);
 
-      // Decode the token to extract the user role
       const decodedToken = jwtDecode<CustomJwtPayload>(data.token); 
       const userRole = decodedToken.role; 
       setUserRole(userRole); 
 
-      // Show success toast immediately
       toast({
         title: "Login Successful",
         description: "You are now logged in.",
         status: "success",
-        duration: 1500, // Display for 1.5 seconds
+        duration: 1500,
         isClosable: true,
       });
 
-      // Simulate a delay of 1.5 seconds before redirecting
       setTimeout(() => {
         setIsLoading(false);
-        navigate("/"); // Redirect to home page
+        navigate("/");
       }, 1500);
     } catch (error) {
       const errorMsg =
@@ -72,26 +79,24 @@ const LoginPage = () => {
           ? error.response.data.message || "Login failed. Please try again."
           : "An unexpected error occurred.";
       setErrorMessage(errorMsg);
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" height="90vh">
-      <Box p={8} borderRadius="md" boxShadow="lg" backgroundColor="#ffffff" width={{ base: "90%", sm: "400px" }} border="1px solid #e2e8f0">
-        <Heading as="h2" size="lg" textAlign="center" mb={6} color="teal.600">
+      <Box p={8} borderRadius="md" boxShadow="lg" backgroundColor={bgColor} width={{ base: "90%", sm: "400px" }} border="1px solid" borderColor={borderColor}>
+        <Heading as="h2" size="lg" textAlign="center" mb={6} color={headingColor}>
           Login
         </Heading>
-        <Text fontSize="sm" color="#4a5568" textAlign="center" mb={4}>
+        <Text fontSize="sm" color={textColor} textAlign="center" mb={4}>
           Welcome to MeriCloset. Please enter your credentials.
         </Text>
 
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl isRequired>
-              <FormLabel htmlFor="email" color="teal.600">
-                Email:
-              </FormLabel>
+              <FormLabel htmlFor="email" color={headingColor}>Email:</FormLabel>
               <Input
                 type="email"
                 id="email"
@@ -99,16 +104,13 @@ const LoginPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 variant="filled"
-                backgroundColor="#f7fafc"
+                backgroundColor={inputBg}
                 focusBorderColor="teal.400"
-                _placeholder={{ color: "#a0aec0" }} // fixed color in both light and dark mode
               />
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel htmlFor="password" color="teal.600">
-                Password:
-              </FormLabel>
+              <FormLabel htmlFor="password" color={headingColor}>Password:</FormLabel>
               <Box position="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -117,9 +119,8 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   variant="filled"
-                  backgroundColor="#f7fafc"
+                  backgroundColor={inputBg}
                   focusBorderColor="teal.400"
-                  _placeholder={{ color: "#a0aec0" }} // fixed color for placeholder
                 />
                 <IconButton
                   position="absolute"
@@ -134,7 +135,13 @@ const LoginPage = () => {
               </Box>
             </FormControl>
 
-            {/* Display error message if login fails */}
+            <FormControl display="flex" alignItems="center">
+              <FormLabel htmlFor="seller-toggle" mb="0">
+                Login as Seller
+              </FormLabel>
+              <Switch id="seller-toggle" isChecked={isSeller} onChange={() => setIsSeller(!isSeller)} />
+            </FormControl>
+
             {errorMessage && (
               <Text color="red.500" fontSize="sm" textAlign="center">
                 {errorMessage}
