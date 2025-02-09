@@ -7,12 +7,12 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ContactUs from "./pages/ContactUs";
 import Login from "./pages/login";
-import Signup from "./pages/signup"
-import Profile from "./pages/profile"
-import UploadProducts from "./pages/UploadProducts"
+import Signup from "./pages/signup";
+import Profile from "./pages/profile";
+import UploadProducts from "./pages/UploadProducts";
 import FAQ from "./pages/FAQ";
 import AboutUs from "./pages/AboutUs";
-
+import Wishlist from "./pages/Wishlist";
 
 const router = createBrowserRouter([
   {
@@ -29,9 +29,11 @@ const router = createBrowserRouter([
       { path: "signup", element: <Signup /> },
       { path: "profile", element: <Profile /> },
       { path: "upload-products", element: <UploadProducts /> },
-      { path: "faq", element: <FAQ/>},
-      { path: "about-us", element: <AboutUs /> }, 
+      { path: "faq", element: <FAQ /> },
+      { path: "about-us", element: <AboutUs /> },
+      { path: "wishlist", element: <Wishlist /> },
     ],
   },
 ]);
+
 export default router;

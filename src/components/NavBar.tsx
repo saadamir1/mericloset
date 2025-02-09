@@ -4,7 +4,7 @@ import {
   HStack,
   Image,
   Button,
-  Text, 
+  Text,
   IconButton,
   useBreakpointValue,
   useColorModeValue,
@@ -19,7 +19,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
-import SearchInput from "./SearchInput"; // Ensure this component exists
+import SearchInput from "./SearchInput";
 import {
   FaUserAlt,
   FaShoppingCart,
@@ -28,11 +28,11 @@ import {
   FaStar,
   FaPhoneAlt,
   FaGlobe,
+  FaHeart, // Wishlist icon
 } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
-import useProductQueryStore from "../store"; // Import useProductQueryStore
+import useProductQueryStore from "../store";
 
-// Add the style prop type
 interface NavBarProps {
   style?: React.CSSProperties;
 }
@@ -79,13 +79,10 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   };
 
   const sloganColor = useColorModeValue("gray.600", "gray.300");
-
-  // Use the resetFilters function from useProductQueryStore
   const resetFilters = useProductQueryStore((state) => state.resetFilters);
 
-  // Function to clear filters when logo is clicked
   const handleLogoClick = () => {
-    resetFilters(); // Call resetFilters to clear the filters
+    resetFilters();
   };
 
   return (
@@ -97,7 +94,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       top="0"
       zIndex="999"
       boxShadow="md"
-      style={style} // Apply the style prop here
+      style={style}
     >
       <HStack width="100%" alignItems="center" spacing={4}>
         {/* Logo and Slogan */}
@@ -111,7 +108,6 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               _hover={{ transform: "scale(1.05)" }}
               transition="transform 0.2s"
             />
-            {/* Bold slogan with dynamic color */}
             <Text fontSize="xs" fontStyle={"italic"} color={sloganColor} fontWeight="bold" mt={1}>
               Style at Your Fingertips
             </Text>
@@ -152,6 +148,16 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
         <HStack spacing={4}>
           <Tooltip label="Toggle Dark Mode">
             <ColorModeSwitch />
+          </Tooltip>
+          {/* Wishlist Button */}
+          <Tooltip label="Wishlist">
+            <IconButton
+              icon={<FaHeart />}
+              aria-label="Wishlist"
+              variant="ghost"
+              as={RouterLink}
+              to="/wishlist" // Ensure this matches the route path
+            />
           </Tooltip>
           <Tooltip label="Cart">
             <IconButton
