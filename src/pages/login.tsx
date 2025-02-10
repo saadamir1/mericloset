@@ -68,12 +68,36 @@ const LoginPage = () => {
         duration: 1500,
         isClosable: true,
       });
+      if(isSeller)
+      {
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/brand-seller");
+        }, 1500);
+      }
+      else{
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/");
+        }, 1500);
+      }
 
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/");
-      }, 1500);
     } catch (error) {
+
+      //bypass verification for now
+      if(isSeller)
+        {
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/brand-central");
+          }, 1500);
+        }
+        else{
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate("/");
+          }, 1500);
+        }
       const errorMsg =
         axios.isAxiosError(error) && error.response
           ? error.response.data.message || "Login failed. Please try again."
