@@ -22,7 +22,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput"; // Ensure this component exists
 import {
   FaUserAlt,
-  FaShoppingCart,
+  FaHeart,  // Wishlist Icon
   FaHome,
   FaFire,
   FaStar,
@@ -153,15 +153,19 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
           <Tooltip label="Toggle Dark Mode">
             <ColorModeSwitch />
           </Tooltip>
-          <Tooltip label="Cart">
+
+          {/* Wishlist Button */}
+          <Tooltip label="Wishlist">
             <IconButton
-              icon={<FaShoppingCart />}
-              aria-label="Cart"
+              icon={<FaHeart />}
+              aria-label="Wishlist"
               variant="ghost"
               as={RouterLink}
-              to="/cart"
+              to="/wishlist"
             />
           </Tooltip>
+
+          {/* User Profile Menu */}
           <Menu>
             <MenuButton
               as={IconButton}
@@ -178,6 +182,8 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               </MenuItem>
             </MenuList>
           </Menu>
+
+          {/* Language Menu */}
           <Menu>
             <MenuButton
               as={IconButton}

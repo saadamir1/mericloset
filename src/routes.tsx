@@ -14,6 +14,7 @@ import UploadProducts from "./pages/UploadProducts"
 import FAQ from "./pages/FAQ";
 import AboutUs from "./pages/AboutUs";
 import BrandCentral from "./pages/brandCentral";
+import WishlistPage from "./pages/Wishlist";
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "upload-products", element: <UploadProducts /> },
       { path: "faq", element: <FAQ/>},
       { path: "about-us", element: <AboutUs /> }, 
+      { path: "wishlist", element: <WishlistPage /> } 
     ],
   },
   { path: "brand-central", element: <BrandCentral /> },
