@@ -4,7 +4,7 @@ import {
   HStack,
   Image,
   Button,
-  Text, 
+  Text,
   IconButton,
   useBreakpointValue,
   useColorModeValue,
@@ -19,7 +19,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
-import SearchInput from "./SearchInput"; // Ensure this component exists
+import SearchInput from "./SearchInput";
 import {
   FaUserAlt,
   FaHeart,  // Wishlist Icon
@@ -28,9 +28,13 @@ import {
   FaStar,
   FaPhoneAlt,
   FaGlobe,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserPlus,
 } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
 import useProductQueryStore from "../store"; // Import useProductQueryStore
+import userStore from "./../userStore"; // Import useUser  Store
 
 // Add the style prop type
 interface NavBarProps {
@@ -47,12 +51,12 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
   const navbarBgColor = useColorModeValue("white", "gray.800");
-  const logoHeight = useBreakpointValue({ base: "40px", md: "50px" });
+  const logoHeight = useBreakpointValue({ base: "30px", md: "40px" });
 
   const buttons = [
     { label: "Home", icon: <FaHome />, to: "/" },
-    { label: "Trending", icon: <FaFire />, to: "/" },
-    { label: "New Arrival", icon: <FaStar />, to: "/" },
+    { label: "Trending", icon: <FaFire />, to: "/trending" },
+    { label: "New Arrival", icon: <FaStar />, to: "/new-arrival" },
     { label: "Contact", icon: <FaPhoneAlt />, to: "/contact-us" },
   ];
 
@@ -64,6 +68,8 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   ];
 
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
+
+  const { user, isLoggedIn, logout } = userStore();
 
   const handleLanguageChange = (langCode: string) => {
     const selectedLanguage = languages.find((lang) => lang.code === langCode);
@@ -78,29 +84,34 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
     }
   };
 
-  const sloganColor = useColorModeValue("gray.600", "gray.300");
-
-  // Use the resetFilters function from useProductQueryStore
   const resetFilters = useProductQueryStore((state) => state.resetFilters);
 
-  // Function to clear filters when logo is clicked
   const handleLogoClick = () => {
-    resetFilters(); // Call resetFilters to clear the filters
+    resetFilters();
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out successfully",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   };
 
   return (
     <Box
       bg={navbarBgColor}
       width="100%"
-      p={3}
+      p={2}
       position="sticky"
       top="0"
       zIndex="999"
       boxShadow="md"
-      style={style} // Apply the style prop here
+      style={style}
     >
       <HStack width="100%" alignItems="center" spacing={4}>
-        {/* Logo and Slogan */}
         <RouterLink to="/" onClick={handleLogoClick}>
           <Box textAlign="center">
             <Image
@@ -111,16 +122,11 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               _hover={{ transform: "scale(1.05)" }}
               transition="transform 0.2s"
             />
-            {/* Bold slogan with dynamic color */}
-            <Text fontSize="xs" fontStyle={"italic"} color={sloganColor} fontWeight="bold" mt={1}>
-              Style at Your Fingertips
-            </Text>
           </Box>
         </RouterLink>
 
-        {/* Navigation Buttons */}
         {!isMobileView && (
-          <HStack spacing={6}>
+          <HStack spacing={4}>
             {buttons.map(({ label, icon, to }) => (
               <Button
                 key={label}
@@ -129,7 +135,8 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                 leftIcon={icon}
                 variant="ghost"
                 fontSize="sm"
-                fontWeight="bold"
+                fontWeight="medium"
+                _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
               >
                 {label}
               </Button>
@@ -137,24 +144,19 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
           </HStack>
         )}
 
-        {/* Spacer */}
         <Spacer />
 
-        {/* Search Bar */}
-        <Box maxW={{ base: "300px", md: "900px" }} flex="1">
+        <Box maxW={{ base: "200px", md: "600px" }}  minW="300px" flex="1">
           <SearchInput />
         </Box>
 
-        {/* Spacer */}
         <Spacer />
 
-        {/* Icons and Language Menu */}
-        <HStack spacing={4}>
-          <Tooltip label="Toggle Dark Mode">
+        <HStack spacing={2}>
+          <Tooltip label="Toggle Dark Mode ">
             <ColorModeSwitch />
           </Tooltip>
 
-          {/* Wishlist Button */}
           <Tooltip label="Wishlist">
             <IconButton
               icon={<FaHeart />}
@@ -162,28 +164,41 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               variant="ghost"
               as={RouterLink}
               to="/wishlist"
+              _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
             />
           </Tooltip>
 
-          {/* User Profile Menu */}
           <Menu>
             <MenuButton
               as={IconButton}
               icon={<FaUserAlt />}
-              aria-label="User Profile"
+              aria-label="User  Profile"
               variant="ghost"
+              _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
             />
             <MenuList>
-              <MenuItem as={RouterLink} to="/login">
-                Login
-              </MenuItem>
-              <MenuItem as={RouterLink} to="/signup">
-                Register
-              </MenuItem>
+              {isLoggedIn ? (
+                <>
+                  <MenuItem as={RouterLink} to="/profile" icon={<FaUserAlt />}>
+                    Profile
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout} icon={<FaSignOutAlt />}>
+                    Logout
+                  </MenuItem>
+                </>
+              ) : (
+                <>
+                  <MenuItem as={RouterLink} to="/login" icon={<FaSignInAlt />}>
+                    Login
+                  </MenuItem>
+                  <MenuItem as={RouterLink} to="/signup" icon={<FaUserPlus />}>
+                    Register
+                  </MenuItem>
+                </>
+              )}
             </MenuList>
           </Menu>
 
-          {/* Language Menu */}
           <Menu>
             <MenuButton
               as={IconButton}
@@ -191,6 +206,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               aria-label="Language"
               variant="ghost"
               fontSize="xl"
+              _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
             />
             <MenuList>
               {languages.map((lang) => (
