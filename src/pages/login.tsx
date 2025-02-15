@@ -26,7 +26,7 @@ interface CustomJwtPayload extends JwtPayload {
 
 const LoginPage = () => {
   const { setIsLoggedIn, setUser, setToken, setUserRole } = useUserStore();
-  const [email, setEmail] = useState("");
+  const [loginIdentifier, setloginIdentifier] = useState(""); //email or username
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,22 +45,23 @@ const LoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessage("");
-    
+  
     try {
       const { data } = await axios.post("http://localhost:5170/api/v1/users/login", {
-        email,
+        loginIdentifier,
         password,
         isSeller,
       });
-
+  
       setToken(data.token);
+      console.log(data.token);
       setUser(data.user);
       setIsLoggedIn(true);
-
-      const decodedToken = jwtDecode<CustomJwtPayload>(data.token); 
-      const userRole = decodedToken.role; 
-      setUserRole(userRole); 
-
+  
+      const decodedToken = jwtDecode<CustomJwtPayload>(data.token);
+      const userRole = decodedToken.role;
+      setUserRole(userRole);
+  
       toast({
         title: "Login Successful",
         description: "You are now logged in.",
@@ -68,44 +69,23 @@ const LoginPage = () => {
         duration: 1500,
         isClosable: true,
       });
-      if(isSeller)
-      {
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate("/brand-seller");
-        }, 1500);
-      }
-      else{
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate("/");
-        }, 1500);
-      }
-
-    } catch (error) {
-
-      //bypass verification for now
-      if(isSeller)
-        {
-          setTimeout(() => {
-            setIsLoading(false);
-            navigate("/brand-central");
-          }, 1500);
-        }
-        else{
-          setTimeout(() => {
-            setIsLoading(false);
-            navigate("/");
-          }, 1500);
-        }
+  
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate(isSeller ? "/brand-central" : "/");
+      }, 1500);
+      
+    } catch (error) {  
       const errorMsg =
         axios.isAxiosError(error) && error.response
           ? error.response.data.message || "Login failed. Please try again."
           : "An unexpected error occurred.";
+  
       setErrorMessage(errorMsg);
       setIsLoading(false);
     }
   };
+  
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" height="90vh">
@@ -120,13 +100,13 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl isRequired>
-              <FormLabel htmlFor="email" color={headingColor}>Email:</FormLabel>
+              <FormLabel htmlFor="loginIdentifier" color={headingColor}>Email or Username:</FormLabel>
               <Input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                type="loginIdentifier"
+                id="loginIdentifier"
+                value={loginIdentifier}
+                onChange={(e) => setloginIdentifier(e.target.value)}
+                placeholder="zainali"
                 variant="filled"
                 backgroundColor={inputBg}
                 focusBorderColor="teal.400"
@@ -141,7 +121,7 @@ const LoginPage = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="xxxxxx"
                   variant="filled"
                   backgroundColor={inputBg}
                   focusBorderColor="teal.400"
