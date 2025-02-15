@@ -19,7 +19,7 @@ import { FaHeart, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import greenAnimated from "../assets/greenanimated.mp4";
-
+import userStore from "./../userStore"
 // Define the full Product schema structure
 interface Product {
   _id: string;
@@ -49,13 +49,15 @@ const WishlistPage: React.FC = () => {
 
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const {user} = userStore();
 
-  // ✅ **Fetch Wishlist Only Once on Page Load**
+  // ✅ Fetch Wishlist Only Once on Page Load
   useEffect(() => {
     const fetchWishlist = async () => {
+      if (!user) return; // Ensure user is available
       try {
         const { data } = await axios.get<WishlistItem[]>(
-          "http://localhost:5170/api/v1/favorites/user"
+          `http://localhost:5170/api/v1/favorites/user/${user.id}`
         );
         setWishlist(data);
       } catch (error) {
@@ -65,8 +67,25 @@ const WishlistPage: React.FC = () => {
       }
     };
 
-    fetchWishlist();
-  }, []); // ✅ Empty dependency array ensures this runs only once
+    if (user) fetchWishlist();
+  }, [user]); // ✅ Runs when user is available
+
+  // ✅ Remove Item from Wishlist
+  const removeFromWishlist = async (productId: string) => {
+    if (!user || !user.id) {
+      console.error("User not found! Please log in.");
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:5170/api/v1/favorites/remove/${productId}/${user.id}`
+      );
+      setWishlist((prev) => prev.filter((fav) => fav.product._id !== productId));
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+    }
+  };
 
   return (
     <Container maxW="container.xl" py={8}>
@@ -75,17 +94,17 @@ const WishlistPage: React.FC = () => {
           My Wishlist
         </Heading>
 
-        {wishlist.length === 0 && (
-  <Flex justify="center" align="center" width="100%">
-    <Box mb={4} borderRadius="lg" overflow="hidden" boxShadow="lg" width="100%" maxW="450px">
-      <video width="100%" autoPlay loop muted>
-        <source src={greenAnimated} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </Box>
-  </Flex>
-)}
-
+        {/* ✅ Empty Wishlist Animation */}
+        {wishlist.length === 0 && !loading && (
+          <Flex justify="center" align="center" width="100%">
+            <Box mb={4} borderRadius="lg" overflow="hidden" boxShadow="lg" width="100%" maxW="450px">
+              <video width="100%" autoPlay loop muted>
+                <source src={greenAnimated} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </Box>
+          </Flex>
+        )}
 
         {loading ? (
           <Spinner size="xl" color="teal.500" />
@@ -144,16 +163,7 @@ const WishlistPage: React.FC = () => {
                     mt={4}
                     w="full"
                     borderRadius="full"
-                    onClick={async () => {
-                      try {
-                        await axios.delete(
-                          `http://localhost:5170/api/v1/favorites/remove/${item.product._id}`
-                        );
-                        setWishlist((prev) => prev.filter((fav) => fav.product._id !== item.product._id));
-                      } catch (error) {
-                        console.error("Error removing favorite:", error);
-                      }
-                    }}
+                    onClick={() => removeFromWishlist(item.product._id)}
                   >
                     Remove
                   </Button>
