@@ -60,7 +60,7 @@ const SignupPage = () => {
         duration: 5000,
         isClosable: true,
       });
-
+      console.log("Signup successful:", data);
       setToken(data.token);
       setUser(data.user);
       setIsLoggedIn(true);
@@ -93,7 +93,7 @@ const SignupPage = () => {
         border="1px solid #e2e8f0"
       >
         <Heading as="h2" size="lg" textAlign="center" mb={6} color="teal.600">
-          Signup
+          Register
         </Heading>
         <Text fontSize="sm" color="gray.600" textAlign="center" mb={4}>
           Please fill in the details to create your account.
@@ -109,12 +109,12 @@ const SignupPage = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="Enter your first name"
+                  placeholder="Zain"
                   variant="filled"
                   backgroundColor="gray.100"
                   focusBorderColor="teal.400"
-                  _placeholder={{ color: "gray.500" }}
-                />
+                  _placeholder={{ color: "gray.500", fontStyle: "italic" }}
+                  />
               </FormControl>
               <FormControl isRequired>
                 <FormLabel htmlFor="lastName" color="teal.600">Last Name:</FormLabel>
@@ -124,12 +124,12 @@ const SignupPage = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  placeholder="Enter your last name"
+                  placeholder="Ali"
                   variant="filled"
                   backgroundColor="gray.100"
                   focusBorderColor="teal.400"
-                  _placeholder={{ color: "gray.500" }}
-                />
+                  _placeholder={{ color: "gray.500", fontStyle: "italic" }}
+                  />
               </FormControl>
             </HStack>
 
@@ -141,12 +141,12 @@ const SignupPage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="zain321@gmail.com"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
-                _placeholder={{ color: "gray.500" }}
-              />
+                _placeholder={{ color: "gray.500", fontStyle: "italic" }}
+                />
             </FormControl>
             <FormControl isRequired>
               <FormLabel htmlFor="password" color="teal.600">Password:</FormLabel>
@@ -156,12 +156,12 @@ const SignupPage = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter your password"
+                placeholder="xxxxxx"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
-                _placeholder={{ color: "gray.500" }}
-              />
+                _placeholder={{ color: "gray.500", fontStyle: "italic" }}
+                />
             </FormControl>
 
             <FormControl isRequired>
@@ -172,12 +172,12 @@ const SignupPage = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Confirm your password"
+                placeholder="xxxxxxx"
                 variant="filled"
                 backgroundColor="gray.100"
                 focusBorderColor="teal.400"
-                _placeholder={{ color: "gray.500" }}
-              />
+                _placeholder={{ color: "gray.500", fontStyle: "italic" }}
+                />
             </FormControl>
 
             <Button type="submit" colorScheme="teal" width="full" mt={4}>
