@@ -3,7 +3,6 @@ import {
   Box,
   GridItem,
   Heading,
-  Image,
   SimpleGrid,
   Spinner,
   Text,
@@ -15,21 +14,19 @@ import {
   ModalCloseButton,
   useDisclosure,
   Icon,
-  useColorModeValue,
+  useColorModeValue, Image,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { FaRulerCombined } from "react-icons/fa";
 import useProduct from "../hooks/useProduct";
 import ProductAttributes from "../components/ProductAttributes";
-
-// Import the size chart image if it's in the src/assets/ folder
+import ImageZoom from "../components/ImageZoom";
 import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 
 const ProductDetailPage = () => {
   const { slug } = useParams();
   const { data: product, isLoading, error } = useProduct(slug!);
   const [mainImage, setMainImage] = useState<string | null>(null);
-  const [zoomStyle, setZoomStyle] = useState<React.CSSProperties>({});
   const { isOpen, onOpen, onClose } = useDisclosure(); // Modal control for Size Chart
   const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState<number>(0); // Track selected thumbnail
 
@@ -50,31 +47,12 @@ const ProductDetailPage = () => {
     setSelectedThumbnailIndex(index); // Update selected thumbnail index
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    if (!mainImage) return;
-    const imageElement = e.currentTarget;
-    const { left, top, width, height } = imageElement.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-
-    setZoomStyle({
-      backgroundImage: `url(${mainImage})`,
-      backgroundSize: `${width * 2}px ${height * 2}px`,
-      backgroundPosition: `${(x / width) * 100}% ${(y / height) * 100}%`,
-      backgroundRepeat: "no-repeat",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setZoomStyle({});
-  };
-
   // Loading and error handling
   if (isLoading) return <Spinner />;
   if (error || !product) {
     return (
       <Text>
-        Error: {error instanceof Error ? error.message : "Product not found"}
+        Error : {error instanceof Error ? error.message : "Product not found"}
       </Text>
     );
   }
@@ -91,7 +69,7 @@ const ProductDetailPage = () => {
         <Box>
           <ProductAttributes product={product} />
 
-          {/* 🆕 Fix: Properly Align the Size Chart Button Under "Sizes" */}
+          {/* Size Chart Button */}
           <Box mt={2}>
             <Button
               onClick={onOpen}
@@ -112,34 +90,7 @@ const ProductDetailPage = () => {
       </GridItem>
 
       <GridItem>
-        <Box mb={4} display="flex" justifyContent="center" position="relative">
-          <Image
-            src={mainImage || ""}
-            alt={product.title}
-            maxWidth="100%"
-            maxHeight="500px"
-            objectFit="contain"
-            borderRadius="md"
-            boxShadow="lg"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            cursor="zoom-in"
-          />
-          {zoomStyle.backgroundImage && (
-            <Box
-              style={zoomStyle}
-              borderRadius="md"
-              boxShadow="lg"
-              display="block"
-              width="300px"
-              height="300px"
-              position="absolute"
-              top="50px"
-              left="50px"
-              zIndex="10"
-            />
-          )}
-        </Box>
+        <ImageZoom src={mainImage || ""} alt={product.title} />
         <Box display="flex" overflowX="auto" paddingY={4} gap={4} justifyContent="center">
           {product.images.map((image, index) => (
             <Box
@@ -175,13 +126,12 @@ const ProductDetailPage = () => {
         </Box>
       </GridItem>
 
-      {/* 🆕 Size Chart Modal */}
+      {/* Size Chart Modal */}
       <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
           <ModalBody p={4} display="flex" justifyContent="center">
-            {/* Load image based on correct path */}
             <Image
               src={sizeChartImg}
               alt="Size Chart"
