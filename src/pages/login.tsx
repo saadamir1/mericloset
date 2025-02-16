@@ -72,7 +72,7 @@ const LoginPage = () => {
   
       setTimeout(() => {
         setIsLoading(false);
-        navigate(isSeller ? "/brand-central" : "/");
+        navigate(isSeller ? "/brand" : "/");
       }, 1500);
       
     } catch (error) {  

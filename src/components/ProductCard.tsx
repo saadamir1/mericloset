@@ -70,13 +70,13 @@ const ProductCard = ({ product }: Props) => {
   
     try {
       if (!isWishlisted) {
-        const response = await axios.post("http://localhost:5170/api/v1/favorites/add", {
+        await axios.post("http://localhost:5170/api/v1/favorites/add", {
           userId: user.id, // ✅ Ensure user ID is sent
           productId: product.id,
         });
         setIsWishlisted(true);
       } else {
-        const response = await axios.delete(
+        await axios.delete(
           `ttp://localhost:5170/api/v1/favorites/remove/${product.id}/${user.id}`
         );
         setIsWishlisted(false);
@@ -86,7 +86,7 @@ const ProductCard = ({ product }: Props) => {
     }
   };
   
-
+  
   return (
     <Card
       height="390px"

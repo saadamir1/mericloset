@@ -46,7 +46,7 @@ const CategoryList = () => {
   }
 
   const renderCategories = (categories: Category[]) => {
-      console.log("Rendering categories:", categories);
+      //console.log("Rendering categories:", categories);
 
       return categories.map((category: Category) => {
           const hasSubcategories = Array.isArray(category.subcategories) && category.subcategories.length > 0;
