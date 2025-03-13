@@ -4,7 +4,6 @@ import {
   HStack,
   Image,
   Button,
-  Text,
   IconButton,
   useBreakpointValue,
   useColorModeValue,
@@ -50,7 +49,7 @@ interface Language {
 const NavBar: React.FC<NavBarProps> = ({ style }) => {
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
-  const navbarBgColor = useColorModeValue("white", "gray.800");
+  const navbarBgColor = useColorModeValue("gray.400", "gray.800");
   const logoHeight = useBreakpointValue({ base: "30px", md: "40px" });
 
   const buttons = [
@@ -69,7 +68,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
 
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
 
-  const { user, isLoggedIn, logout } = userStore();
+  const { isLoggedIn, logout } = userStore();
 
   const handleLanguageChange = (langCode: string) => {
     const selectedLanguage = languages.find((lang) => lang.code === langCode);
