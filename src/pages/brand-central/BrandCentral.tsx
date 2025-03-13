@@ -108,7 +108,7 @@ const BrandCentral: React.FC = () => {
                 <Td>
                   <IconButton
                     as={Link}
-                    to={`/brand/edit-product/${product.id}`}
+                    // to={`/brand/edit-product/${product.id}`}
                     aria-label="Edit Product"
                     icon={<EditIcon />}
                     mr={2}

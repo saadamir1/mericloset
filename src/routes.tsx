@@ -14,11 +14,15 @@ import Profile from "./pages/profile";
 import UploadProducts from "./pages/UploadProducts";
 import FAQ from "./pages/FAQ";
 import AboutUs from "./pages/AboutUs";
-import BrandCentral from "./pages/brand-central/brandCentral";
+//import BrandCentral from "./pages/brand-central/brandCentral";
 import WishlistPage from "./pages/Wishlist";
 import BrandLayout from "./pages/brand-central/BrandLayout";
 import AddProduct from "./pages/brand-central/AddProduct";
-import EditProduct from "./pages/brand-central/editProduct";
+import BrandCentral from "@pages/brand-central/BrandCentral";
+import AdminLayout from "@pages/admin-central/AdminLayout";
+import AdminErrorPage from "@pages/admin-central/AdminErrorPage";
+import AdminCentral from "@pages/admin-central/AdminCentral";
+//import EditProduct from "./pages/brand-central/editProduct";
 
 const router = createBrowserRouter([
   {
@@ -46,9 +50,19 @@ const router = createBrowserRouter([
     element: <BrandLayout />, // Brand Layout
     errorElement: <BrandErrorPage />,
     children: [
-      { index: true, element: <BrandCentral /> },
+       { index: true, element: <BrandCentral /> },
       { path: "add-product", element: <AddProduct /> },
-      { path: "edit-product", element: <EditProduct /> },
+      { path: "edit-profile", element: <Profile /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    errorElement: <AdminErrorPage />,
+    children: [
+       { index: true, element: <AdminCentral /> },
+      { path: "add-product", element: <AddProduct /> }, 
+      { path: "edit-profile", element: <Profile /> },
     ],
   },
 ]);

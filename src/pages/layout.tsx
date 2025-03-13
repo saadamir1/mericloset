@@ -9,7 +9,7 @@ const Layout = () => {
   return (
     <Flex direction="column" minHeight="100vh">
       <NotificationBar />
-      <NavBar style={{ marginTop: "50px" }} />
+      <NavBar style={{ marginTop: "40px" }} />
       <Box flex="1" padding={5}>
         <Outlet /> {/* Renders the active route component */}
       </Box>
