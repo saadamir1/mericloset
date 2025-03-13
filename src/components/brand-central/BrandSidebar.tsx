@@ -1,50 +1,183 @@
 import React from 'react';
-import { Box, VStack, Button, Image } from '@chakra-ui/react';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './../../assets/logo.webp'; // Adjust the path to your logo image
-import useUserStore from './../../userStore'; // Import the user store
+import { 
+  Box, 
+  VStack, 
+  Button, 
+  Image, 
+  Flex, 
+  Text, 
+  Icon, 
+  Divider, 
+  Tooltip
+} from '@chakra-ui/react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { 
+  FiHome, 
+  FiPlusCircle, 
+  FiEdit, 
+  FiLogOut, 
+  FiPackage, 
+  FiBarChart
+} from 'react-icons/fi';
+import logo from './../../assets/logo.webp';
+import useUserStore from './../../userStore';
 
 const BrandSidebar: React.FC = () => {
   const navigate = useNavigate();
-  const logout = useUserStore((state) => state.logout); // Get the logout function from the store
+  const location = useLocation();
+  const logout = useUserStore((state) => state.logout);
 
   const handleLogout = () => {
-    logout(); // Call the logout function
-    navigate('/login'); // Redirect to the login page after logout
+    logout();
+    navigate('/login');
   };
+
+  // Helper function to check active route
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <Box
-      width="200px"
-      bg="gray.200"
-      p={4}
-      height="100vh" // Full height of the viewport
-      position="fixed" // Make the sidebar fixed
+      width="240px"
+      bg="#1A202C" // Dark background for contrast with white logo text
+      height="100vh"
+      position="fixed"
       left={0}
       top={0}
+      boxShadow="0 0 10px rgba(0, 0, 0, 0.3)"
+      color="white"
     >
-      <Image src={logo} alt="Logo" mb={4} /> {/* Add your logo here */}
-      <VStack spacing={4} align="stretch">
-        <Link to="/brand">
-          <Button width="100%" variant="outline">Brand Central</Button>
-        </Link>
-        <Link to="/brand/add-product">
-          <Button width="100%" variant="outline">Add Product</Button>
-        </Link>
-        <Link to="/brand/edit-product">
-          <Button width="100%" variant="outline">Edit Product</Button>
-        </Link>
-        {/* Logout Button */}
-        <Button
-          width="100%"
-          variant="outline"
-          colorScheme="red"
-          onClick={handleLogout}
+      {/* Brand Header */}
+      <Flex 
+        align="center" 
+        justify="center" 
+        py={6} 
+        borderBottom="1px solid"
+        borderColor="whiteAlpha.200"
+      >
+        <Image src={logo} alt="Logo" maxHeight="40px" />
+      </Flex>
+
+      {/* Main Navigation */}
+      <Box p={4}>
+        <Text 
+          fontSize="xs" 
+          fontWeight="bold" 
+          color="#68D391" // Light green to match your brand
+          mb={3} 
+          textTransform="uppercase"
+          px={2}
         >
-          Logout
-        </Button>
-      </VStack>
+          Brand Management
+        </Text>
+
+        <VStack spacing={2} align="stretch">
+          <NavItem 
+            icon={FiHome} 
+            label="Brand Central" 
+            to="/brand" 
+            isActive={isActive('/brand')}
+          />
+          
+          <NavItem 
+            icon={FiBarChart} 
+            label="Analytics" 
+            to="/brand/analytics" 
+            isActive={isActive('/brand/analytics')}
+          />
+          
+          <Divider my={4} borderColor="whiteAlpha.200" />
+          
+          <Text 
+            fontSize="xs" 
+            fontWeight="bold" 
+            color="#68D391" // Light green to match your brand
+            mb={3} 
+            textTransform="uppercase"
+            px={2}
+          >
+            Product Management
+          </Text>
+          
+          <NavItem 
+            icon={FiPackage} 
+            label="Products" 
+            to="/brand/products" 
+            isActive={isActive('/brand/products')}
+          />
+          
+          <NavItem 
+            icon={FiPlusCircle} 
+            label="Add Product" 
+            to="/brand/add-product" 
+            isActive={isActive('/brand/add-product')}
+          />
+          
+          <NavItem 
+            icon={FiEdit} 
+            label="Edit Product" 
+            to="/brand/edit-profile" 
+            isActive={isActive('/brand/edit-product')}
+          />
+        </VStack>
+      </Box>
+
+      {/* Logout Button fixed at bottom */}
+      <Box position="absolute" bottom={6} width="100%" px={4}>
+        <Tooltip label="Logout" placement="right">
+          <Button
+            width="100%"
+            variant="outline"
+            colorScheme="red"
+            size="md"
+            height="50px"
+            borderRadius="md"
+            onClick={handleLogout}
+            leftIcon={<Icon as={FiLogOut} boxSize={5} />}
+            justifyContent="flex-start"
+            fontWeight="medium"
+            borderColor="red.500"
+            _hover={{
+              bg: "rgba(229, 62, 62, 0.2)" // Subtle hover for red button
+            }}
+          >
+            Logout
+          </Button>
+        </Tooltip>
+      </Box>
     </Box>
+  );
+};
+
+// Navigation Item Component
+interface NavItemProps {
+  icon: React.ElementType;
+  label: string;
+  to: string;
+  isActive: boolean;
+}
+
+const NavItem: React.FC<NavItemProps> = ({ icon, label, to, isActive }) => {
+  return (
+    <Link to={to} style={{ textDecoration: 'none' }}>
+      <Flex
+        align="center"
+        p={3}
+        borderRadius="md"
+        cursor="pointer"
+        transition="all 0.2s"
+        bg={isActive ? 'rgba(104, 211, 145, 0.15)' : 'transparent'} // Semi-transparent green for active state
+        color={isActive ? '#68D391' : 'whiteAlpha.900'}
+        _hover={{
+          bg: isActive ? 'rgba(104, 211, 145, 0.15)' : 'whiteAlpha.100',
+          color: isActive ? '#68D391' : 'white'
+        }}
+      >
+        <Icon as={icon} boxSize={5} mr={3} />
+        <Text fontWeight={isActive ? 'medium' : 'normal'}>
+          {label}
+        </Text>
+      </Flex>
+    </Link>
   );
 };
 
