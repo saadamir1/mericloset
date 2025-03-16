@@ -1,4 +1,5 @@
 export default interface Product {
+  views: number;
   id: string; // Virtual 'id' from backend
   title: string;
   description?: string;
