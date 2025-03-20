@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   HStack,
@@ -21,9 +21,8 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import {
   FaUserAlt,
-  FaHeart,  // Wishlist Icon
+  FaHeart,
   FaHome,
-  FaFire,
   FaStar,
   FaPhoneAlt,
   FaGlobe,
@@ -32,10 +31,9 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 import ReactCountryFlag from "react-country-flag";
-import useProductQueryStore from "../store"; // Import useProductQueryStore
-import userStore from "./../userStore"; // Import useUser  Store
+import useProductQueryStore from "../store";
+import userStore from "./../userStore";
 
-// Add the style prop type
 interface NavBarProps {
   style?: React.CSSProperties;
 }
@@ -47,15 +45,35 @@ interface Language {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ style }) => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
   const isMobileView = useBreakpointValue({ base: true, md: false });
   const toast = useToast();
   const navbarBgColor = useColorModeValue("gray.400", "gray.800");
   const logoHeight = useBreakpointValue({ base: "30px", md: "40px" });
 
+  const { isLoggedIn, logout } = userStore();
+  const resetFilters = useProductQueryStore((state) => state.resetFilters);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUserId(parsedUser._id || null);
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+      }
+    }
+  }, []);
+
   const buttons = [
     { label: "Home", icon: <FaHome />, to: "/" },
-    { label: "Trending", icon: <FaFire />, to: "/trending" },
-    { label: "New Arrival", icon: <FaStar />, to: "/new-arrival" },
+    {
+      label: "Recommendations",
+      icon: <FaStar />,
+      to: userId ? `/recommendations/${userId}` : "#",
+    },
     { label: "Contact", icon: <FaPhoneAlt />, to: "/contact-us" },
   ];
 
@@ -65,10 +83,6 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
     { code: "fr", label: "Français", flagCode: "FR" },
     { code: "es", label: "Español", flagCode: "ES" },
   ];
-
-  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
-
-  const { isLoggedIn, logout } = userStore();
 
   const handleLanguageChange = (langCode: string) => {
     const selectedLanguage = languages.find((lang) => lang.code === langCode);
@@ -82,8 +96,6 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
       });
     }
   };
-
-  const resetFilters = useProductQueryStore((state) => state.resetFilters);
 
   const handleLogoClick = () => {
     resetFilters();
@@ -145,14 +157,14 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
 
         <Spacer />
 
-        <Box maxW={{ base: "200px", md: "600px" }}  minW="300px" flex="1">
+        <Box maxW={{ base: "200px", md: "600px" }} minW="300px" flex="1">
           <SearchInput />
         </Box>
 
         <Spacer />
 
         <HStack spacing={2}>
-          <Tooltip label="Toggle Dark Mode ">
+          <Tooltip label="Toggle Dark Mode">
             <ColorModeSwitch />
           </Tooltip>
 
@@ -171,7 +183,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
             <MenuButton
               as={IconButton}
               icon={<FaUserAlt />}
-              aria-label="User  Profile"
+              aria-label="User Profile"
               variant="ghost"
               _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
             />
@@ -213,8 +225,10 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
                   style={{
-                    textDecoration: currentLanguage === lang.code ? "underline" : "none",
-                    fontWeight: currentLanguage === lang.code ? "bold" : "normal",
+                    textDecoration:
+                      currentLanguage === lang.code ? "underline" : "none",
+                    fontWeight:
+                      currentLanguage === lang.code ? "bold" : "normal",
                   }}
                 >
                   <ReactCountryFlag

@@ -38,11 +38,15 @@ const RecommendationsPage: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/v1/tracking/recommendations/${userId}`);
+      const response = await fetch(`/api/v1/recommendations/user/${userId}`);
       const data = await response.json();
 
       if (response.ok) {
-        if (Array.isArray(data)) {
+        // If your backend sends { recommendedProducts: [...] }
+        if (Array.isArray(data.recommendedProducts)) {
+          setRecommendedProducts(data.recommendedProducts.map((item: any) => item.product));
+        } else if (Array.isArray(data)) {
+          // If backend sends the array directly
           setRecommendedProducts(data);
         } else {
           setError("Unexpected data format received.");
@@ -81,7 +85,7 @@ const RecommendationsPage: React.FC = () => {
       )}
 
       {!loading && !error && recommendedProducts.length > 0 && (
-        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={6}>
           {recommendedProducts.map((product, index) => (
             <GridItem
               key={index}
