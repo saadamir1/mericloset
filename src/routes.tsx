@@ -8,13 +8,12 @@ import TermsOfService from "./pages/TermsOfService";
 import ContactUs from "./pages/ContactUs";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
-import BrandErrorPage from "./pages/brand-central/BrandErrorPage"; // General error page for customer routes
+import BrandErrorPage from "./pages/brand-central/BrandErrorPage";
 import BrandRegister from "./pages/BrandRegister";
 import Profile from "./pages/profile";
 import UploadProducts from "./pages/UploadProducts";
 import FAQ from "./pages/FAQ";
 import AboutUs from "./pages/AboutUs";
-//import BrandCentral from "./pages/brand-central/brandCentral";
 import WishlistPage from "./pages/Wishlist";
 import BrandLayout from "./pages/brand-central/BrandLayout";
 import AddProduct from "./pages/brand-central/AddProduct";
@@ -22,7 +21,7 @@ import BrandCentral from "@pages/brand-central/BrandCentral";
 import AdminLayout from "@pages/admin-central/AdminLayout";
 import AdminErrorPage from "@pages/admin-central/AdminErrorPage";
 import AdminCentral from "@pages/admin-central/AdminCentral";
-//import EditProduct from "./pages/brand-central/editProduct";
+import RecommendationsPage from "./pages/RecommendationsPage"; 
 
 const router = createBrowserRouter([
   {
@@ -43,14 +42,15 @@ const router = createBrowserRouter([
       { path: "faq", element: <FAQ /> },
       { path: "about-us", element: <AboutUs /> },
       { path: "wishlist", element: <WishlistPage /> },
+      { path: "recommendations/:userId", element: <RecommendationsPage /> }, 
     ],
   },
   {
     path: "/brand",
-    element: <BrandLayout />, // Brand Layout
+    element: <BrandLayout />,
     errorElement: <BrandErrorPage />,
     children: [
-       { index: true, element: <BrandCentral /> },
+      { index: true, element: <BrandCentral /> },
       { path: "add-product", element: <AddProduct /> },
       { path: "edit-profile", element: <Profile /> },
     ],
@@ -60,8 +60,8 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     errorElement: <AdminErrorPage />,
     children: [
-       { index: true, element: <AdminCentral /> },
-      { path: "add-product", element: <AddProduct /> }, 
+      { index: true, element: <AdminCentral /> },
+      { path: "add-product", element: <AddProduct /> },
       { path: "edit-profile", element: <Profile /> },
     ],
   },
