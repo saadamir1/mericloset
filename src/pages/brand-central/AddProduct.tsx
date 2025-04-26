@@ -70,7 +70,7 @@ const AddProduct: React.FC = () => {
     formData.append("image", file);
     setIsUploading(true);
     try {
-      const res = await fetch("http://localhost:5170/api/v1/upload-image", {
+      const res = await fetch("http://localhost:5170/api/v1/images/upload-image", {
         method: "POST",
         body: formData,
       });
