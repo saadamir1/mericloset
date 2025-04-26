@@ -10,8 +10,6 @@ const SortSelector = () => {
     { value: "-name", label: "Name (Z-A)" },
     { value: "price", label: "Price (Low to High)" },
     { value: "-price", label: "Price (High to Low)" },
-    { value: "-metacritic", label: "Popularity" },
-    { value: "-rating", label: "Average Rating" },
   ];
 
   const sortOrder = useProductQueryStore((s) => s.productQuery.sortOrder);

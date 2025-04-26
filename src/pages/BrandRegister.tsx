@@ -61,7 +61,7 @@ const RegisterBrandPage = () => {
       setIsLoggedIn(true);
       
       setTimeout(() => {
-        navigate("/brand-central");
+        navigate("/brand");
       }, 1500);
     } catch (error) {
       const errorMsg = axios.isAxiosError(error) && error.response

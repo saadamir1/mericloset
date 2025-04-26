@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import BrandSidebar from "../../components/brand-central/BrandSidebar"; // Adjust the path as necessary
+import BrandSidebar from "../../components/brand-central/BrandSidebar"; 
 import { Box, Flex } from "@chakra-ui/react";
 
 const BrandLayout = () => {

@@ -18,10 +18,13 @@ import WishlistPage from "./pages/Wishlist";
 import BrandLayout from "./pages/brand-central/BrandLayout";
 import AddProduct from "./pages/brand-central/AddProduct";
 import BrandCentral from "@pages/brand-central/BrandCentral";
+import BrandProductPage from "@pages/brand-central/BrandProductPage";
 import AdminLayout from "@pages/admin-central/AdminLayout";
 import AdminErrorPage from "@pages/admin-central/AdminErrorPage";
 import AdminCentral from "@pages/admin-central/AdminCentral";
 import RecommendationsPage from "./pages/RecommendationsPage"; 
+import ProductComparison from "@pages/ProductComparison";
+
 
 const router = createBrowserRouter([
   {
@@ -43,6 +46,7 @@ const router = createBrowserRouter([
       { path: "about-us", element: <AboutUs /> },
       { path: "wishlist", element: <WishlistPage /> },
       { path: "recommendations/:userId", element: <RecommendationsPage /> }, 
+      { path: "compare", element: <ProductComparison /> },
     ],
   },
   {
@@ -53,6 +57,7 @@ const router = createBrowserRouter([
       { index: true, element: <BrandCentral /> },
       { path: "add-product", element: <AddProduct /> },
       { path: "edit-profile", element: <Profile /> },
+      { path: "products", element: <BrandProductPage /> }
     ],
   },
   {

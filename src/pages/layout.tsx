@@ -13,6 +13,7 @@ const Layout = () => {
       <Box flex="1" padding={5}>
         <Outlet /> {/* Renders the active route component */}
       </Box>
+      {/* <CompareButton /> Added CompareButton component */}
       <Footer />
       <Chatbot />
     </Flex>

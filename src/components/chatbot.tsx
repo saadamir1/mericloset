@@ -323,7 +323,7 @@ const chatbotIconStyle: React.CSSProperties = {
   bottom: '80px',
   right: '20px',
   fontSize: '24px',
-  backgroundColor: '#4CAF50',
+  backgroundColor: '#1E3A8A',
   color: '#fff',
   padding: '16px',
   borderRadius: '50%',
@@ -355,7 +355,7 @@ const headerStyle: React.CSSProperties = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '12px 16px',
-  backgroundColor: '#4CAF50',
+  backgroundColor: '#1E3A8A',
   color: '#fff'
 };
 
@@ -395,7 +395,7 @@ const chatOutputStyle: React.CSSProperties = {
 
 const userMessageStyle: React.CSSProperties = {
   textAlign: 'right',
-  backgroundColor: '#4CAF50',
+  backgroundColor: '#1E3A8A',
   padding: '10px 14px',
   borderRadius: '14px',
   marginBottom: '2px',
@@ -433,7 +433,7 @@ const inputStyle: React.CSSProperties = {
 
 const sendButtonStyle: React.CSSProperties = {
   padding: '10px',
-  backgroundColor: '#4CAF50',
+  backgroundColor: '#1E3A8A',
   color: 'white',
   border: 'none',
   borderRadius: '50%',
