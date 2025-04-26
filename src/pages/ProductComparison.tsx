@@ -24,14 +24,12 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  HStack,
   VStack,
   Container,
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaTrash, FaSearch } from "react-icons/fa";
 import useComparedProducts from "../hooks/useComparedProducts";
-import Product from "../entities/Product";
 import userStore from "../userStore";
 import axios from "axios";
 
@@ -39,7 +37,9 @@ const ProductComparisonPage = () => {
   const [searchParams] = useSearchParams();
   const productIds = searchParams.get("ids")?.split(",") || [];
   const { products, isLoading, error } = useComparedProducts(productIds);
+  // @ts-ignore
   const [wishlistedIds, setWishlistedIds] = useState<string[]>([]);
+  // @ts-ignore
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
@@ -94,54 +94,54 @@ const ProductComparisonPage = () => {
     navigate(`/products/${slug}`);
   };
 
-  const handleWishlistToggle = async (productId: string) => {
-    if (!user || !user.id) {
-      toast({
-        title: "Please log in to manage your wishlist",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
+  // const handleWishlistToggle = async (productId: string) => {
+  //   if (!user || !user.id) {
+  //     toast({
+  //       title: "Please log in to manage your wishlist",
+  //       status: "error",
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //     return;
+  //   }
 
-    const isWishlisted = wishlistedIds.includes(productId);
+  //   const isWishlisted = wishlistedIds.includes(productId);
     
-    try {
-      if (!isWishlisted) {
-        await axios.post("http://localhost:5170/api/v1/favorites/add", {
-          userId: user.id,
-          productId: productId,
-        });
-        setWishlistedIds([...wishlistedIds, productId]);
-        toast({
-          title: "Added to wishlist",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-      } else {
-        await axios.delete(
-          `http://localhost:5170/api/v1/favorites/remove/${productId}/${user.id}`
-        );
-        setWishlistedIds(wishlistedIds.filter(id => id !== productId));
-        toast({
-          title: "Removed from wishlist",
-          status: "info",
-          duration: 2000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("Error updating wishlist:", error);
-      toast({
-        title: "Error updating wishlist",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-    }
-  };
+  //   try {
+  //     if (!isWishlisted) {
+  //       await axios.post("http://localhost:5170/api/v1/favorites/add", {
+  //         userId: user.id,
+  //         productId: productId,
+  //       });
+  //       setWishlistedIds([...wishlistedIds, productId]);
+  //       toast({
+  //         title: "Added to wishlist",
+  //         status: "success",
+  //         duration: 2000,
+  //         isClosable: true,
+  //       });
+  //     } else {
+  //       await axios.delete(
+  //         `http://localhost:5170/api/v1/favorites/remove/${productId}/${user.id}`
+  //       );
+  //       setWishlistedIds(wishlistedIds.filter(id => id !== productId));
+  //       toast({
+  //         title: "Removed from wishlist",
+  //         status: "info",
+  //         duration: 2000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating wishlist:", error);
+  //     toast({
+  //       title: "Error updating wishlist",
+  //       status: "error",
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
   // Loading state
   if (isLoading) {
@@ -200,58 +200,58 @@ const ProductComparisonPage = () => {
   }
 
   // Function to render attribute value based on its type
-  const renderAttributeValue = (product: Product, attribute: string) => {
-    switch (attribute) {
-      case "title":
-        return product.title;
-      case "brand":
-        return product.brand;
-      case "price":
-        return `$${product.price.toFixed(2)}`;
-      case "colors":
-        return product.colors.length > 0 ? (
-          <Flex wrap="wrap" gap={2} justifyContent="center">
-            {product.colors.map((color, idx) => (
-              <Badge key={idx} px={2} py={1} borderRadius="md" colorScheme="blue">
-                {color}
-              </Badge>
-            ))}
-          </Flex>
-        ) : "N/A";
-      case "sizes":
-        return product.sizes.length > 0 ? (
-          <Flex wrap="wrap" gap={2} justifyContent="center">
-            {product.sizes.map((size, idx) => (
-              <Badge key={idx} px={2} py={1} borderRadius="md" colorScheme="purple">
-                {size}
-              </Badge>
-            ))}
-          </Flex>
-        ) : "N/A";
-      case "category":
-        return product.category || "N/A";
-      default:
-        return product[attribute as keyof Product]?.toString() || "N/A";
-    }
-  };
+  // const renderAttributeValue = (product: Product, attribute: string) => {
+  //   switch (attribute) {
+  //     case "title":
+  //       return product.title;
+  //     case "brand":
+  //       return product.brand;
+  //     case "price":
+  //       return `$${product.price.toFixed(2)}`;
+  //     case "colors":
+  //       return product.colors.length > 0 ? (
+  //         <Flex wrap="wrap" gap={2} justifyContent="center">
+  //           {product.colors.map((color, idx) => (
+  //             <Badge key={idx} px={2} py={1} borderRadius="md" colorScheme="blue">
+  //               {color}
+  //             </Badge>
+  //           ))}
+  //         </Flex>
+  //       ) : "N/A";
+  //     case "sizes":
+  //       return product.sizes.length > 0 ? (
+  //         <Flex wrap="wrap" gap={2} justifyContent="center">
+  //           {product.sizes.map((size, idx) => (
+  //             <Badge key={idx} px={2} py={1} borderRadius="md" colorScheme="purple">
+  //               {size}
+  //             </Badge>
+  //           ))}
+  //         </Flex>
+  //       ) : "N/A";
+  //     case "category":
+  //       return product.category || "N/A";
+  //     default:
+  //       return product[attribute as keyof Product]?.toString() || "N/A";
+  //   }
+  // };
 
-  const getAttributeLabel = (attribute: string) => {
-    const labels: { [key: string]: string } = {
-      title: "Product Name",
-      brand: "Brand",
-      price: "Price",
-      colors: "Available Colors",
-      sizes: "Available Sizes",
-      category: "Category",
-    };
-    return labels[attribute] || attribute.charAt(0).toUpperCase() + attribute.slice(1);
-  };
+  // const getAttributeLabel = (attribute: string) => {
+  //   const labels: { [key: string]: string } = {
+  //     title: "Product Name",
+  //     brand: "Brand",
+  //     price: "Price",
+  //     colors: "Available Colors",
+  //     sizes: "Available Sizes",
+  //     category: "Category",
+  //   };
+  //   return labels[attribute] || attribute.charAt(0).toUpperCase() + attribute.slice(1);
+  // };
 
-  // Get all possible attributes from the products
-  const attributeCategories = [
-    { name: "Basic Information", attributes: ["title", "brand", "price"] },
-    { name: "Specifications", attributes: ["category", "colors", "sizes"] },
-  ];
+  // // Get all possible attributes from the products
+  // const attributeCategories = [
+  //   { name: "Basic Information", attributes: ["title", "brand", "price"] },
+  //   { name: "Specifications", attributes: ["category", "colors", "sizes"] },
+  // ];
 
   return (
     <Container maxW="container.xl" py={8}>

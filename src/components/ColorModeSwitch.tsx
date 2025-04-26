@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { HStack, IconButton, useColorMode } from "@chakra-ui/react";
 import { FaSun, FaMoon } from "react-icons/fa";
 
-const ColorModeSwitch = forwardRef<HTMLButtonElement, any>((props, ref) => {
+const ColorModeSwitch = forwardRef<HTMLButtonElement, any>((ref) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (

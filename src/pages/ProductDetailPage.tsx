@@ -53,12 +53,9 @@ const ProductDetailPage = () => {
   const cardBg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const buttonBg = useColorModeValue("green.500", "green.400");
-  const buttonTextColor = useColorModeValue("white", "gray.900");
-  const buttonHoverBg = useColorModeValue("green.600", "green.300");
   const buttonBorderColor = useColorModeValue("green.600", "green.500");
   const headingColor = useColorModeValue("gray.800", "white");
   const subheadingColor = useColorModeValue("gray.600", "gray.400");
-  const heartColor = isWishlisted ? "red.500" : useColorModeValue("gray.500", "gray.400");
 
   useEffect(() => {
     if (product && product.images.length > 0) {

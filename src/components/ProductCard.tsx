@@ -12,7 +12,7 @@ import {
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaHeart, FaBalanceScale } from "react-icons/fa";
 import axios from "axios";
 import userStore from "../userStore";
