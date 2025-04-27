@@ -25,6 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaRulerCombined, FaHeart } from "react-icons/fa";
+import { WhatsappShareButton, FacebookShareButton, WhatsappIcon, FacebookIcon } from "react-share";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -159,6 +160,7 @@ const ProductDetailPage = () => {
 
   return (
     <Box p={{ base: 4, md: 6 }}>
+      {/* Product Details */}
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
         <Box>
           <Box bg={cardBg} borderRadius="lg" overflow="hidden" boxShadow="sm" border="1px solid" borderColor={borderColor}>
@@ -191,6 +193,50 @@ const ProductDetailPage = () => {
               {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
             </Button>
           </VStack>
+
+          {/* Share Section */}
+          <Box mt={8} textAlign="center">
+            <Text fontWeight="bold" fontSize="xl" mb={3}>
+              Love this product? Share it with your friends!
+            </Text>
+            <Flex justify="center" gap={4} mt={4}>
+              {/* WhatsApp */}
+              <WhatsappShareButton url={window.location.href} title={product.title}>
+                <Box p={2} bg="green.500" borderRadius="full" _hover={{ bg: "green.600", transform: "scale(1.1)" }} transition="0.3s" boxShadow="md">
+                  <WhatsappIcon size={40} round />
+                </Box>
+              </WhatsappShareButton>
+
+              {/* Facebook */}
+              <FacebookShareButton url={window.location.href} hashtag="#MeriCloset">
+                <Box p={2} bg="blue.600" borderRadius="full" _hover={{ bg: "blue.700", transform: "scale(1.1)" }} transition="0.3s" boxShadow="md">
+                  <FacebookIcon size={40} round />
+                </Box>
+              </FacebookShareButton>
+
+              {/* WeChat */}
+              <Box
+                as="a"
+                href="https://www.wechat.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                p={2}
+                bg="green.400"
+                borderRadius="full"
+                _hover={{ bg: "green.500", transform: "scale(1.1)" }}
+                transition="0.3s"
+                boxShadow="md"
+              >
+                <Image
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFXRXd_LFLvL5i2puVIzEP4MO9GvP-33BDZQ&s"
+                  alt="WeChat"
+                  boxSize="30px"
+                  borderRadius="full"
+                  objectFit="cover"
+                />
+              </Box>
+            </Flex>
+          </Box>
         </Box>
       </SimpleGrid>
 
