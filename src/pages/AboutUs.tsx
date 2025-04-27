@@ -5,7 +5,7 @@ import SaadAmirImg from '../assets/profiles/SaadAmir.jpeg';
 import TalhaTanveerImg from '../assets/profiles/TalhaTanveer.jpg';
 
 const AboutPage: React.FC = () => {
-  // Set colors based on theme (light or dark)
+  // Set colors based on theme (light or dark).
   const sectionBgColor = useColorModeValue("gray.50", "gray.800");
   const textColor = useColorModeValue("gray.800", "gray.100");
   const headingColor = useColorModeValue("teal.500", "teal.300");
