@@ -41,6 +41,7 @@ import ImageZoom from "../components/ImageZoom";
 import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 import userStore from "../userStore";
 import axios from "axios";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface RecommendedProduct {
   _id: string;
@@ -80,7 +81,7 @@ const ProductDetailPage = () => {
     hasFetched.current = true;
     const fetchFavorites = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5170/api/v1/favorites/user/${user.id}`);
+        const { data } = await axios.get(`${baseURL}/favorites/user/${user.id}`);
         setIsWishlisted(data.some((fav: any) => fav.product._id === product.id));
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -93,7 +94,7 @@ const ProductDetailPage = () => {
     const fetchRecommendations = async () => {
       if (!product?.id) return;
       try {
-        const { data } = await axios.get(`http://localhost:5170/api/v1/products/${product.id}/recommendations-hybrid`);
+        const { data } = await axios.get(`${baseURL}/products/${product.id}/recommendations-hybrid`);
         console.log("Recommended Products:", data);
         setRecommendedProducts(data);
       } catch (error) {
@@ -130,11 +131,11 @@ const ProductDetailPage = () => {
     }
     try {
       if (!isWishlisted) {
-        await axios.post("http://localhost:5170/api/v1/favorites/add", { userId: user.id, productId: product.id });
+        await axios.post(`${baseURL}/favorites/add`, { userId: user.id, productId: product.id });
         setIsWishlisted(true);
         toast({ title: "Added to wishlist", status: "success", duration: 2000, isClosable: true });
       } else {
-        await axios.delete(`http://localhost:5170/api/v1/favorites/remove/${product.id}/${user.id}`);
+        await axios.delete(`${baseURL}/favorites/remove/${product.id}/${user.id}`);
         setIsWishlisted(false);
         toast({ title: "Removed from wishlist", status: "info", duration: 2000, isClosable: true });
       }

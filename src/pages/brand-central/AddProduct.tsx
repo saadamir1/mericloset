@@ -17,6 +17,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Product from "../../entities/Product";
 import userStore from "../../userStore";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const availableSizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -47,12 +48,12 @@ const AddProduct: React.FC = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5170/api/v1/categories")
+    fetch(`${baseURL}/categories`)
       .then((res) => res.json())
       .then(setCategories)
       .catch(console.error);
 
-    fetch("http://localhost:5170/api/v1/brands")
+    fetch(`${baseURL}/brands`)
       .then((res) => res.json())
       .then((data: BrandOption[]) => {
         setBrandOptions(data);
@@ -70,7 +71,7 @@ const AddProduct: React.FC = () => {
     formData.append("image", file);
     setIsUploading(true);
     try {
-      const res = await fetch("http://localhost:5170/api/v1/images/upload-image", {
+      const res = await fetch(`${baseURL}/images/upload-image`, {
         method: "POST",
         body: formData,
       });
@@ -98,7 +99,7 @@ const AddProduct: React.FC = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5170/api/v1/products/", {
+      const response = await fetch(`${baseURL}/products/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

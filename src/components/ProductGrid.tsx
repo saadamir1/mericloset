@@ -134,54 +134,53 @@ const ProductGrid = () => {
   return (
     <Box>
       {/* Header with filters and product count */}
-{/* Header with filters and product count */}
-<Flex 
-  justify="space-between" 
-  align="center" 
-  px={6} 
-  py={3} 
-  bg="gray.100" 
-  _dark={{ bg: "gray.700" }}
-  borderRadius="md"
-  mb={4}
->
-  <Text fontWeight="medium" _dark={{ color: "white" }}>
-    {totalProducts > 0 ? (
-      <>Showing {startItem}-{endItem} of {totalProducts} products</>
-    ) : (
-      isInitialLoading ? 'Loading products...' : 'No products found'
-    )}
-  </Text>
-  <Flex align="center" gap={2}>
-    <Text fontSize="sm" _dark={{ color: "gray.200" }}>Items per page:</Text>
-    <Select 
-  size="sm" 
-  width="80px" 
-  value={itemsPerPage}
-  onChange={handleItemsPerPageChange}
-  _dark={{ 
-    bg: "gray.600",
-    color: "white",
-    borderColor: "gray.500"
-  }}
-  sx={{
-    "& option": {
-      bg: "white",
-      color: "black",
-      _dark: {
-        bg: "gray.700",
-        color: "white"
-      }
-    }
-  }}
->
-  <option value={12}>12</option>
-  <option value={24}>24</option>
-  <option value={36}>36</option>
-  <option value={48}>48</option>
-</Select>
-  </Flex>
-</Flex>
+      <Flex 
+        justify="space-between" 
+        align="center" 
+        px={6} 
+        py={3} 
+        bg="gray.100" 
+        _dark={{ bg: "gray.700" }}
+        borderRadius="md"
+        mb={4}
+      >
+        <Text fontWeight="medium" _dark={{ color: "white" }}>
+          {totalProducts > 0 ? (
+            <>Showing {startItem}-{endItem} of {totalProducts} products</>
+          ) : (
+            isInitialLoading ? 'Loading products...' : 'No products found'
+          )}
+        </Text>
+        <Flex align="center" gap={2}>
+          <Text fontSize="sm" _dark={{ color: "gray.200" }}>Items per page:</Text>
+          <Select 
+        size="sm" 
+        width="80px" 
+        value={itemsPerPage}
+        onChange={handleItemsPerPageChange}
+        _dark={{ 
+          bg: "gray.600",
+          color: "white",
+          borderColor: "gray.500"
+        }}
+        sx={{
+          "& option": {
+            bg: "white",
+            color: "black",
+            _dark: {
+              bg: "gray.700",
+              color: "white"
+            }
+          }
+        }}
+      >
+        <option value={12}>12</option>
+        <option value={24}>24</option>
+        <option value={36}>36</option>
+        <option value={48}>48</option>
+      </Select>
+        </Flex>
+      </Flex>
       
       {/* Show skeleton loading state while initial loading */}
       {isInitialLoading ? (

@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import userStore from '../userStore';
 import axios from 'axios';
 import { FiUser, FiMail, FiEdit2, FiSave, FiX, FiUserCheck } from 'react-icons/fi';
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface UserProfileData {
   id?: string;
@@ -86,7 +87,7 @@ const ProfilePage: React.FC = () => {
     
     try {
       const { data } = await axios.put(
-        `http://localhost:5170/api/v1/users/${user.id}`,
+        `${baseURL}/users/${user.id}`,
         { 
           userId: user.id, 
           role: "user", 

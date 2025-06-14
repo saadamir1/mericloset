@@ -14,6 +14,7 @@ import {
 import axios from "axios"; 
 import useUserStore from "../userStore";
 import { useNavigate } from "react-router-dom";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const SignupPage = () => {
   const { setIsLoggedIn,setUser, setToken } = useUserStore();
@@ -49,7 +50,7 @@ const SignupPage = () => {
 
     try {
       console.log("Submitting data:", userData);
-      const { data } = await axios.post("http://localhost:5170/api/v1/users/register", userData);
+      const { data } = await axios.post( `${baseURL}/users/register`, userData);
       setToken(data.token);
       setUser(data.user);
 

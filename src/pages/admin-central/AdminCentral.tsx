@@ -65,6 +65,7 @@ import {
 import { Link } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import Product from "entities/Product";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminCentral: React.FC = () => {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } = useProducts();
@@ -149,7 +150,7 @@ const AdminCentral: React.FC = () => {
   const fetchUsers = async () => {
     setIsLoadingUsers(true);
     try {
-      const response = await fetch('http://localhost:5170/api/v1/users');
+      const response = await fetch(`${baseURL}/users`);
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
@@ -179,7 +180,7 @@ const AdminCentral: React.FC = () => {
   const handleDeleteUser = async (userId: string, role: string) => {
     if (window.confirm(`Are you sure you want to delete this ${role === 'user' ? 'customer' : 'brand'}?`)) {
       try {
-        const response = await fetch(`http://localhost:5170/api/v1/users/${userId}`, {
+        const response = await fetch(`${baseURL}/users/${userId}`, {
           method: "DELETE",
         });
         if (response.ok) {
@@ -214,7 +215,7 @@ const AdminCentral: React.FC = () => {
   // View user details
   const viewUserDetails = async (userId: string) => {
     try {
-      const response = await fetch(`http://localhost:5170/api/v1/users/${userId}`);
+      const response = await fetch(`${baseURL}/users/${userId}`);
       if (response.ok) {
         const userData = await response.json();
         setSelectedUser(userData);
@@ -243,7 +244,7 @@ const AdminCentral: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        const response = await fetch(`http://localhost:5170/api/v1/products/${id}`, {
+        const response = await fetch(`${baseURL}/products/${id}`, {
           method: "DELETE",
         });
         if (response.ok) {

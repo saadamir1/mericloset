@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 export interface FetchResponse<T> {
   [x: string]: any;
@@ -8,7 +9,7 @@ export interface FetchResponse<T> {
 }
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5170/api/v1", 
+  baseURL,
 });
 
 class APIClient<T> {

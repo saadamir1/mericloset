@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWindowMinimize, FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import supportIcon from '../assets/support.png';
 import parse from 'html-react-parser';
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Message {
   text: string;
@@ -69,7 +70,7 @@ const Chatbot: React.FC = () => {
       setTyping(true);
 
       try {
-        const response = await fetch('http://localhost:5170/api/v1/chat', {
+        const response = await fetch(`${baseURL}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userInput })

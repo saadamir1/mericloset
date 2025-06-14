@@ -18,6 +18,7 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import userStore from "../../userStore";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Brand {
   _id: string;
@@ -45,7 +46,7 @@ const BrandProductPage: React.FC = () => {
       const brandId = "67d345b425b725146094de0b"; // Hardcoded for demo/debugging
 
       console.log("Using brand ID to fetch products:", brandId);
-      const res = await fetch(`http://localhost:5170/api/v1/products?brandID=${brandId}`);
+      const res = await fetch(`${baseURL}/products?brandID=${brandId}`);
 
       if (!res.ok) throw new Error("API request failed");
 
