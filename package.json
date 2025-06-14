@@ -44,7 +44,7 @@
     "rollup": "^4.22.5",
     "slick-carousel": "^1.8.1",
     "stripe": "^18.2.1",
-    "swiper": "^11.2.6",
+    "swiper": "^11.2.8",
     "zustand": "^4.5.5"
   },
   "devDependencies": {

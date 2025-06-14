@@ -50,6 +50,7 @@ import useProductQueryStore from "../store";
 import userStore from "./../userStore";
 import useComparisonStore from "../comparisonStore";
 import axios from "axios";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface NavBarProps {
   style?: React.CSSProperties;
@@ -98,7 +99,7 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
     
     try {
       const { data } = await axios.get<WishlistItem[]>(
-        `http://localhost:5170/api/v1/favorites/user/${user.id}`
+        `${baseURL}/favorites/user/${user.id}`
       );
       setWishlistCount(data.length);
     } catch (error) {

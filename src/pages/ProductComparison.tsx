@@ -32,6 +32,7 @@ import { FaTrash, FaSearch } from "react-icons/fa";
 import useComparedProducts from "../hooks/useComparedProducts";
 import userStore from "../userStore";
 import axios from "axios";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductComparisonPage = () => {
   const [searchParams] = useSearchParams();
@@ -60,7 +61,7 @@ const ProductComparisonPage = () => {
     const fetchWishlist = async () => {
       setIsWishlistLoading(true);
       try {
-        const { data } = await axios.get(`http://localhost:5170/api/v1/favorites/user/${user.id}`);
+        const { data } = await axios.get(`${baseURL}/favorites/user/${user.id}`);
         const favoriteIds = data.map((fav: any) => fav.product._id);
         setWishlistedIds(favoriteIds);
       } catch (error) {
@@ -109,7 +110,7 @@ const ProductComparisonPage = () => {
     
   //   try {
   //     if (!isWishlisted) {
-  //       await axios.post("http://localhost:5170/api/v1/favorites/add", {
+  //       await axios.post("${baseURL}/favorites/add", {
   //         userId: user.id,
   //         productId: productId,
   //       });
@@ -122,7 +123,7 @@ const ProductComparisonPage = () => {
   //       });
   //     } else {
   //       await axios.delete(
-  //         `http://localhost:5170/api/v1/favorites/remove/${productId}/${user.id}`
+  //         `${baseURL}/favorites/remove/${productId}/${user.id}`
   //       );
   //       setWishlistedIds(wishlistedIds.filter(id => id !== productId));
   //       toast({
@@ -339,7 +340,7 @@ const ProductComparisonPage = () => {
               {/* Price and Status */}
               <Flex justify="space-between" align="center" mb={4}>
                 <Heading as="h4" size="lg" color={headingColor}>
-                  ${product.price.toFixed(2)}
+                  Rs.{product.price.toFixed(2)}
                 </Heading>
                 <Badge colorScheme="green" p={1}>
                   In Stock

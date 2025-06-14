@@ -3,7 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Button, Input, Text } from '@chakra-ui/react';
 import useUserStore from '../userStore'; 
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const UploadExcel: React.FC = () => {
     const { token } = useUserStore();
@@ -28,7 +28,7 @@ const UploadExcel: React.FC = () => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post('http://localhost:5170/api/v1/admin/upload', formData, {
+            const response = await axios.post(`${baseURL}/admin/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`, 

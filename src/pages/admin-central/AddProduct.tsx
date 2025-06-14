@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import Product from "../../entities/Product";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const availableSizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -32,7 +33,7 @@ const AddProduct: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch("http://localhost:5170/api/v1/products/", {
+      const response = await fetch(`${baseURL}/products/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

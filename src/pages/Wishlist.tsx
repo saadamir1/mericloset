@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import greenAnimated from "../assets/greenanimated.mp4";
 import userStore from "./../userStore";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Product {
   _id: string;
@@ -58,7 +59,7 @@ const WishlistPage: React.FC = () => {
       if (!user) return;
       try {
         const { data } = await axios.get<WishlistItem[]>(
-          `http://localhost:5170/api/v1/favorites/user/${user.id}`
+          `${baseURL}/favorites/user/${user.id}`
         );
         setWishlist(data);
       } catch (error) {
@@ -79,7 +80,7 @@ const WishlistPage: React.FC = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5170/api/v1/favorites/remove/${productId}/${user.id}`
+        `${baseURL}/favorites/remove/${productId}/${user.id}`
       );
       setWishlist((prev) => prev.filter((fav) => fav.product._id !== productId));
     } catch (error) {

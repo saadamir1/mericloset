@@ -17,6 +17,7 @@ import { FaHeart, FaBalanceScale } from "react-icons/fa";
 import axios from "axios";
 import userStore from "../userStore";
 import useComparisonStore from "../comparisonStore";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Props {
   product: Product;
@@ -45,7 +46,7 @@ const ProductCard = ({ product }: Props) => {
 
     const fetchFavorites = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5170/api/v1/favorites/user/${user.id}`);
+        const { data } = await axios.get(`${baseURL}/favorites/user/${user.id}`);
         setIsWishlisted(data.some((fav: any) => fav.product._id === product.id));
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -73,14 +74,14 @@ const ProductCard = ({ product }: Props) => {
   
     try {
       if (!isWishlisted) {
-        await axios.post("http://localhost:5170/api/v1/favorites/add", {
+        await axios.post("${baseURL}/favorites/add", {
           userId: user.id,
           productId: product.id,
         });
         setIsWishlisted(true);
       } else {
         await axios.delete(
-          `http://localhost:5170/api/v1/favorites/remove/${product.id}/${user.id}`
+          `${baseURL}/favorites/remove/${product.id}/${user.id}`
         );
         setIsWishlisted(false);
       }

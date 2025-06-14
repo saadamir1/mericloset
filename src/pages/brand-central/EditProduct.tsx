@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Product from "../../entities/Product";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const availableSizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -34,7 +35,7 @@ const EditProduct: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5170/api/v1/products/${id}`);
+        const response = await fetch(`${baseURL}/products/${id}`);
         const data = await response.json();
         setProduct(data);
         setImageUrls(data.images);
@@ -47,7 +48,7 @@ const EditProduct: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:5170/api/v1/products/${id}`, {
+      const response = await fetch(`${baseURL}/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

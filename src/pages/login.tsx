@@ -19,6 +19,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../userStore";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface CustomJwtPayload extends JwtPayload {
   role: string;
@@ -47,7 +48,7 @@ const LoginPage = () => {
     setErrorMessage("");
   
     try {
-      const { data } = await axios.post("http://localhost:5170/api/v1/users/login", {
+      const { data } = await axios.post(`${baseURL}/users/login`, {
         loginIdentifier,
         password,
         isSeller,

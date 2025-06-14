@@ -13,6 +13,7 @@ import {
 import axios from "axios"; 
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../userStore";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const RegisterBrandPage = () => {
     const { setIsLoggedIn,setUser, setToken } = useUserStore();
@@ -47,7 +48,7 @@ const RegisterBrandPage = () => {
 
     try {
       console.log("Submitting brand data:", brandData);
-      const { data }  = await axios.post("http://localhost:5170/api/v1/users/register-brand", brandData);
+      const { data }  = await axios.post(`${baseURL}/users/register-brand`, brandData);
       
       toast({
         title: "Registration Successful",
