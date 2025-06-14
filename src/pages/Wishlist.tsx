@@ -14,13 +14,15 @@ import {
   Heading,
   Badge,
   Flex,
+  Checkbox,
+  HStack,
 } from "@chakra-ui/react";
-import { FaHeart, FaTrash } from "react-icons/fa";
+import { FaHeart, FaTrash, FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import greenAnimated from "../assets/greenanimated.mp4";
-import userStore from "./../userStore"
-// Define the full Product schema structure
+import userStore from "./../userStore";
+
 interface Product {
   _id: string;
   title: string;
@@ -32,7 +34,6 @@ interface Product {
   stockStatus?: string;
 }
 
-// Define the WishlistItem structure
 interface WishlistItem {
   _id: string;
   product: Product;
@@ -49,12 +50,12 @@ const WishlistPage: React.FC = () => {
 
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const {user} = userStore();
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const { user } = userStore();
 
-  // ✅ Fetch Wishlist Only Once on Page Load
   useEffect(() => {
     const fetchWishlist = async () => {
-      if (!user) return; // Ensure user is available
+      if (!user) return;
       try {
         const { data } = await axios.get<WishlistItem[]>(
           `http://localhost:5170/api/v1/favorites/user/${user.id}`
@@ -68,9 +69,8 @@ const WishlistPage: React.FC = () => {
     };
 
     if (user) fetchWishlist();
-  }, [user]); // ✅ Runs when user is available
+  }, [user]);
 
-  // ✅ Remove Item from Wishlist
   const removeFromWishlist = async (productId: string) => {
     if (!user || !user.id) {
       console.error("User not found! Please log in.");
@@ -87,6 +87,36 @@ const WishlistPage: React.FC = () => {
     }
   };
 
+  const handleSelectItem = (productId: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedItems.length === wishlist.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(wishlist.map((item) => item.product._id));
+    }
+  };
+
+  const handleWishlistCheckout = () => {
+    const selected = wishlist.filter((item) =>
+      selectedItems.includes(item.product._id)
+    );
+    if (selected.length === 0) return;
+
+    localStorage.setItem("wishlist_checkout_items", JSON.stringify(selected));
+    navigate("/wishlist-checkout");
+  };
+
+  const totalSelected = wishlist
+    .filter((item) => selectedItems.includes(item.product._id))
+    .reduce((acc, item) => acc + item.product.price, 0);
+
   return (
     <Container maxW="container.xl" py={8}>
       <Box p={6} borderRadius="lg" bg={bgColor} boxShadow={boxShadowColor} textAlign="center">
@@ -94,7 +124,12 @@ const WishlistPage: React.FC = () => {
           My Wishlist
         </Heading>
 
-        {/* ✅ Empty Wishlist Animation */}
+        {wishlist.length > 0 && (
+          <Button onClick={toggleSelectAll} mb={4} colorScheme="teal" variant="outline" size="sm">
+            {selectedItems.length === wishlist.length ? "Deselect All" : "Select All"}
+          </Button>
+        )}
+
         {wishlist.length === 0 && !loading && (
           <Flex justify="center" align="center" width="100%">
             <Box mb={4} borderRadius="lg" overflow="hidden" boxShadow="lg" width="100%" maxW="450px">
@@ -122,55 +157,86 @@ const WishlistPage: React.FC = () => {
             </Button>
           </VStack>
         ) : (
-          <Grid templateColumns="repeat(auto-fill, minmax(280px, 1fr))" gap={6} mt={6}>
-            {wishlist.map((item) => (
-              <GridItem
-                key={item.product._id}
-                bg={colorMode === "dark" ? "gray.700" : "white"}
-                boxShadow="lg"
-                borderRadius="lg"
-                p={4}
-                transition="all 0.3s ease"
-                _hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
-              >
-                <Image
-                  src={item.product.images.length > 0 ? item.product.images[0] : "https://via.placeholder.com/200"}
-                  alt={item.product.title}
+          <>
+            <Grid templateColumns="repeat(auto-fill, minmax(280px, 1fr))" gap={6} mt={6}>
+              {wishlist.map((item) => (
+                <GridItem
+                  key={item.product._id}
+                  bg={colorMode === "dark" ? "gray.700" : "white"}
+                  boxShadow="lg"
                   borderRadius="lg"
-                  height="220px"
-                  objectFit="cover"
-                  w="full"
-                />
-                <Box mt={3}>
-                  <Text fontSize="lg" fontWeight="bold" color={textColor}>
-                    {item.product.title}
-                  </Text>
-                  <Badge colorScheme="purple" mt={1} fontSize="sm">
-                    {item.product.brand}
-                  </Badge>
-                  <Box height="50px" overflow="hidden" mt={2}>
-                    <Text fontSize="sm" color={secondaryTextColor}>
-                      {item.product.description?.substring(0, 60)}...
+                  p={4}
+                  transition="all 0.3s ease"
+                  _hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
+                >
+                  <HStack spacing={2} mb={2} align="center">
+                    <Checkbox
+                      colorScheme="teal"
+                      isChecked={selectedItems.includes(item.product._id)}
+                      onChange={() => handleSelectItem(item.product._id)}
+                      icon={<FaCheckCircle />}
+                      size="lg"
+                      borderColor={highlightColor}
+                    />
+                    <Text fontSize="sm" fontWeight="medium" color={secondaryTextColor}>
+                      Select for Checkout
                     </Text>
-                  </Box>
-                  <Text fontWeight="bold" fontSize="xl" color={highlightColor} mt={2}>
-                    Rs. {item.product.price.toFixed(2)}
-                  </Text>
-                  <Button
-                    leftIcon={<FaTrash />}
-                    colorScheme="red"
-                    size="sm"
-                    mt={4}
+                  </HStack>
+                  <Image
+                    src={item.product.images.length > 0 ? item.product.images[0] : "https://via.placeholder.com/200"}
+                    alt={item.product.title}
+                    borderRadius="lg"
+                    height="220px"
+                    objectFit="cover"
                     w="full"
-                    borderRadius="full"
-                    onClick={() => removeFromWishlist(item.product._id)}
-                  >
-                    Remove
-                  </Button>
-                </Box>
-              </GridItem>
-            ))}
-          </Grid>
+                  />
+                  <Box mt={3}>
+                    <Text fontSize="lg" fontWeight="bold" color={textColor}>
+                      {item.product.title}
+                    </Text>
+                    <Badge colorScheme="purple" mt={1} fontSize="sm">
+                      {item.product.brand}
+                    </Badge>
+                    <Box height="50px" overflow="hidden" mt={2}>
+                      <Text fontSize="sm" color={secondaryTextColor}>
+                        {item.product.description?.substring(0, 60)}...
+                      </Text>
+                    </Box>
+                    <Text fontWeight="bold" fontSize="xl" color={highlightColor} mt={2}>
+                      Rs. {item.product.price.toFixed(2)}
+                    </Text>
+                    <Button
+                      leftIcon={<FaTrash />}
+                      colorScheme="red"
+                      size="sm"
+                      mt={4}
+                      w="full"
+                      borderRadius="full"
+                      onClick={() => removeFromWishlist(item.product._id)}
+                    >
+                      Remove
+                    </Button>
+                  </Box>
+                </GridItem>
+              ))}
+            </Grid>
+
+            {selectedItems.length > 0 && (
+              <Box mt={8}>
+                <Text fontWeight="bold" fontSize="lg" mb={2}>
+                  Selected Items Total: Rs. {totalSelected.toFixed(2)}
+                </Text>
+                <Button
+                  colorScheme="green"
+                  size="lg"
+                  borderRadius="full"
+                  onClick={handleWishlistCheckout}
+                >
+                  Checkout Selected
+                </Button>
+              </Box>
+            )}
+          </>
         )}
       </Box>
     </Container>
@@ -178,3 +244,5 @@ const WishlistPage: React.FC = () => {
 };
 
 export default WishlistPage;
+// This code defines a WishlistPage component that displays a user's wishlist items.
+// It allows users to select items for checkout, remove items from the wishlist, and navigate to a checkout page.

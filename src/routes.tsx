@@ -24,6 +24,9 @@ import AdminErrorPage from "@pages/admin-central/AdminErrorPage";
 import AdminCentral from "@pages/admin-central/AdminCentral";
 import RecommendationsPage from "./pages/RecommendationsPage"; 
 import ProductComparison from "@pages/ProductComparison";
+import Checkout from "./pages/checkout";
+import WishlistCheckout from "./pages/WishlistCheckout";
+
 
 
 const router = createBrowserRouter([
@@ -47,6 +50,8 @@ const router = createBrowserRouter([
       { path: "wishlist", element: <WishlistPage /> },
       { path: "recommendations/:userId", element: <RecommendationsPage /> }, 
       { path: "compare", element: <ProductComparison /> },
+      { path: "checkout", element: <Checkout /> },
+      { path: "wishlist-checkout", element: <WishlistCheckout /> },
     ],
   },
   {
