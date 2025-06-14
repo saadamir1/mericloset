@@ -19,13 +19,17 @@ import {
   Alert,
   AlertIcon,
   AlertTitle,
-  VStack,
   Divider,
   useToast,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  HStack,
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaRulerCombined, FaHeart } from "react-icons/fa";
-import { WhatsappShareButton, FacebookShareButton, WhatsappIcon, FacebookIcon } from "react-share";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -53,16 +57,17 @@ const ProductDetailPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedThumbnailIndex, setSelectedThumbnailIndex] = useState<number>(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [quantity, setQuantity] = useState<number>(1);
   const hasFetched = useRef(false);
   const toast = useToast();
   const { user } = userStore();
   const navigate = useNavigate();
-
   const [recommendedProducts, setRecommendedProducts] = useState<RecommendedProduct[]>([]);
   const [recommendationsLoading, setRecommendationsLoading] = useState(true);
 
   const cardBg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
+  const themeColor = useColorModeValue("green.500", "green.300");
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -89,6 +94,7 @@ const ProductDetailPage = () => {
       if (!product?.id) return;
       try {
         const { data } = await axios.get(`http://localhost:5170/api/v1/products/${product.id}/recommendations-hybrid`);
+        console.log("Recommended Products:", data);
         setRecommendedProducts(data);
       } catch (error) {
         console.error('Error fetching recommendations:', error);
@@ -104,26 +110,31 @@ const ProductDetailPage = () => {
     setSelectedThumbnailIndex(index);
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+    const order = {
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      quantity,
+      image: product.images[0],
+    };
+    localStorage.setItem("checkout_order", JSON.stringify(order));
+    navigate("/checkout");
+  };
+
   const handleWishlistToggle = async () => {
-    if (!user || !user.id) {
-      toast({
-        title: "Please log in to manage your wishlist.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
+    if (!user || !user.id || !product?.id) {
+      toast({ title: "Please log in to manage your wishlist.", status: "error", duration: 2000, isClosable: true });
       return;
     }
     try {
       if (!isWishlisted) {
-        await axios.post("http://localhost:5170/api/v1/favorites/add", {
-          userId: user.id,
-          productId: product?.id,
-        });
+        await axios.post("http://localhost:5170/api/v1/favorites/add", { userId: user.id, productId: product.id });
         setIsWishlisted(true);
         toast({ title: "Added to wishlist", status: "success", duration: 2000, isClosable: true });
       } else {
-        await axios.delete(`http://localhost:5170/api/v1/favorites/remove/${product?.id}/${user.id}`);
+        await axios.delete(`http://localhost:5170/api/v1/favorites/remove/${product.id}/${user.id}`);
         setIsWishlisted(false);
         toast({ title: "Removed from wishlist", status: "info", duration: 2000, isClosable: true });
       }
@@ -135,7 +146,7 @@ const ProductDetailPage = () => {
 
   const handleViewProduct = (slugOrId: string) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    navigate(`/product/${slugOrId}`);
+    navigate(`/products/${slugOrId}`);
   };
 
   if (isLoading) {
@@ -160,13 +171,9 @@ const ProductDetailPage = () => {
 
   return (
     <Box p={{ base: 4, md: 6 }}>
-      {/* Product Details */}
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
         <Box>
-          <Box bg={cardBg} borderRadius="lg" overflow="hidden" boxShadow="sm" border="1px solid" borderColor={borderColor}>
-            <ImageZoom src={mainImage || ""} alt={product.title} />
-          </Box>
-
+          <ImageZoom src={mainImage || ""} alt={product.title} />
           <Flex mt={4} gap={2} overflowX="auto" pb={2}>
             {product.images.map((image, index) => (
               <Box key={index} cursor="pointer" onClick={() => handleThumbnailClick(image, index)}>
@@ -175,72 +182,34 @@ const ProductDetailPage = () => {
             ))}
           </Flex>
         </Box>
-
-        <Box bg={cardBg} p={6} borderRadius="lg" boxShadow="sm" border="1px solid" borderColor={borderColor}>
-          <Heading size="lg" mb={3}>{product.title}</Heading>
-          <Text mb={4} color="gray.600">{product.description}</Text>
-
+        <Box>
+          <Heading size="lg">{product.title}</Heading>
+          <Text mt={2} color="gray.600">{product.description}</Text>
+          <ProductAttributes product={product} />
           <Divider my={4} />
 
-          <VStack align="stretch" spacing={4}>
-            <ProductAttributes product={product} />
+          <HStack mt={4} align="flex-end">
+            <Box>
+              <Text fontWeight="bold" mb={1}>Quantity</Text>
+              <NumberInput size="md" maxW="100px" min={1} value={quantity} onChange={(val) => setQuantity(parseInt(val))} focusBorderColor={themeColor} borderColor={themeColor}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Box>
+            <Button colorScheme="blue" onClick={handleBuyNow}>Buy Now</Button>
+          </HStack>
 
-            <Button onClick={onOpen} leftIcon={<FaRulerCombined />} variant="outline" colorScheme="green">
-              Size Chart
-            </Button>
-
-            <Button onClick={handleWishlistToggle} leftIcon={<FaHeart color={isWishlisted ? "red" : undefined} />} variant="outline" colorScheme={isWishlisted ? "red" : "green"}>
-              {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-            </Button>
-          </VStack>
-
-          {/* Share Section */}
-          <Box mt={8} textAlign="center">
-            <Text fontWeight="bold" fontSize="xl" mb={3}>
-              Love this product? Share it with your friends!
-            </Text>
-            <Flex justify="center" gap={4} mt={4}>
-              {/* WhatsApp */}
-              <WhatsappShareButton url={window.location.href} title={product.title}>
-                <Box p={2} bg="green.500" borderRadius="full" _hover={{ bg: "green.600", transform: "scale(1.1)" }} transition="0.3s" boxShadow="md">
-                  <WhatsappIcon size={40} round />
-                </Box>
-              </WhatsappShareButton>
-
-              {/* Facebook */}
-              <FacebookShareButton url={window.location.href} hashtag="#MeriCloset">
-                <Box p={2} bg="blue.600" borderRadius="full" _hover={{ bg: "blue.700", transform: "scale(1.1)" }} transition="0.3s" boxShadow="md">
-                  <FacebookIcon size={40} round />
-                </Box>
-              </FacebookShareButton>
-
-              {/* WeChat */}
-              <Box
-                as="a"
-                href="https://www.wechat.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                p={2}
-                bg="green.400"
-                borderRadius="full"
-                _hover={{ bg: "green.500", transform: "scale(1.1)" }}
-                transition="0.3s"
-                boxShadow="md"
-              >
-                <Image
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFXRXd_LFLvL5i2puVIzEP4MO9GvP-33BDZQ&s"
-                  alt="WeChat"
-                  boxSize="30px"
-                  borderRadius="full"
-                  objectFit="cover"
-                />
-              </Box>
-            </Flex>
-          </Box>
+          <Button onClick={onOpen} leftIcon={<FaRulerCombined />} variant="outline" colorScheme="green" mt={4}>Size Chart</Button>
+          <Button onClick={handleWishlistToggle} leftIcon={<FaHeart color={isWishlisted ? "red" : undefined} />} variant="outline" colorScheme={isWishlisted ? "red" : "green"} mt={4}>
+            {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+          </Button>
         </Box>
       </SimpleGrid>
 
-      {/* Size Chart Modal */}
+      {/* Modal for Size Chart */}
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent borderRadius="lg">
@@ -252,10 +221,9 @@ const ProductDetailPage = () => {
         </ModalContent>
       </Modal>
 
-      {/* Recommended Products */}
+      {/* Recommended Products Section */}
       <Box mt={16} position="relative" textAlign="center">
         <Heading as="h2" size="lg" mb={6}>Recommended For You</Heading>
-
         {recommendationsLoading ? (
           <SimpleGrid columns={{ base: 2, md: 4 }} spacing={5}>
             {[...Array(4)].map((_, i) => (
@@ -268,45 +236,21 @@ const ProductDetailPage = () => {
               slidesPerView={2}
               spaceBetween={20}
               autoplay={{ delay: 3000, disableOnInteraction: false }}
-              navigation={{
-                nextEl: ".swiper-button-next-custom",
-                prevEl: ".swiper-button-prev-custom",
-              }}
+              navigation={{ nextEl: ".swiper-button-next-custom", prevEl: ".swiper-button-prev-custom" }}
               modules={[Navigation, Autoplay]}
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
-              }}
+              breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}
             >
               {recommendedProducts.map((rec) => (
                 <SwiperSlide key={rec._id}>
-                  <Box
-                    border="1px solid"
-                    borderColor={borderColor}
-                    borderRadius="lg"
-                    p={3}
-                    bg={cardBg}
-                    h="340px"
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    transition="transform 0.3s ease"
-                    _hover={{ transform: "scale(1.05)" }}
-                  >
+                  <Box border="1px solid" borderColor={borderColor} borderRadius="lg" p={3} bg={cardBg} h="340px" display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" transition="transform 0.3s ease" _hover={{ transform: "scale(1.05)" }}>
                     <Image src={rec.images[0]} height="200px" width="100%" objectFit="contain" borderRadius="md" />
                     <Text fontWeight="bold" noOfLines={2} textAlign="center">{rec.title}</Text>
                     <Text color="green.500" fontWeight="semibold">Rs. {rec.price}</Text>
-                    <Button size="sm" colorScheme="green" mt={2} onClick={() => handleViewProduct(rec.slug ?? rec._id)}>
-                      View Product
-                    </Button>
+                    <Button size="sm" colorScheme="green" mt={2} onClick={() => handleViewProduct(rec.slug ?? rec._id)}>View Product</Button>
                   </Box>
                 </SwiperSlide>
               ))}
             </Swiper>
-
-            {/* Custom Arrows */}
             <Button className="swiper-button-prev-custom" position="absolute" top="50%" left="-5" zIndex={10} transform="translateY(-50%)" bg="green.500" color="white" borderRadius="full" _hover={{ bg: "green.600" }}>‹</Button>
             <Button className="swiper-button-next-custom" position="absolute" top="50%" right="-5" zIndex={10} transform="translateY(-50%)" bg="green.500" color="white" borderRadius="full" _hover={{ bg: "green.600" }}>›</Button>
           </Box>
@@ -316,4 +260,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage;
+export default ProductDetailPage; 
