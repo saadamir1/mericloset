@@ -28,7 +28,7 @@ import {
   NumberDecrementStepper,
   HStack,
 } from "@chakra-ui/react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaRulerCombined, FaHeart } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";

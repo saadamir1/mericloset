@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { FiEdit3, FiMessageSquare, FiStar } from "react-icons/fi";
+import { FiMessageSquare, FiStar } from "react-icons/fi";
 
 interface ProductFeedbackSectionProps {
   productId: string;
