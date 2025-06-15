@@ -41,6 +41,7 @@ import ImageZoom from "../components/ImageZoom";
 import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 import userStore from "../userStore";
 import axios from "axios";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface RecommendedProduct {
@@ -209,6 +210,14 @@ const ProductDetailPage = () => {
             </Button>
           </HStack>
 
+          <HStack spacing={3} mt={2}>
+            <Link to={`/product-review/${product.id}`}>
+              <Button colorScheme="purple" variant="solid" size="sm">
+                Write a Product Review
+              </Button>
+            </Link>
+          </HStack>
+
           <Link to="/feedback">
             <Button colorScheme="teal" variant="outline" size="sm" mt={2} width="fit-content">Give Feedback</Button>
           </Link>
@@ -265,5 +274,3 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-// This code is a React component for a product detail page in an e-commerce application.
-// It displays product information, allows users to view images, add products to their wishlist, and buy products.
