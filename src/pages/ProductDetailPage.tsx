@@ -41,7 +41,7 @@ import ImageZoom from "../components/ImageZoom";
 import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 import userStore from "../userStore";
 import axios from "axios";
-
+import ProductFeedbackSection from "../components/ProductFeedbackSection";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface RecommendedProduct {
@@ -202,7 +202,6 @@ const ProductDetailPage = () => {
             </Box>
             <Button colorScheme="blue" onClick={handleBuyNow}>Buy Now</Button>
           </HStack>
-
           <HStack spacing={3} mt={4}>
             <Button onClick={onOpen} leftIcon={<FaRulerCombined />} variant="outline" colorScheme="green" size="sm">Size Chart</Button>
             <Button onClick={handleWishlistToggle} leftIcon={<FaHeart color={isWishlisted ? "red" : undefined} />} variant="outline" colorScheme={isWishlisted ? "red" : "green"} size="sm">
@@ -210,17 +209,6 @@ const ProductDetailPage = () => {
             </Button>
           </HStack>
 
-          <HStack spacing={3} mt={2}>
-            <Link to={`/product-review/${product.id}`}>
-              <Button colorScheme="purple" variant="solid" size="sm">
-                Write a Product Review
-              </Button>
-            </Link>
-          </HStack>
-
-          <Link to="/feedback">
-            <Button colorScheme="teal" variant="outline" size="sm" mt={2} width="fit-content">Give Feedback</Button>
-          </Link>
         </Box>
       </SimpleGrid>
 
@@ -234,6 +222,8 @@ const ProductDetailPage = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
+      {/* Add this new component */}
+      <ProductFeedbackSection productId={product.id} />
 
       <Box mt={16} position="relative" textAlign="center">
         <Heading as="h2" size="lg" mb={6}>Recommended For You</Heading>
