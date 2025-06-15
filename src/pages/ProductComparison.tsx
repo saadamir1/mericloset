@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react";
 import {
   Box,
   Button,
@@ -254,6 +254,14 @@ const ProductComparisonPage = () => {
   //   { name: "Specifications", attributes: ["category", "colors", "sizes"] },
   // ];
 
+  
+// Helper function to format sizes
+const formatSizesArray = (sizes: any) => 
+  !sizes ? [] : 
+  Array.isArray(sizes) ? 
+    sizes.join(',').replace(/[\[\]']/g, '').split(',').map(s => s.trim()).filter(s => s) :
+    String(sizes).replace(/[\[\]']/g, '').split(',').map(s => s.trim()).filter(s => s);
+
   return (
     <Container maxW="container.xl" py={8}>
       <Box mb={8}>
@@ -430,7 +438,7 @@ const ProductComparisonPage = () => {
               <Td fontWeight="medium">Price</Td>
               {products.map((product) => (
                 <Td key={`${product.id}-price`} textAlign="center" color="blue.600" fontWeight="bold">
-                  ${product.price.toFixed(2)}
+                  Rs. {product.price.toFixed(2)}
                 </Td>
               ))}
             </Tr>
@@ -470,20 +478,16 @@ const ProductComparisonPage = () => {
             <Tr>
               <Td fontWeight="medium">Available Sizes</Td>
               {products.map((product) => (
-                <Td key={`${product.id}-sizes`} textAlign="center">
-                  <Flex wrap="wrap" gap={2} justifyContent="center">
-                    {product.sizes && product.sizes.length > 0 ? (
-                      product.sizes.map((size, idx) => (
+                  <Td key={`${product.id}-sizes`} textAlign="center">
+                    <Flex wrap="wrap" gap={2} justifyContent="center">
+                      {formatSizesArray(product.sizes).map((size: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined, idx: Key | null | undefined) => (
                         <Badge key={idx} px={2} py={1} borderRadius="md" colorScheme="purple">
                           {size}
                         </Badge>
-                      ))
-                    ) : (
-                      <Text>N/A</Text>
-                    )}
-                  </Flex>
-                </Td>
-              ))}
+                      )) || <Text>N/A</Text>}
+                    </Flex>
+                  </Td>
+                ))}
             </Tr>
           </Tbody>
         </Table>
