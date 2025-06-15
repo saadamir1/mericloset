@@ -4,7 +4,10 @@ import {
   GridItem,
   Box,
   Flex,
+  Button,
+  Center,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import GameGrid from "../components/ProductGrid";
 import GameHeading from "../components/ProductHeading";
 import CategoryList from "../components/CategoryList";
@@ -15,8 +18,6 @@ import CustomSlider from "../components/CustomSlider";
 import Scroller from "../components/Scroller";
 
 const HomePage = () => {
-
-
   return (
     <>
       {/* Image Slider */}
@@ -43,8 +44,6 @@ const HomePage = () => {
             <GameHeading />
           </Box>
 
-          
-
           <Flex paddingLeft={2} marginBottom={3}>
             <Box marginRight={4}>
               <BrandSelector />
@@ -56,7 +55,17 @@ const HomePage = () => {
         </GridItem>
       </Grid>
 
+      {/* Info Section */}
       <InfoSection />
+
+      {/* Feedback Button */}
+      <Center mt={10} mb={4}>
+        <Link to="/feedback">
+          <Button colorScheme="blue" size="lg" px={10}>
+            Give Feedback
+          </Button>
+        </Link>
+      </Center>
 
       {/* Scroll Buttons */}
       <Scroller />
