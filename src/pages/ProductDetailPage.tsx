@@ -28,7 +28,7 @@ import {
   NumberDecrementStepper,
   HStack,
 } from "@chakra-ui/react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaRulerCombined, FaHeart } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -41,6 +41,7 @@ import ImageZoom from "../components/ImageZoom";
 import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 import userStore from "../userStore";
 import axios from "axios";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface RecommendedProduct {
@@ -95,7 +96,6 @@ const ProductDetailPage = () => {
       if (!product?.id) return;
       try {
         const { data } = await axios.get(`${baseURL}/products/${product.id}/recommendations-hybrid`);
-        console.log("Recommended Products:", data);
         setRecommendedProducts(data);
       } catch (error) {
         console.error('Error fetching recommendations:', error);
@@ -203,14 +203,27 @@ const ProductDetailPage = () => {
             <Button colorScheme="blue" onClick={handleBuyNow}>Buy Now</Button>
           </HStack>
 
-          <Button onClick={onOpen} leftIcon={<FaRulerCombined />} variant="outline" colorScheme="green" mt={4}>Size Chart</Button>
-          <Button onClick={handleWishlistToggle} leftIcon={<FaHeart color={isWishlisted ? "red" : undefined} />} variant="outline" colorScheme={isWishlisted ? "red" : "green"} mt={4}>
-            {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-          </Button>
+          <HStack spacing={3} mt={4}>
+            <Button onClick={onOpen} leftIcon={<FaRulerCombined />} variant="outline" colorScheme="green" size="sm">Size Chart</Button>
+            <Button onClick={handleWishlistToggle} leftIcon={<FaHeart color={isWishlisted ? "red" : undefined} />} variant="outline" colorScheme={isWishlisted ? "red" : "green"} size="sm">
+              {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+            </Button>
+          </HStack>
+
+          <HStack spacing={3} mt={2}>
+            <Link to={`/product-review/${product.id}`}>
+              <Button colorScheme="purple" variant="solid" size="sm">
+                Write a Product Review
+              </Button>
+            </Link>
+          </HStack>
+
+          <Link to="/feedback">
+            <Button colorScheme="teal" variant="outline" size="sm" mt={2} width="fit-content">Give Feedback</Button>
+          </Link>
         </Box>
       </SimpleGrid>
 
-      {/* Modal for Size Chart */}
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent borderRadius="lg">
@@ -222,7 +235,6 @@ const ProductDetailPage = () => {
         </ModalContent>
       </Modal>
 
-      {/* Recommended Products Section */}
       <Box mt={16} position="relative" textAlign="center">
         <Heading as="h2" size="lg" mb={6}>Recommended For You</Heading>
         {recommendationsLoading ? (
@@ -261,4 +273,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage; 
+export default ProductDetailPage;
