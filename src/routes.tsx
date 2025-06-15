@@ -26,6 +26,7 @@ import RecommendationsPage from "./pages/RecommendationsPage";
 import ProductComparison from "@pages/ProductComparison";
 import Checkout from "./pages/checkout";
 import WishlistCheckout from "./pages/WishlistCheckout";
+import FeedbackPage from "./pages/FeedBackPage";
 
 
 
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       { path: "compare", element: <ProductComparison /> },
       { path: "checkout", element: <Checkout /> },
       { path: "wishlist-checkout", element: <WishlistCheckout /> },
+      { path: "feedback", element: <FeedbackPage /> },
     ],
   },
   {
