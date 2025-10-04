@@ -7,10 +7,13 @@ A modern React-based frontend for MeriCloset - a personalized fashion platform t
 - **Personalized Shopping Experience**: AI-powered product recommendations
 - **Product Comparison**: Side-by-side comparison of products from different brands
 - **Advanced Search & Filtering**: Filter by size, color, price, material, and sustainability
-- **User Closet Management**: Personal wardrobe organization and styling
+- **User Closet Management**: Personal wardrobe organization (entities defined, no UI implementation)
 - **Favorites & Wishlists**: Save and organize favorite products
 - **Brand Discovery**: Explore products from various fashion brands
 - **Secure Payments**: Integrated Stripe payment processing
+- **AI Chatbot**: Gemini-powered shopping assistant for product recommendations
+- **Product Reviews & Feedback**: User rating and review system
+- **Admin & Brand Portals**: Separate dashboards for different user roles
 - **Responsive Design**: Optimized for desktop and mobile devices
 
 ## 🛠️ Tech Stack
