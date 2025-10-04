@@ -1,115 +1,165 @@
+# MeriCloset Frontend
 
-# MeriCloset
+A modern React-based frontend for MeriCloset - a personalized fashion platform that curates products from various fashion brands, enabling users to make smarter shopping decisions.
 
-MeriCloset is a personalized fashion platform that curates products from various fashion brands, enabling users to make smarter shopping decisions. The platform empowers smaller brands and traders to showcase their products, providing them with an opportunity to compete alongside larger, established brands. With personalized product recommendations, smart filtering, and a dedicated portal for brands, MeriCloset serves as a one-stop solution for both shoppers and brands.
+## 🚀 Features
 
----
+- **Personalized Shopping Experience**: AI-powered product recommendations
+- **Product Comparison**: Side-by-side comparison of products from different brands
+- **Advanced Search & Filtering**: Filter by size, color, price, material, and sustainability
+- **User Closet Management**: Personal wardrobe organization and styling
+- **Favorites & Wishlists**: Save and organize favorite products
+- **Brand Discovery**: Explore products from various fashion brands
+- **Secure Payments**: Integrated Stripe payment processing
+- **Responsive Design**: Optimized for desktop and mobile devices
 
-## Features
+## 🛠️ Tech Stack
 
-- **Personalized Shopping**: Tailored product suggestions based on user preferences, leveraging collaborative and content-based filtering systems.
-- **Product Comparison**: Users can compare products from different brands side-by-side to make informed purchase decisions.
-- **Brand Portal**: Allows brands to manage and showcase their products directly on the platform.
-- **Admin Dashboard**: Track key metrics like customer numbers, brand statistics, and product information.
-- **Favorites & Wishlists**: Users can save their favorite products for easy access later.
-- **Search and Filtering**: Advanced search and filtering options based on various attributes like size, color, price, material, and sustainability.
-- **User Feedback**: Collect and display ratings and feedback on products, helping users make better choices.
-- **Discount Alerts**: Notify users about discounts on their saved products.
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **UI Library**: Chakra UI + Material-UI
+- **State Management**: Zustand
+- **Data Fetching**: TanStack React Query (React Query)
+- **HTTP Client**: Axios
+- **Routing**: React Router DOM
+- **Authentication**: JWT with express-jwt
+- **Animations**: Framer Motion
+- **Forms**: React Hook Form
+- **File Uploads**: React Dropzone
+- **Payments**: Stripe React Components
+- **Notifications**: React Toastify
 
----
+## 📋 Prerequisites
 
-## Tech Stack
+- Node.js (v16 or higher)
+- npm or yarn
+- MeriCloset Backend API running
 
-- **Frontend**: 
-  - **React**: JavaScript library for building user interfaces.
-  - **Vite**: Next-generation, fast, and optimized build tool.
-  - **TypeScript**: Typed superset of JavaScript for better development experience and type safety.
-  - **Chakra UI**: A simple, modular, accessible component library for building React applications.
-  - **Framer Motion**: A powerful library for animations in React.
-  
-- **State Management**:
-  - **Zustand**: A fast and lightweight state management library for React.
+## 🚀 Installation & Setup
 
-- **API Handling**:
-  - **Axios**: Promise-based HTTP client for the browser and Node.js.
-  - **React Query**: For fetching, caching, and syncing server data in React apps.
-
-- **Authentication**:
-  - **express-jwt**: A simple, compact library to verify JWTs in your application.
-  - **jwt-decode**: A library to decode JWT tokens.
-
-- **File Uploads**:
-  - **Multer**: A middleware for handling `multipart/form-data` file uploads.
-  - **react-dropzone**: A simple React hook for creating drag-and-drop file upload areas.
-
-- **Form Management**:
-  - **React Hook Form**: A performant, flexible, and extensible form library for React.
-
-- **Routing**:
-  - **React Router DOM**: Declarative routing for React applications.
-
-- **Notifications**:
-  - **React Toastify**: A library to add toast notifications in React apps.
-
----
-
-## Installation
-
-1. **Clone the repository**:
-
+1. **Clone the repository**
    ```bash
    git clone https://github.com/saadamir1/mericloset.git
-   cd mericloset
+   cd mericloset/mericloset
    ```
 
-2. **Install dependencies**:
-
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Run the development server**:
+3. **Environment Configuration**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_API_URL=http://localhost:3000/api/v1
+   VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   VITE_BASE_URL=http://localhost:5173
+   ```
 
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. Open the app in your browser at [http://localhost:5173](http://localhost:5173).
+5. **Open in browser**
+   
+   Navigate to [http://localhost:5173](http://localhost:5173)
 
----
+## 📜 Available Scripts
 
-## Environment Variables
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm start` - Start development server with auto-open
 
-Create a `.env` file in the root of the project with the following variables:
+## 📁 Project Structure
 
+```
+src/
+├── assets/          # Static assets (images, icons)
+├── components/      # Reusable UI components
+├── data/           # Static data and constants
+├── entities/       # TypeScript interfaces and types
+├── hooks/          # Custom React hooks
+├── pages/          # Application pages/routes
+├── services/       # API services and utilities
+├── comparisonStore.ts  # Product comparison state
+├── store.ts        # Main application state
+├── userStore.ts    # User authentication state
+├── theme.ts        # Chakra UI theme configuration
+├── routes.tsx      # Application routing
+└── main.tsx        # Application entry point
+```
+
+## 🔧 Key Features Implementation
+
+### State Management
+- **Zustand** for lightweight, fast state management
+- Separate stores for user authentication, product comparison, and main app state
+
+### Authentication
+- JWT-based authentication
+- Persistent login state
+- Protected routes
+
+### Product Features
+- Advanced filtering and search
+- Product comparison functionality
+- Personalized recommendations
+- Favorites and wishlist management
+
+### Payment Integration
+- Stripe payment processing
+- Secure checkout flow
+- Order management
+
+## 🎨 UI/UX Features
+
+- **Responsive Design**: Mobile-first approach
+- **Dark/Light Mode**: Theme switching capability
+- **Smooth Animations**: Framer Motion integration
+- **Accessible Components**: Chakra UI accessibility features
+- **Loading States**: Skeleton loaders and spinners
+- **Toast Notifications**: User feedback system
+
+## 🔗 API Integration
+
+The frontend communicates with the MeriCloset backend API for:
+- User authentication and management
+- Product catalog and search
+- Order processing
+- Recommendation engine
+- Brand management
+- Admin dashboard data
+
+## 🚀 Deployment
+
+### Build for Production
 ```bash
-REACT_APP_API_URL=http://your-api-url
-JWT_SECRET=your-jwt-secret-key
+npm run build
 ```
+
+### Deploy to Vercel
+The project includes `vercel.json` configuration for easy Vercel deployment.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is part of a BSc Computer Science Final Year Project.
+
+## 👨‍💻 Author
+
+**Saad Amir** - BSc Computer Science Student
 
 ---
 
-## Folder Structure
-
-```
-mericloset/
-│
-├── src/                     # All source code
-│   ├── components/          # Reusable UI components
-│   ├── pages/               # Application pages
-│   ├── services/            # API services and utilities
-│   ├── store/               # Zustand state management
-│   ├── styles/              # Global styles
-│   └── utils/               # Utility functions
-│
-├── public/                  # Static assets like images, fonts, etc.
-├── package.json             # Project metadata and dependencies
-├── vite.config.ts           # Vite configuration
-└── README.md                # Project documentation
-```
-
----
-
-## Contributing
-
-We welcome contributions! Please fork the repository, create a new branch, and submit a pull request with your changes.
+**Note**: This is a Final Year Project (FYP) for BSc Computer Science degree, showcasing modern web development practices and technologies in the fashion e-commerce domain.
