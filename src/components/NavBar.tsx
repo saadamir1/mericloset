@@ -45,6 +45,7 @@ import {
   FaSearch,
   FaTimes,
   FaBalanceScale,
+  FaMagic,
 } from "react-icons/fa";
 import useProductQueryStore from "../store";
 import userStore from "./../userStore";
@@ -108,16 +109,9 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUserId(parsedUser._id || null);
-      } catch (error) {
-        console.error("Error parsing user from localStorage:", error);
-      }
-    }
-  }, []);
+    const id = user?.id || user?._id || null;
+    setUserId(id || null);
+  }, [user]);
 
   // Fetch wishlist count on component mount and when location changes
   useEffect(() => {
@@ -164,8 +158,14 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
     {
       label: "For You",
       icon: <FaThumbsUp />,
-      to: userId ? `/recommendations/${userId}` : "#",
+      to: userId ? `/recommendations/${userId}` : "/recommendations",
       isActive: location.pathname.includes("/recommendations")
+    },
+    {
+      label: "Outfits",
+      icon: <FaMagic />,
+      to: "/outfit-builder",
+      isActive: location.pathname.includes("/outfit-builder")
     },
     { 
       label: "New Arrivals", 

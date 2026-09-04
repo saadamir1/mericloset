@@ -11,13 +11,15 @@ import {
   useToast,
   HStack,
   Tooltip,
+  Box,
+  Badge,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaBalanceScale } from "react-icons/fa";
 import axios from "axios";
 import userStore from "../userStore";
 import useComparisonStore from "../comparisonStore";
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE, mediaUrl } from "../config";
 
 interface Props {
   product: Product;
@@ -33,23 +35,32 @@ const ProductCard = ({ product }: Props) => {
   const toast = useToast();
 
   const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.300", "gray.600");
-  const textColor = useColorModeValue("gray.900", "gray.100");
-  const brandColor = useColorModeValue("gray.600", "gray.400");
-  const priceColor = useColorModeValue("black", "white");
-  const heartColor = isWishlisted ? "red.500" : useColorModeValue("gray.500", "gray.400");
-  const compareColor = isInComparison(product.id) ? "blue.500" : useColorModeValue("gray.500", "gray.400");
+  const borderColor = useColorModeValue("blackAlpha.100", "whiteAlpha.200");
+  const textColor = useColorModeValue("ink.800", "gray.100");
+  const brandColor = useColorModeValue("gray.500", "gray.400");
+  const priceColor = useColorModeValue("ink.900", "white");
+  const mutedHeart = useColorModeValue("gray.400", "gray.500");
+  const mutedCompare = useColorModeValue("gray.400", "gray.500");
+  const actionBg = useColorModeValue("whiteAlpha.900", "blackAlpha.600");
+  const heartColor = isWishlisted ? "red.400" : mutedHeart;
+  const compareColor = isInComparison(product.id) ? "brand.500" : mutedCompare;
+
+  const img0 = mediaUrl(product.images?.[0] || "");
+  const img1 = mediaUrl(product.images?.[1] || "");
 
   useEffect(() => {
-    if (!user || hasFetched.current) return;
+    if (!user?.id || hasFetched.current) {
+      setLoading(false);
+      return;
+    }
     hasFetched.current = true;
 
     const fetchFavorites = async () => {
       try {
-        const { data } = await axios.get(`${baseURL}/favorites/user/${user.id}`);
-        setIsWishlisted(data.some((fav: any) => fav.product._id === product.id));
-      } catch (error) {
-        console.error("Error fetching favorites:", error);
+        const { data } = await axios.get(`${API_BASE}/favorites/user/${user.id}`);
+        setIsWishlisted(data.some((fav: any) => fav.product?._id === product.id));
+      } catch {
+        /* ignore */
       } finally {
         setLoading(false);
       }
@@ -59,30 +70,28 @@ const ProductCard = ({ product }: Props) => {
   }, [product.id, user]);
 
   const handleWishlistToggle = async () => {
-    if (!user || !user.id) {
+    if (!user?.id) {
       if (!toast.isActive("login-error")) {
         toast({
-          id: "login-error", // Unique ID to prevent duplicates
+          id: "login-error",
           title: "Please log in to manage your wishlist.",
           status: "error",
           duration: 2000,
           isClosable: true,
         });
-      }    
+      }
       return;
     }
-  
+
     try {
       if (!isWishlisted) {
-        await axios.post("${baseURL}/favorites/add", {
+        await axios.post(`${API_BASE}/favorites/add`, {
           userId: user.id,
           productId: product.id,
         });
         setIsWishlisted(true);
       } else {
-        await axios.delete(
-          `${baseURL}/favorites/remove/${product.id}/${user.id}`
-        );
+        await axios.delete(`${API_BASE}/favorites/remove/${product.id}/${user.id}`);
         setIsWishlisted(false);
       }
     } catch (error) {
@@ -91,102 +100,88 @@ const ProductCard = ({ product }: Props) => {
   };
 
   const handleCompareToggle = () => {
-    const inComparison = isInComparison(product.id);
-    
-    if (inComparison) {
+    if (isInComparison(product.id)) {
       removeFromComparison(product.id);
-      toast({
-        title: "Removed from comparison",
-        status: "info",
-        duration: 2000,
-        isClosable: true,
-      });
+      toast({ title: "Removed from comparison", status: "info", duration: 1600, isClosable: true });
     } else {
       addToComparison(product.id);
       toast({
         title: "Added to comparison",
-        description: "You can compare up to 3 products",
+        description: "Compare up to 3 products",
         status: "success",
-        duration: 2000,
+        duration: 1600,
         isClosable: true,
       });
     }
   };
-  
-  // const handleCompareNow = () => {
-  //   const comparedProductIds = useComparisonStore.getState().comparedProductIds;
-  //   if (comparedProductIds.length > 1) {
-  //     navigate(`/compare?ids=${comparedProductIds.join(',')}`);
-  //   } else {
-  //     toast({
-  //       title: "Select more products",
-  //       description: "Please select at least 2 products to compare",
-  //       status: "warning",
-  //       duration: 2000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
-  
+
   return (
     <Card
-      height="390px"
-      boxShadow="lg"
+      height="100%"
+      minH="380px"
+      boxShadow="sm"
       bg={bgColor}
       borderWidth="1px"
       borderColor={borderColor}
-      borderRadius="md"
+      borderRadius="2xl"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       position="relative"
       overflow="hidden"
+      transition="transform .2s, box-shadow .2s"
+      _hover={{ transform: "translateY(-4px)", boxShadow: "lg" }}
     >
-      <HStack position="absolute" top={2} right={2} zIndex="1" spacing={1}>
-        <Tooltip label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}>
+      <HStack position="absolute" top={3} right={3} zIndex="1" spacing={1}>
+        <Tooltip label={isWishlisted ? "Remove from wishlist" : "Wishlist"}>
           <IconButton
-            icon={<FaHeart size={20} />}
+            icon={<FaHeart />}
             color={loading ? "gray.300" : heartColor}
-            aria-label="Add to wishlist"
-            size="md"
+            aria-label="Wishlist"
+            size="sm"
             onClick={handleWishlistToggle}
-            variant="ghost"
-            transition="color 0.2s ease-in-out, transform 0.2s ease"
-            _hover={{ color: "red.500", transform: "scale(1.1)" }}
+            variant="solid"
+            bg={actionBg}
+            borderRadius="full"
           />
         </Tooltip>
-        <Tooltip label={isInComparison(product.id) ? "Remove from comparison" : "Add to comparison"}>
+        <Tooltip label={isInComparison(product.id) ? "Remove compare" : "Compare"}>
           <IconButton
-            icon={<FaBalanceScale size={20} />}
+            icon={<FaBalanceScale />}
             color={compareColor}
-            aria-label="Add to comparison"
-            size="md"
+            aria-label="Compare"
+            size="sm"
             onClick={handleCompareToggle}
-            variant="ghost"
-            transition="color 0.2s ease-in-out, transform 0.2s ease"
-            _hover={{ color: "blue.500", transform: "scale(1.1)" }}
+            variant="solid"
+            bg={actionBg}
+            borderRadius="full"
           />
         </Tooltip>
       </HStack>
-      
-      {product.images.length > 0 && (
-        <Image
-          src={hovered && product.images[1] ? product.images[1] : product.images[0]}
-          alt={product.title}
-          height="240px"
-          objectFit="cover"
-          width="100%"
-          borderTopRadius="md"
-          transition="0.3s ease"
-        />
-      )}
-      <CardBody>
-        <Heading fontSize={{ base: "lg", md: "xl" }} textAlign="left" noOfLines={1} color={textColor}>
+
+      <Box overflow="hidden">
+        {(img0 || product.images?.length > 0) && (
+          <Image
+            src={hovered && img1 ? img1 : img0 || product.images[0]}
+            alt={product.title}
+            height="240px"
+            objectFit="cover"
+            width="100%"
+            transition="0.35s ease"
+            transform={hovered ? "scale(1.04)" : "scale(1)"}
+          />
+        )}
+      </Box>
+      <CardBody pt={4}>
+        <Badge colorScheme="brand" mb={2} borderRadius="full" px={2}>
+          {product.stockStatus || "In stock"}
+        </Badge>
+        <Heading fontSize="md" textAlign="left" noOfLines={2} color={textColor} minH="2.6em">
           <Link to={`/products/${product.id}`}>{product.title}</Link>
         </Heading>
-        <Text color={brandColor} fontSize="sm" noOfLines={1}>
-          {product.brand}
+        <Text color={brandColor} fontSize="sm" noOfLines={1} mt={1}>
+          {typeof product.brand === "string" ? product.brand : (product.brand as any)?.name}
         </Text>
-        <Text fontWeight="bold" fontSize="xl" color={priceColor}>
+        <Text fontWeight="700" fontSize="lg" color={priceColor} mt={2}>
           Rs. {Math.floor(product.price)}
         </Text>
       </CardBody>

@@ -9,11 +9,10 @@ const Layout = () => {
   return (
     <Flex direction="column" minHeight="100vh">
       <NotificationBar />
-      <NavBar style={{ marginTop: "40px" }} />
-      <Box flex="1" padding={5}>
-        <Outlet /> {/* Renders the active route component */}
+      <NavBar />
+      <Box flex="1" px={{ base: 3, md: 5 }} pt={{ base: 3, md: 4 }} pb={8} maxW="1600px" w="100%" mx="auto">
+        <Outlet />
       </Box>
-      {/* <CompareButton /> Added CompareButton component */}
       <Footer />
       <Chatbot />
     </Flex>

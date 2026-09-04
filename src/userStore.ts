@@ -1,7 +1,9 @@
 import { create } from "zustand";
+import { normalizeUser } from "./config";
 
 interface User {
-  id?: string;  
+  id?: string;
+  _id?: string;
   firstName?: string;
   lastName?: string;
   username?: string;
@@ -21,13 +23,24 @@ interface UserStore {
   logout: () => void;
 }
 
+const readUser = (): User => {
+  try {
+    return normalizeUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  } catch {
+    return {};
+  }
+};
+
 const useUserStore = create<UserStore>((set) => ({
-  user: JSON.parse(localStorage.getItem("user") || "{}"),
+  user: readUser(),
   token: localStorage.getItem("token") || undefined,
   isLoggedIn: !!localStorage.getItem("token"),
 
   setUser: (user) => {
-    const updatedUser = { ...JSON.parse(localStorage.getItem("user") || "{}"), ...user };
+    const updatedUser = normalizeUser({
+      ...JSON.parse(localStorage.getItem("user") || "{}"),
+      ...user,
+    });
     localStorage.setItem("user", JSON.stringify(updatedUser));
     set({ user: updatedUser });
   },
@@ -41,7 +54,7 @@ const useUserStore = create<UserStore>((set) => ({
 
   setUserRole: (role) => {
     set((state) => {
-      const updatedUser = { ...state.user, role };
+      const updatedUser = normalizeUser({ ...state.user, role });
       localStorage.setItem("user", JSON.stringify(updatedUser));
       return { user: updatedUser };
     });

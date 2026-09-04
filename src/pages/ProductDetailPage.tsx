@@ -27,6 +27,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   HStack,
+  Badge,
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaRulerCombined, FaHeart } from "react-icons/fa";
@@ -42,7 +43,9 @@ import sizeChartImg from "../assets/shalwarkameezsize.jpg";
 import userStore from "../userStore";
 import axios from "axios";
 import ProductFeedbackSection from "../components/ProductFeedbackSection";
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE, mediaUrl } from "../config";
+import { pushRecentView } from "../intelligence/memory";
+const baseURL = API_BASE;
 
 interface RecommendedProduct {
   _id: string;
@@ -66,6 +69,8 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const [recommendedProducts, setRecommendedProducts] = useState<RecommendedProduct[]>([]);
   const [recommendationsLoading, setRecommendationsLoading] = useState(true);
+  const [aiExplain, setAiExplain] = useState<{ styleScore?: number; explanation?: string; model?: string | null } | null>(null);
+  const [dupes, setDupes] = useState<RecommendedProduct[]>([]);
 
   const cardBg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
@@ -92,19 +97,69 @@ const ProductDetailPage = () => {
   }, [product, user]);
 
   useEffect(() => {
+    if (!product?.id) return;
+    pushRecentView({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.images?.[0],
+      brand: typeof product.brand === "string" ? product.brand : undefined,
+    });
+
+    const uid = user?.id || user?._id;
+    if (!uid) return;
+    axios
+      .post(`${API_BASE}/tracking`, {
+        userId: uid,
+        productId: product.id,
+        actionType: "viewed",
+        device: "web",
+      })
+      .catch(() => {});
+  }, [product?.id, user?.id]);
+
+  useEffect(() => {
     const fetchRecommendations = async () => {
       if (!product?.id) return;
       try {
         const { data } = await axios.get(`${baseURL}/products/${product.id}/recommendations-hybrid`);
-        setRecommendedProducts(data);
+        setRecommendedProducts(Array.isArray(data) ? data : data.products || []);
       } catch (error) {
-        console.error('Error fetching recommendations:', error);
+        try {
+          const { data } = await axios.get(`${baseURL}/intelligence/complete-the-look/${product.id}`);
+          setRecommendedProducts(data.products || []);
+        } catch {
+          console.error("Error fetching recommendations:", error);
+        }
       } finally {
         setRecommendationsLoading(false);
       }
     };
     fetchRecommendations();
   }, [product]);
+
+  useEffect(() => {
+    if (!product?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const profile = JSON.parse(localStorage.getItem("mc_style_profile") || "null");
+        const [{ data: explain }, { data: dupeData }] = await Promise.all([
+          axios.post(`${API_BASE}/intelligence/explain`, { productId: product.id, profile }),
+          axios.get(`${API_BASE}/intelligence/dupes/${product.id}`),
+        ]);
+        if (!cancelled) {
+          setAiExplain(explain);
+          setDupes(dupeData.products || []);
+        }
+      } catch {
+        /* optional AI layer */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [product?.id]);
 
   const handleThumbnailClick = (image: string, index: number) => {
     setMainImage(image);
@@ -185,6 +240,17 @@ const ProductDetailPage = () => {
         </Box>
         <Box>
           <Heading size="lg">{product.title}</Heading>
+          {aiExplain?.styleScore != null && (
+            <HStack mt={3} spacing={3} align="start">
+              <Badge colorScheme="brand" fontSize="0.85rem" borderRadius="full" px={3} py={1}>
+                Style fit {aiExplain.styleScore}
+              </Badge>
+              <Text fontSize="sm" color="gray.500" noOfLines={3}>
+                {aiExplain.explanation}
+                {aiExplain.model ? ` · ${aiExplain.model}` : ""}
+              </Text>
+            </HStack>
+          )}
           <Text mt={2} color="gray.600">{product.description}</Text>
           <ProductAttributes product={product} />
           <Divider my={4} />
@@ -226,7 +292,7 @@ const ProductDetailPage = () => {
       <ProductFeedbackSection productId={product.id} />
 
       <Box mt={16} position="relative" textAlign="center">
-        <Heading as="h2" size="lg" mb={6}>Recommended For You</Heading>
+        <Heading as="h2" size="lg" mb={6}>Complete the look</Heading>
         {recommendationsLoading ? (
           <SimpleGrid columns={{ base: 2, md: 4 }} spacing={5}>
             {[...Array(4)].map((_, i) => (
@@ -246,7 +312,7 @@ const ProductDetailPage = () => {
               {recommendedProducts.map((rec) => (
                 <SwiperSlide key={rec._id}>
                   <Box border="1px solid" borderColor={borderColor} borderRadius="lg" p={3} bg={cardBg} h="340px" display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" transition="transform 0.3s ease" _hover={{ transform: "scale(1.05)" }}>
-                    <Image src={rec.images[0]} height="200px" width="100%" objectFit="contain" borderRadius="md" />
+                    <Image src={mediaUrl(rec.images?.[0])} height="200px" width="100%" objectFit="contain" borderRadius="md" />
                     <Text fontWeight="bold" noOfLines={2} textAlign="center">{rec.title}</Text>
                     <Text color="green.500" fontWeight="semibold">Rs. {rec.price}</Text>
                     <Button size="sm" colorScheme="green" mt={2} onClick={() => handleViewProduct(rec.slug ?? rec._id)}>View Product</Button>
@@ -259,6 +325,35 @@ const ProductDetailPage = () => {
           </Box>
         )}
       </Box>
+
+      {dupes.length > 0 && (
+        <Box mt={12}>
+          <Heading as="h2" size="md" mb={4} textAlign="center">
+            Smarter value picks
+          </Heading>
+          <Text textAlign="center" color="gray.500" mb={5} fontSize="sm">
+            Similar vibe at a lower price (content + color match)
+          </Text>
+          <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
+            {dupes.slice(0, 4).map((d) => (
+              <Box
+                key={d._id}
+                borderWidth="1px"
+                borderColor={borderColor}
+                borderRadius="lg"
+                p={3}
+                bg={cardBg}
+                cursor="pointer"
+                onClick={() => handleViewProduct(d.slug ?? d._id)}
+              >
+                <Image src={mediaUrl(d.images?.[0])} h="140px" w="100%" objectFit="cover" borderRadius="md" mb={2} />
+                <Text fontSize="sm" fontWeight="600" noOfLines={2}>{d.title}</Text>
+                <Text color="brand.500" fontWeight="bold">Rs. {d.price}</Text>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -18,6 +18,7 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import userStore from "../../userStore";
+import { mediaUrl } from "../../config";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Brand {
@@ -103,7 +104,7 @@ const BrandProductPage: React.FC = () => {
                         src={
                           product.images[0]?.startsWith("http")
                             ? product.images[0]
-                            : `http://localhost:5170${product.images[0]}`
+                            : mediaUrl(product.images[0])
                         }
                         name={product.title}
                       />

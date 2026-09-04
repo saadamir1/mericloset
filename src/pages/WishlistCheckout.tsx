@@ -19,6 +19,7 @@ import visaIcon from "../assets/visa.jpg";
 import masterIcon from "../assets/mastercard.png";
 import unknownIcon from "../assets/unknown.png";
 import userStore from "../userStore"; // ✅ added
+import { API_ORIGIN } from "../config";
 
 interface ProductItem {
   product: {
@@ -93,7 +94,7 @@ const WishlistCheckout = () => {
 
     if (paymentMethod === "card") {
       try {
-        const res = await fetch("http://localhost:5170/create-checkout-session", {
+        const res = await fetch(`${API_ORIGIN}/create-checkout-session`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ items: payload.items }),
@@ -110,7 +111,7 @@ const WishlistCheckout = () => {
       }
     } else {
       try {
-        await fetch("http://localhost:5170/wishlist-cash-order", {
+        await fetch(`${API_ORIGIN}/wishlist-cash-order`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

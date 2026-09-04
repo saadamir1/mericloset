@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWindowMinimize, FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import supportIcon from '../assets/support.png';
 import parse from 'html-react-parser';
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE } from '../config';
 
 interface Message {
   text: string;
@@ -24,9 +24,9 @@ const Chatbot: React.FC = () => {
   const isDarkMode = colorMode === 'dark';
 
   const suggestedPrompts = [
-    'What is Junaid Jamshed?',
-    'What is Shalwar Kameez?',
-    'Is Shalwar Kameez only for adults?'
+    'Suggest an Eid outfit under 5000',
+    'What goes with a black kurta?',
+    'Find sustainable summer wear'
   ];
 
   const toggleChatBox = () => setIsOpen(!isOpen);
@@ -70,7 +70,7 @@ const Chatbot: React.FC = () => {
       setTyping(true);
 
       try {
-        const response = await fetch(`${baseURL}/chat`, {
+        const response = await fetch(`${API_BASE}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userInput })

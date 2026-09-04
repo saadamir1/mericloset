@@ -44,8 +44,14 @@ const Footer = () => {
     <Box as="footer" bg="gray.800" color="gray.100" py={5} px={2} textAlign="center" position="relative">
       <VStack spacing={4}>
         <HStack justify="center" spacing={4}>
-          <Link href="/about-us" fontSize="sm" _hover={{ textDecoration: 'underline' }}>
-            About Us
+          <Link href="/wishlist" fontSize="sm" _hover={{ textDecoration: 'underline' }}>
+            Wishlist
+          </Link>
+          <Link href="/recommendations" fontSize="sm" _hover={{ textDecoration: 'underline' }}>
+            AI picks
+          </Link>
+          <Link href="/compare" fontSize="sm" _hover={{ textDecoration: 'underline' }}>
+            Compare
           </Link>
           <Link href="/privacy-policy" fontSize="sm" _hover={{ textDecoration: 'underline' }}>
             Privacy Policy
@@ -86,8 +92,8 @@ const Footer = () => {
 
         <VStack spacing={1} align="flex-start" maxWidth="250px">
           <Text fontWeight="bold" color="white">Account</Text>
-          <Link href="/my-account" fontSize="sm" _hover={{ textDecoration: 'underline' }}>My Account</Link>
-          <Link href="/orders" fontSize="sm" _hover={{ textDecoration: 'underline' }}>Orders Tracking</Link>
+          <Link href="/profile" fontSize="sm" _hover={{ textDecoration: 'underline' }}>My Account</Link>
+          <Link href="/recommendations" fontSize="sm" _hover={{ textDecoration: 'underline' }}>AI picks</Link>
           <Link href="/wishlist" fontSize="sm" _hover={{ textDecoration: 'underline' }}>Wishlist</Link>
         </VStack>
 

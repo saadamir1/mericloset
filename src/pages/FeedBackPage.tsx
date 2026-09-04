@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { API_BASE } from "../config";
 
 const FeedbackPage = () => {
   const [form, setForm] = useState({
@@ -51,7 +52,7 @@ const FeedbackPage = () => {
       console.log("Submitting feedback with data:", form);
 
       const res = await fetch(
-        "https://mericloset-backend-66892c258cf6.herokuapp.com/api/v1/feedback",
+        `${API_BASE}/feedback`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

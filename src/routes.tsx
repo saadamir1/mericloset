@@ -22,14 +22,14 @@ import BrandProductPage from "@pages/brand-central/BrandProductPage";
 import AdminLayout from "@pages/admin-central/AdminLayout";
 import AdminErrorPage from "@pages/admin-central/AdminErrorPage";
 import AdminCentral from "@pages/admin-central/AdminCentral";
-import RecommendationsPage from "./pages/RecommendationsPage"; 
+import RecommendationsPage from "./pages/RecommendationsPage";
 import ProductComparison from "@pages/ProductComparison";
 import Checkout from "./pages/checkout";
 import WishlistCheckout from "./pages/WishlistCheckout";
 import FeedbackPage from "./pages/FeedBackPage";
 import ProductReviewPage from "./pages/ProductReviewPage";
-
-
+import ProtectedRoute from "./components/ProtectedRoute";
+import OutfitBuilderPage from "./pages/OutfitBuilderPage";
 
 const router = createBrowserRouter([
   {
@@ -50,33 +50,46 @@ const router = createBrowserRouter([
       { path: "faq", element: <FAQ /> },
       { path: "about-us", element: <AboutUs /> },
       { path: "wishlist", element: <WishlistPage /> },
-      { path: "recommendations/:userId", element: <RecommendationsPage /> }, 
+      { path: "recommendations/:userId", element: <RecommendationsPage /> },
+      { path: "recommendations", element: <RecommendationsPage /> },
+      { path: "outfit-builder", element: <OutfitBuilderPage /> },
       { path: "compare", element: <ProductComparison /> },
       { path: "checkout", element: <Checkout /> },
       { path: "wishlist-checkout", element: <WishlistCheckout /> },
       { path: "feedback", element: <FeedbackPage /> },
       { path: "product-review/:productId", element: <ProductReviewPage /> },
+      { path: "success", element: <HomePage /> },
     ],
   },
   {
     path: "/brand",
-    element: <BrandLayout />,
+    element: <ProtectedRoute roles={["brand", "admin"]} />,
     errorElement: <BrandErrorPage />,
     children: [
-      { index: true, element: <BrandCentral /> },
-      { path: "add-product", element: <AddProduct /> },
-      { path: "edit-profile", element: <Profile /> },
-      { path: "products", element: <BrandProductPage /> }
+      {
+        element: <BrandLayout />,
+        children: [
+          { index: true, element: <BrandCentral /> },
+          { path: "add-product", element: <AddProduct /> },
+          { path: "edit-profile", element: <Profile /> },
+          { path: "products", element: <BrandProductPage /> },
+        ],
+      },
     ],
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <ProtectedRoute roles={["admin"]} />,
     errorElement: <AdminErrorPage />,
     children: [
-      { index: true, element: <AdminCentral /> },
-      { path: "add-product", element: <AddProduct /> },
-      { path: "edit-profile", element: <Profile /> },
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AdminCentral /> },
+          { path: "add-product", element: <AddProduct /> },
+          { path: "edit-profile", element: <Profile /> },
+        ],
+      },
     ],
   },
 ]);

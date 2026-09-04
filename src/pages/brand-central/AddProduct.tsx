@@ -17,6 +17,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Product from "../../entities/Product";
 import userStore from "../../userStore";
+import { mediaUrl } from "../../config";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const availableSizes = ["S", "M", "L", "XL", "XXL"];
@@ -182,7 +183,7 @@ const AddProduct: React.FC = () => {
             <VStack spacing={2} align="start">
               {imageUrls.map((url, i) => (
                 <HStack key={i}>
-                  <Image boxSize="80px" src={`http://localhost:5170${url}`} />
+                  <Image boxSize="80px" src={mediaUrl(url)} />
                   <Button colorScheme="red" size="sm" onClick={() => setImageUrls((prev) => prev.filter((_, idx) => idx !== i))}>Delete</Button>
                 </HStack>
               ))}

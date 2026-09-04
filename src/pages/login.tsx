@@ -55,14 +55,13 @@ const LoginPage = () => {
       });
   
       setToken(data.token);
-      console.log(data.token);
       setUser(data.user);
       setIsLoggedIn(true);
-  
+
       const decodedToken = jwtDecode<CustomJwtPayload>(data.token);
-      const userRole = decodedToken.role;
+      const userRole = decodedToken.role || data.user?.role || "user";
       setUserRole(userRole);
-  
+
       toast({
         title: "Login Successful",
         description: "You are now logged in.",
@@ -70,11 +69,13 @@ const LoginPage = () => {
         duration: 1500,
         isClosable: true,
       });
-  
+
       setTimeout(() => {
         setIsLoading(false);
-        navigate(isSeller ? "/brand" : "/");
-      }, 1500);
+        if (userRole === "admin") navigate("/admin");
+        else if (userRole === "brand" || isSeller) navigate("/brand");
+        else navigate("/");
+      }, 800);
       
     } catch (error) {  
       const errorMsg =

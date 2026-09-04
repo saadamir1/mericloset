@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import visaIcon from "../assets/visa.jpg";
 import masterIcon from "../assets/mastercard.png";
 import unknownIcon from "../assets/unknown.png";
+import { API_ORIGIN } from "../config";
 
 interface OrderType {
   title: string;
@@ -89,7 +90,7 @@ const Checkout = () => {
 
     if (paymentMethod === "card") {
       try {
-        const res = await fetch("http://localhost:5170/create-checkout-session", {
+        const res = await fetch(`${API_ORIGIN}/create-checkout-session`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -113,7 +114,7 @@ const Checkout = () => {
       }
     } else {
       try {
-        await fetch("http://localhost:5170/cash-order", {
+        await fetch(`${API_ORIGIN}/cash-order`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
