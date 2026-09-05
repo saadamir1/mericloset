@@ -1,168 +1,86 @@
-# MeriCloset Frontend
+# MeriCloset — Frontend
 
-A modern React-based frontend for MeriCloset - a personalized fashion platform that curates products from various fashion brands, enabling users to make smarter shopping decisions.
+MeriCloset is a personalized fashion shopping platform built as my BSc Computer Science final year project. It pulls products together from multiple brands and layers an AI recommendation/styling engine on top, so instead of browsing one store at a time, you get a single feed tailored to what you actually wear.
 
-## 🚀 Features
+This repo is the client — React + TypeScript, talking to the [MeriCloset backend](https://github.com/saadamir1/mericloset-backend).
 
-- **Personalized Shopping Experience**: AI-powered product recommendations
-- **Product Comparison**: Side-by-side comparison of products from different brands
-- **Advanced Search & Filtering**: Filter by size, color, price, material, and sustainability
-- **User Closet Management**: Personal wardrobe organization (entities defined, no UI implementation)
-- **Favorites & Wishlists**: Save and organize favorite products
-- **Brand Discovery**: Explore products from various fashion brands
-- **Secure Payments**: Integrated Stripe payment processing
-- **AI Chatbot**: Gemini-powered shopping assistant for product recommendations
-- **Product Reviews & Feedback**: User rating and review system
-- **Admin & Brand Portals**: Separate dashboards for different user roles
-- **Responsive Design**: Optimized for desktop and mobile devices
+## What's in it
 
-## 🛠️ Tech Stack
+- **"For You" feed** — personalized product recommendations, powered by the backend's intelligence engine (collaborative filtering + content-based scoring, not just "sort by popular")
+- **Outfit Builder** — put pieces together and get a completed look
+- **Product comparison** — line up products from different brands side by side
+- **Search & filtering** — by size, color, price, material
+- **Wishlist & favorites**, with a dedicated wishlist checkout flow
+- **Milo**, an in-app AI stylist chatbot (Gemini-backed) that recommends products conversationally
+- **Checkout** — Stripe (card) and cash-on-delivery
+- **Admin & Brand portals** — separate authenticated dashboards for platform admins and brand accounts to manage their own product catalogs
+- **Personal closet** — data model and API exist end-to-end; there's no dedicated closet UI yet (noted here so it's not a surprise)
+- Light/dark mode, responsive layout
 
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **UI Library**: Chakra UI + Material-UI
-- **State Management**: Zustand
-- **Data Fetching**: TanStack React Query (React Query)
-- **HTTP Client**: Axios
-- **Routing**: React Router DOM
-- **Authentication**: JWT with express-jwt
-- **Animations**: Framer Motion
-- **Forms**: React Hook Form
-- **File Uploads**: React Dropzone
-- **Payments**: Stripe React Components
-- **Notifications**: React Toastify
+## Stack
 
-## 📋 Prerequisites
+React 18 + TypeScript · Vite · Chakra UI (+ some MUI components) · Zustand · TanStack Query · React Router · Axios · Framer Motion · React Hook Form · Stripe.js
 
-- Node.js (v16 or higher)
-- npm or yarn
-- MeriCloset Backend API running
+## Running it locally
 
-## 🚀 Installation & Setup
+You'll need the [backend](https://github.com/saadamir1/mericloset-backend) running too — this app doesn't do anything on its own without an API to talk to.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/saadamir1/mericloset.git
-   cd mericloset/mericloset
-   ```
+```bash
+git clone https://github.com/saadamir1/mericloset.git
+cd mericloset
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+Copy `.env.example` to `.env` (or `.env.development`) and point it at your backend:
 
-3. **Environment Configuration**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   VITE_API_URL=http://localhost:3000/api/v1
-   VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-   VITE_BASE_URL=http://localhost:5173
-   ```
+```env
+PORT=5173
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+```
 
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
+That's the only variable this app actually reads — there's no separate Stripe key needed on the frontend; checkout sessions are created server-side.
 
-5. **Open in browser**
-   
-   Navigate to [http://localhost:5173](http://localhost:5173)
+```bash
+npm run dev
+```
 
-## 📜 Available Scripts
+Then open [http://localhost:5173](http://localhost:5173).
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm start` - Start development server with auto-open
+## Scripts
 
-## 📁 Project Structure
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm start` | Same, but auto-opens the browser |
+| `npm run build` | Type-check + production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | ESLint |
+
+## Project structure
 
 ```
 src/
-├── assets/          # Static assets (images, icons)
-├── components/      # Reusable UI components
-├── data/           # Static data and constants
-├── entities/       # TypeScript interfaces and types
-├── hooks/          # Custom React hooks
-├── pages/          # Application pages/routes
-├── services/       # API services and utilities
-├── comparisonStore.ts  # Product comparison state
-├── store.ts        # Main application state
-├── userStore.ts    # User authentication state
-├── theme.ts        # Chakra UI theme configuration
-├── routes.tsx      # Application routing
-└── main.tsx        # Application entry point
+├── assets/          # images, icons
+├── components/      # shared UI (NavBar, ProductCard, chatbot, admin-central/, brand-central/, ...)
+├── pages/           # routed pages (HomePage, Wishlist, OutfitBuilderPage, admin-central/, brand-central/, ...)
+├── entities/        # TypeScript types
+├── hooks/           # custom hooks
+├── services/        # API calls
+├── store.ts         # main app state (Zustand)
+├── userStore.ts     # auth state
+├── comparisonStore.ts
+├── theme.ts         # Chakra theme
+├── config.ts        # API base URL / media URL helpers
+└── routes.tsx
 ```
 
-## 🔧 Key Features Implementation
+## Deployment
 
-### State Management
-- **Zustand** for lightweight, fast state management
-- Separate stores for user authentication, product comparison, and main app state
+`npm run build` outputs a static bundle; `vercel.json` is already set up for SPA routing on Vercel. Just make sure `VITE_API_BASE_URL` in your Vercel project settings points at your deployed backend.
 
-### Authentication
-- JWT-based authentication
-- Persistent login state
-- Protected routes
+## About this project
 
-### Product Features
-- Advanced filtering and search
-- Product comparison functionality
-- Personalized recommendations
-- Favorites and wishlist management
+Built by **Saad Amir** as a BSc Computer Science final year project — the goal was to go past a basic CRUD storefront and actually build a recommendation/personalization layer that does something (see the [backend's intelligence engine](https://github.com/saadamir1/mericloset-backend) for the interesting part).
 
-### Payment Integration
-- Stripe payment processing
-- Secure checkout flow
-- Order management
-
-## 🎨 UI/UX Features
-
-- **Responsive Design**: Mobile-first approach
-- **Dark/Light Mode**: Theme switching capability
-- **Smooth Animations**: Framer Motion integration
-- **Accessible Components**: Chakra UI accessibility features
-- **Loading States**: Skeleton loaders and spinners
-- **Toast Notifications**: User feedback system
-
-## 🔗 API Integration
-
-The frontend communicates with the MeriCloset backend API for:
-- User authentication and management
-- Product catalog and search
-- Order processing
-- Recommendation engine
-- Brand management
-- Admin dashboard data
-
-## 🚀 Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-### Deploy to Vercel
-The project includes `vercel.json` configuration for easy Vercel deployment.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is part of a BSc Computer Science Final Year Project.
-
-## 👨‍💻 Author
-
-**Saad Amir** - BSc Computer Science Student
-
----
-
-**Note**: This is a Final Year Project (FYP) for BSc Computer Science degree, showcasing modern web development practices and technologies in the fashion e-commerce domain.
+- GitHub: [github.com/saadamir1](https://github.com/saadamir1)
+- LinkedIn: [in/saadamir](https://linkedin.com/in/saadamir)
