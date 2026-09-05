@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Text, CloseButton } from "@chakra-ui/react";
+import { Box, HStack, Text, CloseButton } from "@chakra-ui/react";
+import { FaBullhorn } from "react-icons/fa";
 
 const NotificationBar: React.FC = () => {
   const [showNotification, setShowNotification] = useState(true);
@@ -36,25 +37,38 @@ const NotificationBar: React.FC = () => {
   return (
     showNotification && (
       <Box
-        position="absolute"
-        top={0}
-        left={0}
+        position="relative"
         width="100%"
-        bg="teal.500"
+        minH="34px"
+        bgGradient="linear(to-r, teal.700, teal.500)"
         color="white"
-        p={2}
+        px={{ base: 10, md: 12 }}
+        py={2}
         textAlign="center"
-        zIndex="1000"
+        // NOTE: no position/top/zIndex here anymore. This bar and NavBar are
+        // wrapped together in ONE sticky container in Layout.tsx, so they
+        // always move as a single unit. That's what was causing the overlap:
+        // this was sticky on its own (top: 0) while NavBar was separately
+        // sticky at a hardcoded top: "34px" — the moment this bar's height
+        // changed (closed, wrapped to 2 lines on small screens, font change)
+        // or its stacking order shifted, NavBar's fixed 34px offset no
+        // longer matched reality, so NavBar either overlapped this bar or
+        // left an empty gap above itself.
       >
-        <Text fontSize="sm" display="inline">
-          {notificationMessage}
-        </Text>
+        <HStack spacing={2} justify="center">
+          <Box as={FaBullhorn} fontSize="xs" opacity={0.85} />
+          <Text fontSize="sm" fontWeight="medium">
+            {notificationMessage}
+          </Text>
+        </HStack>
         <CloseButton
           size="sm"
+          borderRadius="full"
           position="absolute"
           top="50%"
-          right="10px"
+          right={{ base: 2, md: 5 }}
           transform="translateY(-50%)"
+          _hover={{ bg: "whiteAlpha.300" }}
           onClick={closeNotification}
         />
       </Box>

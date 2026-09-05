@@ -71,22 +71,37 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // Use the comparison store
   const { comparedProductIds } = useComparisonStore();
-  
-  // Dark gradient background for navbar that works well with white logo text
+
+  // Track scroll position so the navbar can shift from a very light,
+  // barely-there glass panel at the top of the page to a slightly more
+  // solid, blurred, elevated one once the user scrolls — this is what
+  // creates the "transparent, then sleek" transition effect.
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navbarBgColor = useColorModeValue(
-    "linear-gradient(90deg, #1a365d 0%, #2a4365 100%)",
-    "linear-gradient(90deg, #1A202C 0%, #2D3748 100%)"
+    isScrolled ? "rgba(255, 255, 255, 0.92)" : "rgba(255, 255, 255, 0.55)",
+    isScrolled ? "rgba(17, 24, 39, 0.92)" : "rgba(17, 24, 39, 0.55)"
   );
-  const navbarTextColor = "white";
-  const logoHeight = useBreakpointValue({ base: "35px", md: "45px" });
+  const navbarTextColor = useColorModeValue("gray.800", "white");
+  const logoHeight = useBreakpointValue({ base: "32px", md: "40px" });
   const isMobileView = useBreakpointValue({ base: true, md: false });
-  const buttonHoverBg = useColorModeValue("rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)");
+  const buttonHoverBg = useColorModeValue("blackAlpha.50", "whiteAlpha.100");
+  const capsuleBg = useColorModeValue("blackAlpha.50", "whiteAlpha.100");
+  const menuListBg = useColorModeValue("white", "gray.800");
+  const menuItemHoverBg = useColorModeValue("teal.50", "whiteAlpha.100");
+  const accentColor = "teal.400";
   
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn, logout, user } = userStore();
@@ -213,31 +228,65 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
   return (
     <Box
       as="nav"
-      bgImage={navbarBgColor}
+      bg={navbarBgColor}
+      backdropFilter={isScrolled ? "saturate(180%) blur(16px)" : "saturate(150%) blur(8px)"}
       width="100%"
-      px={{ base: 4, md: 6 }}
-      py={3}
-      position="sticky"
-      top="0"
-      zIndex="999"
+      px={{ base: 3, md: 8 }}
+      py={{ base: 2, md: 3 }}
       color={navbarTextColor}
-      boxShadow="0 4px 20px rgba(0,0,0,0.15)"
+      boxShadow={isScrolled ? "0 4px 24px rgba(15, 23, 42, 0.08)" : "none"}
+      transition="background-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease"
       style={style}
     >
-      <Flex width="100%" alignItems="center" justifyContent="space-between">
+      <Flex
+        width="100%"
+        maxW="1600px"
+        mx="auto"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         {/* Logo and Desktop Navigation */}
         <HStack spacing={6}>
           <motion.div
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <RouterLink to="/" onClick={handleLogoClick}>
-              <Image
-                src={logo}
-                alt="Logo"
-                height={logoHeight}
-                objectFit="cover"
-              />
+              <HStack spacing={2}>
+                {/* The source logo.webp has "Meri Closet" baked into the image
+                    in white text, so it vanishes on a light background (that's
+                    the ghosting you saw). Until there's an icon-only asset, we
+                    clip the image down to just its left-hand icon square and
+                    render the wordmark as real, theme-aware text instead — it
+                    now stays visible in both light and dark mode. */}
+                <Box
+                  boxSize={logoHeight}
+                  borderRadius="full"
+                  overflow="hidden"
+                  flexShrink={0}
+                >
+                  <Image
+                    src={logo}
+                    alt="Meri Closet"
+                    h={logoHeight}
+                    w="auto"
+                    maxW="none"
+                    objectFit="cover"
+                    objectPosition="left center"
+                  />
+                </Box>
+                <Text
+                  fontFamily="'Georgia', 'Playfair Display', serif"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  fontWeight="semibold"
+                  letterSpacing="wide"
+                  color={navbarTextColor}
+                  whiteSpace="nowrap"
+                  lineHeight="1"
+                >
+                  Meri Closet
+                </Text>
+              </HStack>
             </RouterLink>
           </motion.div>
 
@@ -253,19 +302,20 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                   variant="ghost"
                   size="md"
                   fontWeight="medium"
+                  borderRadius="full"
                   position="relative"
-                  color="white"
+                  color={button.isActive ? accentColor : navbarTextColor}
                   _hover={{ bg: buttonHoverBg }}
                   _after={
                     button.isActive
                       ? {
                           content: '""',
                           position: "absolute",
-                          bottom: "0",
-                          left: "10%",
-                          width: "80%",
+                          bottom: "-2px",
+                          left: "20%",
+                          width: "60%",
                           height: "2px",
-                          bg: "yellow.400",
+                          bg: accentColor,
                           borderRadius: "full",
                         }
                       : {}
@@ -273,12 +323,12 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                 >
                   {button.label}
                   {button.badge && (
-                    <Badge ml={1} colorScheme="yellow" fontSize="0.6em" variant="solid" borderRadius="full">
+                    <Badge ml={1} colorScheme="teal" fontSize="0.6em" variant="solid" borderRadius="full">
                       {button.badge}
                     </Badge>
                   )}
                   {button.label === "New Arrivals" && (
-                    <Badge ml={1} colorScheme="yellow" fontSize="0.6em" variant="solid">
+                    <Badge ml={1} colorScheme="teal" fontSize="0.6em" variant="solid" borderRadius="full">
                       NEW
                     </Badge>
                   )}
@@ -294,15 +344,16 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
             <form onSubmit={handleSearchSubmit}>
               <InputGroup size="md">
                 <InputLeftElement pointerEvents="none">
-                  <FaSearch color="gray.300" />
+                  <FaSearch color="gray.400" />
                 </InputLeftElement>
                 <Input
                   placeholder="Search..."
-                  bg="whiteAlpha.200"
+                  bg={useColorModeValue("blackAlpha.50", "whiteAlpha.100")}
                   border="none"
-                  focusBorderColor="yellow.400"
-                  color="white"
-                  _placeholder={{ color: "whiteAlpha.700" }}
+                  borderRadius="full"
+                  focusBorderColor="teal.400"
+                  color={navbarTextColor}
+                  _placeholder={{ color: useColorModeValue("gray.500", "whiteAlpha.700") }}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   autoFocus
@@ -315,8 +366,9 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               icon={<FaSearch />}
               aria-label="Search"
               variant="ghost"
+              borderRadius="full"
               fontSize="lg"
-              color="white"
+              color={navbarTextColor}
               _hover={{ bg: buttonHoverBg }}
               onClick={() => setSearchOpen(true)}
             />
@@ -327,24 +379,32 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               icon={<FaTimes />}
               aria-label="Close Search"
               variant="ghost"
+              borderRadius="full"
               fontSize="lg"
-              color="white"
+              color={navbarTextColor}
               _hover={{ bg: buttonHoverBg }}
               onClick={() => setSearchOpen(false)}
             />
           )}
 
           {!isMobileView && (
-            <>
+            <HStack
+              spacing={0}
+              bg={capsuleBg}
+              borderRadius="full"
+              p={1}
+            >
               <Tooltip label="Wishlist" hasArrow>
                 <Box position="relative">
                   <IconButton
                     icon={<FaHeart />}
                     aria-label="Wishlist"
                     variant="ghost"
+                    borderRadius="full"
+                    size="sm"
                     as={RouterLink}
                     to="/wishlist"
-                    color="white"
+                    color={navbarTextColor}
                     _hover={{ bg: buttonHoverBg }}
                   />
                   {wishlistCount > 0 && (
@@ -372,10 +432,10 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
 
               <Tooltip label="Toggle Dark Mode" hasArrow>
                 <Box>
-                  <ColorModeSwitch color="white" />
+                  <ColorModeSwitch color={navbarTextColor} />
                 </Box>
               </Tooltip>
-            </>
+            </HStack>
           )}
 
           <Menu>
@@ -384,25 +444,69 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               icon={<FaUserAlt />}
               aria-label="User Profile"
               variant="ghost"
-              color="white"
+              borderRadius="full"
+              color={navbarTextColor}
               _hover={{ bg: buttonHoverBg }}
             />
-            <MenuList bg={useColorModeValue("white", "gray.800")} color={useColorModeValue("gray.800", "white")}>
+            <MenuList
+              bg={menuListBg}
+              color={navbarTextColor}
+              borderRadius="xl"
+              boxShadow="lg"
+              border="none"
+              py={2}
+              minW="190px"
+            >
               {isLoggedIn ? (
                 <>
-                  <MenuItem as={RouterLink} to="/profile" icon={<FaUserAlt />}>
+                  <MenuItem
+                    as={RouterLink}
+                    to="/profile"
+                    icon={<FaUserAlt />}
+                    borderRadius="md"
+                    mx={1}
+                    w="calc(100% - 8px)"
+                    _hover={{ bg: menuItemHoverBg }}
+                    _focus={{ bg: menuItemHoverBg }}
+                  >
                     Profile
                   </MenuItem>
-                  <MenuItem onClick={handleLogout} icon={<FaSignOutAlt />}>
+                  <MenuItem
+                    onClick={handleLogout}
+                    icon={<FaSignOutAlt />}
+                    borderRadius="md"
+                    mx={1}
+                    w="calc(100% - 8px)"
+                    _hover={{ bg: menuItemHoverBg }}
+                    _focus={{ bg: menuItemHoverBg }}
+                  >
                     Logout
                   </MenuItem>
                 </>
               ) : (
                 <>
-                  <MenuItem as={RouterLink} to="/login" icon={<FaSignInAlt />}>
+                  <MenuItem
+                    as={RouterLink}
+                    to="/login"
+                    icon={<FaSignInAlt />}
+                    borderRadius="md"
+                    mx={1}
+                    w="calc(100% - 8px)"
+                    _hover={{ bg: menuItemHoverBg }}
+                    _focus={{ bg: menuItemHoverBg }}
+                  >
                     Login
                   </MenuItem>
-                  <MenuItem as={RouterLink} to="/signup" icon={<FaUserPlus />}>
+                  <MenuItem
+                    as={RouterLink}
+                    to="/signup"
+                    icon={<FaUserPlus />}
+                    borderRadius="md"
+                    mx={1}
+                    w="calc(100% - 8px)"
+                    _hover={{ bg: menuItemHoverBg }}
+                    _focus={{ bg: menuItemHoverBg }}
+                  >
                     Register
                   </MenuItem>
                 </>
@@ -415,8 +519,9 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
               icon={<FaBars />}
               aria-label="Open Menu"
               variant="ghost"
+              borderRadius="full"
               onClick={onOpen}
-              color="white"
+              color={navbarTextColor}
               _hover={{ bg: buttonHoverBg }}
             />
           )}
@@ -442,18 +547,19 @@ const NavBar: React.FC<NavBarProps> = ({ style }) => {
                   leftIcon={button.icon}
                   justifyContent="flex-start"
                   variant={button.isActive ? "solid" : "ghost"}
-                  colorScheme={button.isActive ? "blue" : undefined}
+                  colorScheme={button.isActive ? "teal" : undefined}
+                  borderRadius="full"
                   w="full"
                   position="relative"
                 >
                   {button.label}
                   {button.badge && (
-                    <Badge ml={1} colorScheme="yellow" fontSize="0.6em" borderRadius="full">
+                    <Badge ml={1} colorScheme="teal" fontSize="0.6em" borderRadius="full">
                       {button.badge}
                     </Badge>
                   )}
                   {button.label === "New Arrivals" && (
-                    <Badge ml={1} colorScheme="green" fontSize="0.6em">
+                    <Badge ml={1} colorScheme="teal" fontSize="0.6em" borderRadius="full">
                       NEW
                     </Badge>
                   )}
